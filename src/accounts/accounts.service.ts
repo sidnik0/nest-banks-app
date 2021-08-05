@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { HelpersService } from '../common/helpers/helpers.service';
 import { AccountInterface } from './interfaces/acoount.interface';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
@@ -7,11 +8,16 @@ import { UpdateAccountDto } from './dto/update-account.dto';
 export class AccountsService {
   private readonly accounts: Map<string, AccountInterface> = new Map();
 
-  create(createAccountDto: CreateAccountDto): AccountInterface {
-    const balance = createAccountDto.balance || 0;
-    this.accounts.set(createAccountDto.id, { ...createAccountDto, balance });
+  constructor(private readonly helpersService: HelpersService) {}
 
-    return this.accounts.get(createAccountDto.id);
+  create(createAccountDto: CreateAccountDto): AccountInterface {
+    const id = this.helpersService.createId();
+
+    const balance = createAccountDto.balance || 0;
+
+    this.accounts.set(id, { ...createAccountDto, balance, id });
+
+    return this.accounts.get(id);
   }
 
   getById(id: string): AccountInterface | undefined {

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { HelpersService } from '../common/helpers/helpers.service';
 import { UserInterface } from './interfaces/user.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update.user.dto';
@@ -7,15 +8,20 @@ import { UpdateUserDto } from './dto/update.user.dto';
 export class UsersService {
   private users: Map<string, UserInterface> = new Map();
 
-  create(createUserDto: CreateUserDto): UserInterface {
-    this.users.set(createUserDto.id, createUserDto);
+  constructor(private readonly helpersService: HelpersService) {}
 
-    return this.users.get(createUserDto.id);
+  create(createUserDto: CreateUserDto): UserInterface {
+    const id = this.helpersService.createId();
+
+    this.users.set(id, { ...createUserDto, id });
+
+    return this.users.get(id);
   }
 
   getById(id: string): UserInterface | undefined {
     return this.users.get(id);
   }
+
   get(): Map<string, UserInterface> {
     return this.users;
   }

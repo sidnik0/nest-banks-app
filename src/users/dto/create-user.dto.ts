@@ -1,5 +1,6 @@
+import { FaceType } from '../../types/face/face.type';
+
 export class CreateUserDto {
-  readonly id: string;
   readonly name: string;
-  readonly face: string;
+  readonly face: FaceType;
 }
