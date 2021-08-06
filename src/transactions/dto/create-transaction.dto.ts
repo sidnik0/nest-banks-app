@@ -1,5 +1,5 @@
 export class CreateTransactionDto {
-  fromAccountId: string;
-  toAccountId: string;
-  value: number;
+  readonly fromAccountId: string;
+  readonly toAccountId: string;
+  readonly value: number;
 }
