@@ -7,5 +7,6 @@ import { HelpersModule } from '../common/helpers/helpers.module';
   imports: [HelpersModule],
   controllers: [AccountsController],
   providers: [AccountsService],
+  exports: [AccountsService],
 })
 export class AccountsModule {}
