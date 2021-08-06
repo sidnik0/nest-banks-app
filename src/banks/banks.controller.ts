@@ -36,7 +36,7 @@ export class BanksController {
   async get(): Promise<Map<string, BankInterface>> {
     console.log(`Get all banks`);
 
-    const banks = this.banksService.get();
+    const banks = await this.banksService.get();
 
     return banks.size ? banks : null;
   }

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { HelpersService } from '../common/helpers/helpers.service';
-import { AccountInterface } from './interfaces/acoount.interface';
+import { AccountInterface } from './interfaces/account.interface';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 
@@ -10,33 +10,41 @@ export class AccountsService {
 
   constructor(private readonly helpersService: HelpersService) {}
 
-  create(createAccountDto: CreateAccountDto): AccountInterface {
+  async create(createAccountDto: CreateAccountDto): Promise<void> {
     const id = this.helpersService.createId();
 
     const balance = createAccountDto.balance || 0;
 
     this.accounts.set(id, { ...createAccountDto, balance, id });
+  }
 
+  async getById(id: string): Promise<AccountInterface> {
     return this.accounts.get(id);
   }
 
-  getById(id: string): AccountInterface | undefined {
-    return this.accounts.get(id);
+  async getAllByIdUser(idUser: string): Promise<Array<AccountInterface>> {
+    const result = [];
+
+    for (const obj of this.accounts.values()) {
+      if (obj.idUser !== idUser) continue;
+
+      result.push(obj);
+    }
+
+    return result;
   }
 
-  get(): Map<string, AccountInterface> {
+  async get(): Promise<Map<string, AccountInterface>> {
     return this.accounts;
   }
 
-  update(id: string, updateAccountDto: UpdateAccountDto): AccountInterface {
+  async update(id: string, updateAccountDto: UpdateAccountDto): Promise<void> {
     const oldValue = this.accounts.get(id);
 
     this.accounts.set(id, { ...oldValue, ...updateAccountDto });
-
-    return this.accounts.get(id);
   }
 
-  delete(id: string): boolean {
+  async delete(id: string): Promise<boolean> {
     return this.accounts.delete(id);
   }
 }

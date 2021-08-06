@@ -1,27 +1,13 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Put,
-  Delete,
-  Param,
-  Body,
-} from '@nestjs/common';
+import { Controller, Get, Put, Delete, Param, Body } from '@nestjs/common';
 import { UsersService } from './users.service';
+
 import { UserInterface } from './interfaces/user.interface';
-import { CreateUserDto } from './dto/create-user.dto';
+
 import { UpdateUserDto } from './dto/update.user.dto';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<UserInterface> {
-    console.log(`Create user`);
-
-    return this.usersService.create(createUserDto);
-  }
 
   @Get(':id')
   async getById(@Param('id') id: string): Promise<UserInterface> {
@@ -36,7 +22,7 @@ export class UsersController {
   async get(): Promise<Map<string, UserInterface>> {
     console.log(`Get all users`);
 
-    const users = this.usersService.get();
+    const users = await this.usersService.get();
 
     return users.size ? users : null;
   }

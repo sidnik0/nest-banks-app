@@ -1,17 +1,9 @@
 import { Module } from '@nestjs/common';
 import { BanksModule } from './banks/banks.module';
 import { UsersModule } from './users/users.module';
-import { AccountsModule } from './accounts/accounts.module';
-import { TransactionsModule } from './transactions/transactions.module';
-import { CurrentUsersOfBanksModule } from './currentUsersOfBanks/current-users-of-banks.module';
+import { RegistrationsModule } from './registrations/registrations.module';
 
 @Module({
-  imports: [
-    BanksModule,
-    UsersModule,
-    AccountsModule,
-    TransactionsModule,
-    CurrentUsersOfBanksModule,
-  ],
+  imports: [BanksModule, UsersModule, RegistrationsModule],
 })
 export class AppModule {}
