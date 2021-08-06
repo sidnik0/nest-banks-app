@@ -1,3 +1,3 @@
 export class UpdateAccountDto {
-  balance: number;
+  readonly balance: number;
 }

@@ -1,5 +1,6 @@
 export interface BankInterface {
   id: string;
   name: string;
-  commission: number;
+  comEnt: number;
+  comInd: number;
 }

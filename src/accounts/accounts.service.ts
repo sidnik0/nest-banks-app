@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { AccountInterface } from './interfaces/acoount.interface';
+import { HelpersService } from '../common/helpers/helpers.service';
+import { AccountInterface } from './interfaces/account.interface';
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 
@@ -7,30 +8,43 @@ import { UpdateAccountDto } from './dto/update-account.dto';
 export class AccountsService {
   private readonly accounts: Map<string, AccountInterface> = new Map();
 
-  create(createAccountDto: CreateAccountDto): AccountInterface {
-    const balance = createAccountDto.balance || 0;
-    this.accounts.set(createAccountDto.id, { ...createAccountDto, balance });
+  constructor(private readonly helpersService: HelpersService) {}
 
-    return this.accounts.get(createAccountDto.id);
+  async create(createAccountDto: CreateAccountDto): Promise<void> {
+    const id = this.helpersService.createId();
+
+    const balance = createAccountDto.balance || 0;
+
+    this.accounts.set(id, { ...createAccountDto, balance, id });
   }
 
-  getById(id: string): AccountInterface | undefined {
+  async getById(id: string): Promise<AccountInterface> {
     return this.accounts.get(id);
   }
 
-  get(): Map<string, AccountInterface> {
+  async getAllByIdUser(idUser: string): Promise<Array<AccountInterface>> {
+    const result = [];
+
+    for (const obj of this.accounts.values()) {
+      if (obj.idUser !== idUser) continue;
+
+      result.push(obj);
+    }
+
+    return result;
+  }
+
+  async get(): Promise<Map<string, AccountInterface>> {
     return this.accounts;
   }
 
-  update(id: string, updateAccountDto: UpdateAccountDto): AccountInterface {
+  async update(id: string, updateAccountDto: UpdateAccountDto): Promise<void> {
     const oldValue = this.accounts.get(id);
 
     this.accounts.set(id, { ...oldValue, ...updateAccountDto });
-
-    return this.accounts.get(id);
   }
 
-  delete(id: string): boolean {
+  async delete(id: string): Promise<boolean> {
     return this.accounts.delete(id);
   }
 }
