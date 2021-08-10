@@ -3,6 +3,7 @@ import { AccountsService } from '../accounts/accounts.service';
 import { HelpersService } from '../common/helpers/helpers.service';
 
 import { CurrentUserOfBankInterface } from './interfaces/current-user-of-bank.interface';
+import { AccountInterface } from '../accounts/interfaces/account.interface';
 
 import { CreateCurrentUserOfBankDto } from './dto/create-current-user-of-bank.dto';
 
@@ -18,11 +19,11 @@ export class CurrentUsersOfBanksService {
 
   async create(
     createCurrentUserOfBankDto: CreateCurrentUserOfBankDto,
-  ): Promise<void> {
+  ): Promise<AccountInterface> {
     const id = this.helpersService.createId();
 
     this.currentUsersOfBanks.set(id, { ...createCurrentUserOfBankDto, id });
-    await this.accountsService.create(createCurrentUserOfBankDto);
+    return await this.accountsService.create(createCurrentUserOfBankDto);
   }
 
   async getBanksByIdUser(idUser: string): Promise<Array<string>> {

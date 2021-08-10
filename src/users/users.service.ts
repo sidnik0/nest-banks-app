@@ -10,7 +10,7 @@ import { TransactionInterface } from '../transactions/interfaces/transaction.int
 import { AllTransactionInterface } from '../transactions/interfaces/all-transaction.interface';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update.user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateCurrentUserOfBankDto } from '../currentUsersOfBanks/dto/create-current-user-of-bank.dto';
 import { CreateAccountDto } from '../accounts/dto/create-account.dto';
 import { CreateTransactionDto } from '../transactions/dto/create-transaction.dto';
@@ -55,8 +55,10 @@ export class UsersService {
 
   async bankRegistration(
     createCurrentUserOfBankDto: CreateCurrentUserOfBankDto,
-  ): Promise<void> {
-    await this.currentUsersOfBanksService.create(createCurrentUserOfBankDto);
+  ): Promise<AccountInterface> {
+    return await this.currentUsersOfBanksService.create(
+      createCurrentUserOfBankDto,
+    );
   }
 
   async getAllBanksByIdUser(id: string): Promise<Array<string>> {
@@ -77,8 +79,8 @@ export class UsersService {
 
   async transactionRequest(
     createTransactionDto: CreateTransactionDto,
-  ): Promise<void> {
-    await this.transactionsService.create(createTransactionDto);
+  ): Promise<TransactionInterface> {
+    return await this.transactionsService.create(createTransactionDto);
   }
 
   async getTransactionById(id: string): Promise<TransactionInterface> {

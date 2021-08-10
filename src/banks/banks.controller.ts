@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { BanksService } from './banks.service';
 import { BankInterface } from './interfaces/bank.interface';
+// import { UserInterface } from '../users/interfaces/user.interface';
 import { CreateBankDto } from './dto/create-bank.dto';
 import { UpdateBankDto } from './dto/update-bank.dto';
 
@@ -16,7 +17,7 @@ import { UpdateBankDto } from './dto/update-bank.dto';
 export class BanksController {
   constructor(private readonly banksService: BanksService) {}
 
-  @Post()
+  @Post('')
   async create(@Body() createBankDto: CreateBankDto): Promise<BankInterface> {
     console.log(`Create bank`);
 
@@ -56,5 +57,37 @@ export class BanksController {
     console.log(`Delete bank by id: ${id}`);
 
     return this.banksService.deleteById(id);
+  }
+
+  @Get(':id/users')
+  async getAllUsers(@Param('id') id: string): Promise<unknown> {
+    console.log(`Get all users`);
+
+    const users = await this.banksService.getAllUsersByIdBank(id);
+
+    return users.length ? users : null;
+  }
+
+  @Get(':id/users/:idUser/accounts')
+  async getAllAccounts(
+    @Param('id') id: string,
+    @Param('idUser') idUser: string,
+  ): Promise<unknown> {
+    console.log(`Get all users`);
+
+    const accounts = await this.banksService.getAllAccountsByIdUser(idUser);
+
+    return accounts.length ? accounts : null;
+  }
+
+  @Get(':id/users/:idUser/accounts/:idAccount')
+  async getAllTransactions(
+    @Param('id') id: string,
+    @Param('idUser') idUser: string,
+    @Param('idAccount') idAccount: string,
+  ): Promise<unknown> {
+    console.log(`Get all users`);
+
+    return await this.banksService.getAllTransactionByIdAccount(idAccount);
   }
 }

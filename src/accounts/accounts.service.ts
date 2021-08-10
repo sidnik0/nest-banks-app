@@ -10,12 +10,14 @@ export class AccountsService {
 
   constructor(private readonly helpersService: HelpersService) {}
 
-  async create(createAccountDto: CreateAccountDto): Promise<void> {
+  async create(createAccountDto: CreateAccountDto): Promise<AccountInterface> {
     const id = this.helpersService.createId();
 
     const balance = createAccountDto.balance || 0;
 
     this.accounts.set(id, { ...createAccountDto, balance, id });
+
+    return this.accounts.get(id);
   }
 
   async getById(id: string): Promise<AccountInterface> {

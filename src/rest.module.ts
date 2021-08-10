@@ -6,4 +6,4 @@ import { RegistrationsModule } from './registrations/registrations.module';
 @Module({
   imports: [BanksModule, UsersModule, RegistrationsModule],
 })
-export class AppModule {}
+export class RestModule {}

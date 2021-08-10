@@ -18,7 +18,9 @@ export class TransactionsService {
     private readonly accountsService: AccountsService,
   ) {}
 
-  async create(createTransactionDto: CreateTransactionDto): Promise<void> {
+  async create(
+    createTransactionDto: CreateTransactionDto,
+  ): Promise<TransactionInterface> {
     const id = this.helpersService.createId();
 
     const fromAccountPromise = this.getAccountById(
@@ -54,6 +56,8 @@ export class TransactionsService {
       create,
       id,
     });
+
+    return this.transactions.get(id);
   }
 
   async getById(id: string): Promise<TransactionInterface> {

@@ -3,7 +3,7 @@ import { UsersService } from './users.service';
 
 import { UserInterface } from './interfaces/user.interface';
 
-import { UpdateUserDto } from './dto/update.user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
