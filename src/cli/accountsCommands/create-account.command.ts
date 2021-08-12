@@ -1,5 +1,5 @@
 import { Command, CommandRunner, Option } from 'nest-commander';
-import { UsersService } from '../../users/users.service';
+import { AccountsService } from '../../accounts/accounts.service';
 import { HelpersService } from '../../common/helpers/helpers.service';
 
 import { CreateAccountDto } from '../../accounts/dto/create-account.dto';
@@ -21,7 +21,7 @@ export class CreateAccountCommand implements CommandRunner {
   ];
 
   constructor(
-    private readonly usersService: UsersService,
+    private readonly accountsService: AccountsService,
     private readonly helpersService: HelpersService,
   ) {}
 
@@ -45,7 +45,7 @@ export class CreateAccountCommand implements CommandRunner {
     }
 
     try {
-      const account = await this.usersService.createAccount({
+      const account = await this.accountsService.create({
         ...regUser,
         ...options,
       });
@@ -94,11 +94,11 @@ export class CreateAccountCommand implements CommandRunner {
       process.exit(0);
     }
 
-    if (currency === 'USD') return currency;
+    if (currency === 'USD' || currency === 'EUR' || currency !== 'RUB') {
+      return currency;
+    }
 
-    if (currency === 'EUR') return currency;
-
-    if (currency !== 'RUB') return 'RUB';
+    return 'RUB';
   }
 
   @Option({

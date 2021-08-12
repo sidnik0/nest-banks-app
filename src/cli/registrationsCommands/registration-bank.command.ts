@@ -22,6 +22,9 @@ export class RegistrationBankCommand implements CommandRunner {
       this.properties,
     );
 
+    console.log(registrationBankDto);
+    console.log(options);
+
     if (!options[this.name]) {
       registrationBankDto[this.name] = this.parseName(
         registrationBankDto[this.name],
@@ -49,12 +52,12 @@ export class RegistrationBankCommand implements CommandRunner {
   }
 
   @Option({
-    flags: '-n, name=<name>',
+    flags: '-n, name <name>',
     description: 'Bank name',
   })
   parseName(name: string): string {
     if (!name) {
-      console.error('Bank name not specified');
+      console.error('Bank name not specified. Use name=value or -n value');
       process.exit(0);
     }
 
@@ -62,7 +65,7 @@ export class RegistrationBankCommand implements CommandRunner {
   }
 
   @Option({
-    flags: '-e, comEnt=<comEnt>',
+    flags: '-e, comEnt <comEnt>',
     description: 'Entity commission',
   })
   parseComEnt(comEnt: string): number {
@@ -77,7 +80,7 @@ export class RegistrationBankCommand implements CommandRunner {
   }
 
   @Option({
-    flags: '-i, comInd=<comInd>',
+    flags: '-i, comInd <comInd>',
     description: 'Individuals commission',
   })
   parseComInd(comInd: string): number {

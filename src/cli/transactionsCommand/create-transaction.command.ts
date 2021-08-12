@@ -1,5 +1,5 @@
 import { Command, CommandRunner, Option } from 'nest-commander';
-import { UsersService } from '../../users/users.service';
+import { TransactionsService } from '../../transactions/transactions.service';
 import { HelpersService } from '../../common/helpers/helpers.service';
 
 import { CreateTransactionDto } from '../../transactions/dto/create-transaction.dto';
@@ -16,7 +16,7 @@ export class CreateTransactionCommand implements CommandRunner {
   ];
 
   constructor(
-    private readonly usersService: UsersService,
+    private readonly transactionsService: TransactionsService,
     private readonly helpersService: HelpersService,
   ) {}
 
@@ -43,7 +43,7 @@ export class CreateTransactionCommand implements CommandRunner {
     }
 
     try {
-      const currentTransaction = await this.usersService.transactionRequest({
+      const currentTransaction = await this.transactionsService.create({
         ...transaction,
         ...options,
       });

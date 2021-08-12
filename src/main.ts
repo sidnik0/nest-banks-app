@@ -7,7 +7,7 @@ async function bootstrap() {
   console.log(0);
   console.log(process.argv);
   console.log(1);
-  switch ('rest' as string) {
+  switch ('cli' as string) {
     case 'cli':
       await CommandFactory.run(CliModule, ['warn', 'error']);
 

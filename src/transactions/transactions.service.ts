@@ -1,13 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { HelpersService } from '../common/helpers/helpers.service';
 import { AccountsService } from '../accounts/accounts.service';
+import { BanksService } from '../banks/banks.service';
+import { UsersService } from '../users/users.service';
 
 import { TransactionInterface } from './interfaces/transaction.interface';
 import { AccountInterface } from '../accounts/interfaces/account.interface';
 
-import { AllTransactionInterface } from './interfaces/all-transaction.interface';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
-import { UpdateAccountDto } from '../accounts/dto/update-account.dto';
+import { PeriodTransactionDto } from './dto/period-transaction.dto';
 
 @Injectable()
 export class TransactionsService {
@@ -16,6 +17,8 @@ export class TransactionsService {
   constructor(
     private readonly helpersService: HelpersService,
     private readonly accountsService: AccountsService,
+    private readonly banksService: BanksService,
+    private readonly usersService: UsersService,
   ) {}
 
   async create(
@@ -23,13 +26,10 @@ export class TransactionsService {
   ): Promise<TransactionInterface> {
     const id = this.helpersService.createId();
 
-    const fromAccountPromise = this.getAccountById(
+    const fromAccountPromise = this.accountsService.getById(
       createTransactionDto.fromAccountId,
-    ).then((account): AccountInterface => {
-      return TransactionsService.balanceCheck(account, createTransactionDto);
-    });
-
-    const toAccountPromise = this.getAccountById(
+    );
+    const toAccountPromise = this.accountsService.getById(
       createTransactionDto.toAccountId,
     );
 
@@ -38,14 +38,30 @@ export class TransactionsService {
       toAccountPromise,
     ]);
 
+    TransactionsService.balanceCheck(fromAccount, createTransactionDto);
     TransactionsService.currencyCheck(fromAccount, toAccount);
 
-    const updateFromAccountPromise = this.updateAccountById(fromAccount.id, {
-      balance: fromAccount.balance - createTransactionDto.value,
-    } as UpdateAccountDto);
-    const updateToAccountPromise = this.updateAccountById(toAccount.id, {
-      balance: toAccount.balance + createTransactionDto.value,
-    } as UpdateAccountDto);
+    const commission = await this.getCurrentCommission(fromAccount, toAccount);
+
+    const updateFromAccountPromise = this.accountsService.updateById(
+      fromAccount.id,
+      {
+        balance: TransactionsService.updateBalance(
+          fromAccount.balance,
+          -createTransactionDto.value,
+          commission,
+        ),
+      },
+    );
+    const updateToAccountPromise = this.accountsService.updateById(
+      toAccount.id,
+      {
+        balance: TransactionsService.updateBalance(
+          toAccount.balance,
+          createTransactionDto.value,
+        ),
+      },
+    );
 
     await Promise.all([updateFromAccountPromise, updateToAccountPromise]);
 
@@ -64,52 +80,78 @@ export class TransactionsService {
     return this.transactions.get(id);
   }
 
-  async getByIdAccount(idAccount: string): Promise<AllTransactionInterface> {
-    const fromResult = [];
-    const toResult = [];
+  async getByIdAccount(
+    idAccount: string,
+    period?: PeriodTransactionDto,
+  ): Promise<Array<TransactionInterface>> {
+    const result = [];
 
     for (const obj of this.transactions.values()) {
-      if (obj.fromAccountId === idAccount) {
-        fromResult.push(obj);
-      } else if (obj.toAccountId === idAccount) {
-        toResult.push(obj);
-      } else {
+      if (obj.fromAccountId === idAccount || obj.toAccountId === idAccount) {
+        result.push(obj);
       }
     }
+    if (!period) return result;
 
-    return { from: fromResult, to: toResult };
+    return TransactionsService.filterByPeriod(result, period);
   }
 
-  // async get(): Promise<Map<string, TransactionInterface>> {
-  //   return this.transactions;
-  // }
-
-  private async getAccountById(id: string): Promise<AccountInterface> {
-    return this.accountsService.getById(id);
+  async get(): Promise<Map<string, TransactionInterface>> {
+    return this.transactions;
   }
 
-  private async updateAccountById(
-    id: string,
-    updateAccountDto: UpdateAccountDto,
-  ): Promise<void> {
-    await this.accountsService.update(id, updateAccountDto);
+  private static updateBalance(a: number, b: number, com = 1): number {
+    return Math.floor((a + b * com) * 100) / 100;
   }
 
   private static balanceCheck(
     account: AccountInterface,
     createTransactionDto: CreateTransactionDto,
-  ): AccountInterface {
-    if (account.balance < createTransactionDto.value)
+  ): void {
+    if (account.balance < createTransactionDto.value) {
       throw Error('Not enough money in the account');
-
-    return account;
+    }
   }
 
   private static currencyCheck(
     fromAccount: AccountInterface,
     toAccount: AccountInterface,
   ): void {
-    if (fromAccount.currency !== toAccount.currency)
+    if (fromAccount.currency !== toAccount.currency) {
       throw Error('Another currency on the account');
+    }
+  }
+
+  private static filterByPeriod(
+    transactions: Array<TransactionInterface>,
+    period: PeriodTransactionDto,
+  ): Array<TransactionInterface> {
+    return transactions.map((transaction) => {
+      if (
+        period.from <= transaction.create &&
+        transaction.create <= period.to
+      ) {
+        return transaction;
+      }
+    });
+  }
+
+  private async getCurrentCommission(
+    fromAccount: AccountInterface,
+    toAccount: AccountInterface,
+  ): Promise<number> {
+    const fromBankPromise = this.banksService.getById(fromAccount.idBank);
+    const toBankPromise = this.banksService.getById(toAccount.idBank);
+    const fromUserPromise = this.usersService.getById(fromAccount.idUser);
+
+    const [fromBank, toBank, fromUser] = await Promise.all([
+      fromBankPromise,
+      toBankPromise,
+      fromUserPromise,
+    ]);
+
+    if (fromBank.id !== toBank.id) return 1;
+
+    return fromUser.face === 'entity' ? fromBank.comEnt : fromBank.comInd;
   }
 }

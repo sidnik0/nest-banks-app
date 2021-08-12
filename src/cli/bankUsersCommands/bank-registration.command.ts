@@ -1,11 +1,11 @@
 import { Command, CommandRunner, Option } from 'nest-commander';
-import { UsersService } from '../../users/users.service';
+import { BankUsersService } from '../../bankUsers/bank-users.service';
 import { HelpersService } from '../../common/helpers/helpers.service';
 
-import { CreateCurrentUserOfBankDto } from '../../currentUsersOfBanks/dto/create-current-user-of-bank.dto';
+import { CreateBankUserDto } from '../../bankUsers/dto/create-bank-user.dto';
 
 @Command({
-  name: 'bank-registration',
+  name: 'bank-registration-with-account',
   description: 'Registration user in the bank',
 })
 export class BankRegistrationCommand implements CommandRunner {
@@ -21,14 +21,11 @@ export class BankRegistrationCommand implements CommandRunner {
   ];
 
   constructor(
-    private readonly usersService: UsersService,
+    private readonly bankUsersService: BankUsersService,
     private readonly helpersService: HelpersService,
   ) {}
 
-  async run(
-    args: Array<string>,
-    options: CreateCurrentUserOfBankDto,
-  ): Promise<void> {
+  async run(args: Array<string>, options: CreateBankUserDto): Promise<void> {
     const regUser = this.helpersService.convertingArgs(args, this.properties);
 
     if (!options[this.idUser]) {
@@ -48,7 +45,7 @@ export class BankRegistrationCommand implements CommandRunner {
     }
 
     try {
-      const account = await this.usersService.bankRegistration({
+      const account = await this.bankUsersService.createWithAccount({
         ...regUser,
         ...options,
       });
@@ -97,11 +94,11 @@ export class BankRegistrationCommand implements CommandRunner {
       process.exit(0);
     }
 
-    if (currency === 'USD') return currency;
+    if (currency === 'USD' || currency === 'EUR' || currency === 'RUB') {
+      return currency;
+    }
 
-    if (currency === 'EUR') return currency;
-
-    if (currency !== 'RUB') return 'RUB';
+    return 'RUB';
   }
 
   @Option({

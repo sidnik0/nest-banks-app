@@ -1,17 +1,14 @@
 import { Command, CommandRunner, Option } from 'nest-commander';
-import { UsersService } from '../../users/users.service';
+import { TransactionsService } from '../../transactions/transactions.service';
 import { HelpersService } from '../../common/helpers/helpers.service';
 
-@Command({
-  name: 'get-all-transactions-account',
-  description: 'Get all transactions account',
-})
-export class GetAllTransactionsAccountCommand implements CommandRunner {
+@Command({ name: 'get-transaction', description: 'Get transaction' })
+export class GetTransactionCommand implements CommandRunner {
   private readonly id = 'id';
   private readonly properties = [this.id];
 
   constructor(
-    private readonly usersService: UsersService,
+    private readonly transactionsService: TransactionsService,
     private readonly helpersService: HelpersService,
   ) {}
 
@@ -19,7 +16,7 @@ export class GetAllTransactionsAccountCommand implements CommandRunner {
     const userId = this.helpersService.convertingArgs(args, this.properties);
 
     try {
-      const user = await this.usersService.getAllTransactionsByIdAccount(
+      const user = await this.transactionsService.getById(
         userId[this.id] || options.id,
       );
 
@@ -33,11 +30,11 @@ export class GetAllTransactionsAccountCommand implements CommandRunner {
 
   @Option({
     flags: '-i, id=<id>',
-    description: 'Account id',
+    description: 'Transaction id',
   })
   parseId(id: string): string {
     if (!id) {
-      console.error('Account id not specified');
+      console.error('Transaction id not specified');
       process.exit(0);
     }
 

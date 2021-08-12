@@ -3,16 +3,18 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
 import { HelpersModule } from '../common/helpers/helpers.module';
-import { CurrentUsersOfBanksModule } from '../currentUsersOfBanks/current-users-of-banks.module';
-import { AccountsModule } from '../accounts/accounts.module';
-import { TransactionsModule } from '../transactions/transactions.module';
+// import { BankUsersModule } from '../bankUsers/bank-users.module';
+// import { AccountsModule } from '../accounts/accounts.module';
+// import { TransactionsModule } from '../transactions/transactions.module';
+// import { BanksModule } from '../banks/banks.module';
 
 @Module({
   imports: [
     HelpersModule,
-    CurrentUsersOfBanksModule,
-    AccountsModule,
-    TransactionsModule,
+    // BankUsersModule,
+    // AccountsModule,
+    // TransactionsModule,
+    // BanksModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],

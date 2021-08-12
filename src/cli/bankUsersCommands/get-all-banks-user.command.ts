@@ -1,17 +1,17 @@
 import { Command, CommandRunner, Option } from 'nest-commander';
-import { UsersService } from '../../users/users.service';
+import { BankUsersService } from '../../bankUsers/bank-users.service';
 import { HelpersService } from '../../common/helpers/helpers.service';
 
 @Command({
-  name: 'get-all-banks-user',
+  name: 'get-all-user-banks',
   description: 'Get all banks the user exists',
 })
-export class GetAllBanksUsersCommand implements CommandRunner {
+export class GetAllBanksUserCommand implements CommandRunner {
   private readonly id = 'id';
   private readonly properties = [this.id];
 
   constructor(
-    private readonly usersService: UsersService,
+    private readonly bankUsersService: BankUsersService,
     private readonly helpersService: HelpersService,
   ) {}
 
@@ -19,7 +19,7 @@ export class GetAllBanksUsersCommand implements CommandRunner {
     const userId = this.helpersService.convertingArgs(args, this.properties);
 
     try {
-      const banks = await this.usersService.getAllBanksByIdUser(
+      const banks = await this.bankUsersService.getBanksByIdUser(
         userId[this.id] || options.id,
       );
 

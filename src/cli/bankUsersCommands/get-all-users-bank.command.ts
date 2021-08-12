@@ -1,26 +1,29 @@
 import { Command, CommandRunner, Option } from 'nest-commander';
-import { UsersService } from '../../users/users.service';
+import { BankUsersService } from '../../bankUsers/bank-users.service';
 import { HelpersService } from '../../common/helpers/helpers.service';
 
-@Command({ name: 'get-account', description: 'Get account' })
-export class GetAccountCommand implements CommandRunner {
+@Command({
+  name: 'get-all-bank-users',
+  description: 'Get all bank users',
+})
+export class GetAllUsersBankCommand implements CommandRunner {
   private readonly id = 'id';
   private readonly properties = [this.id];
 
   constructor(
-    private readonly usersService: UsersService,
+    private readonly bankUsersService: BankUsersService,
     private readonly helpersService: HelpersService,
   ) {}
 
   async run(args: Array<string>, options: { id: string }): Promise<void> {
-    const account = this.helpersService.convertingArgs(args, this.properties);
+    const bankId = this.helpersService.convertingArgs(args, this.properties);
 
     try {
-      const currentAccount = await this.usersService.getAccountById(
-        account[this.id] || options.id,
+      const users = await this.bankUsersService.getUsersByIdBank(
+        bankId[this.id] || options.id,
       );
 
-      console.log(currentAccount);
+      console.log(users);
     } catch (e) {
       console.log(e.message);
       console.error('Internal error');
@@ -30,11 +33,11 @@ export class GetAccountCommand implements CommandRunner {
 
   @Option({
     flags: '-i, id=<id>',
-    description: 'Account id',
+    description: 'Bank id',
   })
   parseId(id: string): string {
     if (!id) {
-      console.error('Account id not specified');
+      console.error('Bank id not specified');
       process.exit(0);
     }
 
