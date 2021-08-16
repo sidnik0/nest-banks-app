@@ -1,12 +1,19 @@
-import { Command, CommandRunner } from 'nest-commander';
+import { Injectable } from '@nestjs/common';
 import { UsersService } from '../../users/users.service';
+import { commands } from '../commands';
+import { getUsersHelp } from '../helps';
 
-@Command({ name: 'get-users', description: 'Get all users' })
-export class GetUsersCommand implements CommandRunner {
+@Injectable()
+export class GetUsersCommand {
   constructor(private readonly usersService: UsersService) {}
 
-  async run(): Promise<void> {
+  async run(args: Array<string>): Promise<void> {
     try {
+      if (args[0] === commands.help || !args[0]) {
+        console.log(getUsersHelp);
+        process.exit(0);
+      }
+
       const users = await this.usersService.get();
 
       console.log(users);

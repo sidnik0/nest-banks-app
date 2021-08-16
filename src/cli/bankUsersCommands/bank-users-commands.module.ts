@@ -13,5 +13,10 @@ import { BankUsersModule } from '../../bankUsers/bank-users.module';
     GetAllBanksUserCommand,
     GetAllUsersBankCommand,
   ],
+  exports: [
+    BankRegistrationCommand,
+    GetAllBanksUserCommand,
+    GetAllUsersBankCommand,
+  ],
 })
-export class BankUsersCommandModule {}
+export class BankUsersCommandsModule {}

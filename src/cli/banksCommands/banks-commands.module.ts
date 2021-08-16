@@ -15,5 +15,11 @@ import { BanksModule } from '../../banks/banks.module';
     GetBanksCommand,
     UpdateBankCommand,
   ],
+  exports: [
+    DeleteBankCommand,
+    GetBankCommand,
+    GetBanksCommand,
+    UpdateBankCommand,
+  ],
 })
 export class BanksCommandsModule {}

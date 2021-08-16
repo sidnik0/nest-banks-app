@@ -13,5 +13,6 @@ import { AccountsModule } from '../../accounts/accounts.module';
     GetAccountCommand,
     GetAllAccountsUserCommand,
   ],
+  exports: [CreateAccountCommand, GetAccountCommand, GetAllAccountsUserCommand],
 })
 export class AccountsCommandsModule {}

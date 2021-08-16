@@ -1,14 +1,14 @@
-import { Command, CommandRunner, Option } from 'nest-commander';
+import { Injectable } from '@nestjs/common';
+
 import { BankUsersService } from '../../bankUsers/bank-users.service';
 import { HelpersService } from '../../common/helpers/helpers.service';
 
 import { CreateBankUserDto } from '../../bankUsers/dto/create-bank-user.dto';
+import { commands } from '../commands';
+import { bankRegistrationHelp } from '../helps';
 
-@Command({
-  name: 'bank-registration-with-account',
-  description: 'Registration user in the bank',
-})
-export class BankRegistrationCommand implements CommandRunner {
+@Injectable()
+export class BankRegistrationCommand {
   private readonly idUser = 'idUser';
   private readonly idBank = 'idBank';
   private readonly currency = 'currency';
@@ -25,30 +25,26 @@ export class BankRegistrationCommand implements CommandRunner {
     private readonly helpersService: HelpersService,
   ) {}
 
-  async run(args: Array<string>, options: CreateBankUserDto): Promise<void> {
+  async run(args: Array<string>): Promise<void> {
+    if (args[0] === commands.help || !args[0]) {
+      console.log(bankRegistrationHelp);
+      process.exit(0);
+    }
+
     const regUser = this.helpersService.convertingArgs(args, this.properties);
 
-    if (!options[this.idUser]) {
-      regUser[this.idUser] = this.parseIdUser(regUser[this.idUser]);
-    }
-
-    if (!options[this.idBank]) {
-      regUser[this.idBank] = this.parseIdBank(regUser[this.idBank]);
-    }
-
-    if (!options[this.currency]) {
-      regUser[this.currency] = this.parseCurrency(regUser[this.currency]);
-    }
-
-    if (!options[this.balance]) {
-      regUser[this.balance] = this.parseBalance(regUser[this.balance]);
-    }
-
     try {
-      const account = await this.bankUsersService.createWithAccount({
-        ...regUser,
-        ...options,
-      });
+      regUser[this.idUser] = this.parseIdUser(regUser[this.idUser]);
+
+      regUser[this.idBank] = this.parseIdBank(regUser[this.idBank]);
+
+      regUser[this.currency] = this.parseCurrency(regUser[this.currency]);
+
+      regUser[this.balance] = this.parseBalance(regUser[this.balance]);
+
+      const account = await this.bankUsersService.createWithAccount(
+        regUser as CreateBankUserDto,
+      );
 
       console.log(account);
     } catch (e) {
@@ -58,10 +54,6 @@ export class BankRegistrationCommand implements CommandRunner {
     }
   }
 
-  @Option({
-    flags: '-u, idUser=<idUser>',
-    description: 'User id',
-  })
   parseIdUser(idUser: string): string {
     if (!idUser) {
       console.error('User id not specified');
@@ -71,10 +63,6 @@ export class BankRegistrationCommand implements CommandRunner {
     return idUser;
   }
 
-  @Option({
-    flags: '-b, idBank=<idBank>',
-    description: 'Bank id',
-  })
   parseIdBank(idBank: string): string {
     if (!idBank) {
       console.error('Bank id not specified');
@@ -84,10 +72,6 @@ export class BankRegistrationCommand implements CommandRunner {
     return idBank;
   }
 
-  @Option({
-    flags: '-c, currency=<currency>',
-    description: 'currency ("USD" | "EUR" | "RUB")',
-  })
   parseCurrency(currency: string): string {
     if (!currency) {
       console.error('Currency not specified');
@@ -101,10 +85,6 @@ export class BankRegistrationCommand implements CommandRunner {
     return 'RUB';
   }
 
-  @Option({
-    flags: '-bl, balance=<balance>',
-    description: 'balance',
-  })
   parseBalance(balance: string): number {
     const bal = Number.parseInt(balance);
 

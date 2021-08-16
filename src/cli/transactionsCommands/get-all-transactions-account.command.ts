@@ -1,12 +1,11 @@
-import { Command, CommandRunner, Option } from 'nest-commander';
+import { Injectable } from '@nestjs/common';
 import { TransactionsService } from '../../transactions/transactions.service';
 import { HelpersService } from '../../common/helpers/helpers.service';
+import { commands } from '../commands';
+import { getAllTransactionsHelp } from '../helps';
 
-@Command({
-  name: 'get-all-transactions-account',
-  description: 'Get all transactions account',
-})
-export class GetAllTransactionsAccountCommand implements CommandRunner {
+@Injectable()
+export class GetAllTransactionsAccountCommand {
   private readonly id = 'id';
   private readonly properties = [this.id];
 
@@ -15,12 +14,19 @@ export class GetAllTransactionsAccountCommand implements CommandRunner {
     private readonly helpersService: HelpersService,
   ) {}
 
-  async run(args: Array<string>, options: { id: string }): Promise<void> {
-    const userId = this.helpersService.convertingArgs(args, this.properties);
+  async run(args: Array<string>): Promise<void> {
+    if (args[0] === commands.help || !args[0]) {
+      console.log(getAllTransactionsHelp);
+      process.exit(0);
+    }
+
+    const accountId = this.helpersService.convertingArgs(args, this.properties);
 
     try {
+      accountId[this.id] = this.parseId(accountId[this.id]);
+
       const user = await this.transactionsService.getByIdAccount(
-        userId[this.id] || options.id,
+        accountId[this.id],
       );
 
       console.log(user);
@@ -31,10 +37,6 @@ export class GetAllTransactionsAccountCommand implements CommandRunner {
     }
   }
 
-  @Option({
-    flags: '-i, id=<id>',
-    description: 'Account id',
-  })
   parseId(id: string): string {
     if (!id) {
       console.error('Account id not specified');

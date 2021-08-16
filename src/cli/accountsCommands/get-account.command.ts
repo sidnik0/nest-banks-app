@@ -1,9 +1,11 @@
-import { Command, CommandRunner, Option } from 'nest-commander';
+import { Injectable } from '@nestjs/common';
 import { AccountsService } from '../../accounts/accounts.service';
 import { HelpersService } from '../../common/helpers/helpers.service';
+import { commands } from '../commands';
+import { getAccountHelp } from '../helps';
 
-@Command({ name: 'get-account', description: 'Get account' })
-export class GetAccountCommand implements CommandRunner {
+@Injectable()
+export class GetAccountCommand {
   private readonly id = 'id';
   private readonly properties = [this.id];
 
@@ -12,12 +14,19 @@ export class GetAccountCommand implements CommandRunner {
     private readonly helpersService: HelpersService,
   ) {}
 
-  async run(args: Array<string>, options: { id: string }): Promise<void> {
+  async run(args: Array<string>): Promise<void> {
+    if (args[0] === commands.help || !args[0]) {
+      console.log(getAccountHelp);
+      process.exit(0);
+    }
+
     const account = this.helpersService.convertingArgs(args, this.properties);
 
     try {
+      account[this.id] = this.parseId(account[this.id]);
+
       const currentAccount = await this.accountsService.getById(
-        account[this.id] || options.id,
+        account[this.id],
       );
 
       console.log(currentAccount);
@@ -28,10 +37,6 @@ export class GetAccountCommand implements CommandRunner {
     }
   }
 
-  @Option({
-    flags: '-i, id=<id>',
-    description: 'Account id',
-  })
   parseId(id: string): string {
     if (!id) {
       console.error('Account id not specified');

@@ -1,11 +1,18 @@
-import { Command, CommandRunner } from 'nest-commander';
+import { Injectable } from '@nestjs/common';
 import { BanksService } from '../../banks/banks.service';
+import { commands } from '../commands';
+import { getBanksHelp } from '../helps';
 
-@Command({ name: 'get-banks', description: 'Get all banks' })
-export class GetBanksCommand implements CommandRunner {
+@Injectable()
+export class GetBanksCommand {
   constructor(private readonly banksService: BanksService) {}
 
-  async run(): Promise<void> {
+  async run(args: Array<string>): Promise<void> {
+    if (args[0] === commands.help || !args[0]) {
+      console.log(getBanksHelp);
+      process.exit(0);
+    }
+
     try {
       const banks = await this.banksService.get();
 

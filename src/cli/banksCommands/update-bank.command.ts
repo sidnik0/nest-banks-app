@@ -1,11 +1,13 @@
-import { Command, CommandRunner, Option } from 'nest-commander';
+import { Injectable } from '@nestjs/common';
 import { BanksService } from '../../banks/banks.service';
 import { HelpersService } from '../../common/helpers/helpers.service';
 
 import { UpdateBankDto } from '../../banks/dto/update-bank.dto';
+import { commands } from '../commands';
+import { updateBankHelp } from '../helps';
 
-@Command({ name: 'update-bank', description: 'Update bank' })
-export class UpdateBankCommand implements CommandRunner {
+@Injectable()
+export class UpdateBankCommand {
   private readonly id = 'id';
   private readonly name = 'name';
   private readonly comEnt = 'comEnt';
@@ -17,26 +19,41 @@ export class UpdateBankCommand implements CommandRunner {
     private readonly helpersService: HelpersService,
   ) {}
 
-  async run(args: Array<string>, options: UpdateBankDto): Promise<void> {
+  async run(args: Array<string>): Promise<void> {
+    if (args[0] === commands.help || !args[0]) {
+      console.log(updateBankHelp);
+      process.exit(0);
+    }
+
     const updateBank = this.helpersService.convertingArgs(
       args,
       this.properties,
     );
 
-    const id = updateBank[this.id] || options.id;
+    try {
+      updateBank[this.id] = this.parseId(updateBank[this.id]);
 
-    const bank = await this.banksService.updateById(id, {
-      ...updateBank,
-      ...options,
-    });
+      updateBank[this.name] = this.parseName(updateBank[this.name]);
 
-    console.log(bank);
+      updateBank[this.comEnt] = this.parseComEnt(updateBank[this.comEnt]);
+
+      updateBank[this.comInd] = this.parseComInd(updateBank[this.comInd]);
+
+      const id = updateBank[this.id];
+
+      const bank = await this.banksService.updateById(
+        id,
+        updateBank as UpdateBankDto,
+      );
+
+      console.log(bank);
+    } catch (e) {
+      console.log(e.message);
+      console.error('Internal error');
+      process.exit(0);
+    }
   }
 
-  @Option({
-    flags: '-i, id=<id>',
-    description: 'Bank id',
-  })
   parseId(id: string): string {
     if (!id) {
       console.error('Bank id not specified');
@@ -46,28 +63,16 @@ export class UpdateBankCommand implements CommandRunner {
     return id;
   }
 
-  @Option({
-    flags: '-n, name=<name>',
-    description: 'Bank name',
-  })
   parseName(name: string): string {
     return name;
   }
 
-  @Option({
-    flags: '-e, comEnt=<comEnt>',
-    description: 'Entity commission',
-  })
   parseComEnt(comEnt: string): number {
     const com = Number.parseInt(comEnt);
 
     return com || 0;
   }
 
-  @Option({
-    flags: '-i, comInd=<comInd>',
-    description: 'Individuals commission',
-  })
   parseComInd(comInd: string): number {
     const com = Number.parseInt(comInd);
 

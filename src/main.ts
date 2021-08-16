@@ -1,15 +1,14 @@
 import { NestFactory } from '@nestjs/core';
-import { CommandFactory } from 'nest-commander';
 import { RestModule } from './rest.module';
-import { CliModule } from './cli.module';
+import { CliModule } from './cli/cli.module';
+import { CliService } from './cli/cli.service';
 
 async function bootstrap() {
-  console.log(0);
-  console.log(process.argv);
-  console.log(1);
   switch ('cli' as string) {
     case 'cli':
-      await CommandFactory.run(CliModule, ['warn', 'error']);
+      const cli = await NestFactory.createApplicationContext(CliModule);
+      const cliService = cli.get(CliService);
+      await cliService.run(process.argv);
 
       break;
     case 'rest':
@@ -19,8 +18,6 @@ async function bootstrap() {
 
       break;
   }
-  // // const app = await NestFactory.create(RestModule);
-  // // await app.listen(3000);
-  // await CommandFactory.run(CliModule, ['warn', 'error']);
 }
+
 bootstrap();

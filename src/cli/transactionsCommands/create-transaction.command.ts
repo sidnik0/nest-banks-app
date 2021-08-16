@@ -1,11 +1,13 @@
-import { Command, CommandRunner, Option } from 'nest-commander';
+import { Injectable } from '@nestjs/common';
 import { TransactionsService } from '../../transactions/transactions.service';
 import { HelpersService } from '../../common/helpers/helpers.service';
 
 import { CreateTransactionDto } from '../../transactions/dto/create-transaction.dto';
+import { commands } from '../commands';
+import { createTransactionHelp } from '../helps';
 
-@Command({ name: 'create-transaction', description: 'Create transaction' })
-export class CreateTransactionCommand implements CommandRunner {
+@Injectable()
+export class CreateTransactionCommand {
   private readonly fromAccountId = 'fromAccountId';
   private readonly toAccountId = 'toAccountId';
   private readonly value = 'value';
@@ -20,33 +22,31 @@ export class CreateTransactionCommand implements CommandRunner {
     private readonly helpersService: HelpersService,
   ) {}
 
-  async run(args: Array<string>, options: CreateTransactionDto): Promise<void> {
+  async run(args: Array<string>): Promise<void> {
+    if (args[0] === commands.help || !args[0]) {
+      console.log(createTransactionHelp);
+      process.exit(0);
+    }
+
     const transaction = this.helpersService.convertingArgs(
       args,
       this.properties,
     );
 
-    if (!options[this.fromAccountId]) {
+    try {
       transaction[this.fromAccountId] = this.parseFromAccountId(
         transaction[this.fromAccountId],
       );
-    }
 
-    if (!options[this.toAccountId]) {
       transaction[this.toAccountId] = this.parseToAccountId(
         transaction[this.toAccountId],
       );
-    }
 
-    if (!options[this.value]) {
       transaction[this.value] = this.parseValue(transaction[this.value]);
-    }
 
-    try {
-      const currentTransaction = await this.transactionsService.create({
-        ...transaction,
-        ...options,
-      });
+      const currentTransaction = await this.transactionsService.create(
+        transaction as CreateTransactionDto,
+      );
 
       console.log(currentTransaction);
     } catch (e) {
@@ -56,10 +56,6 @@ export class CreateTransactionCommand implements CommandRunner {
     }
   }
 
-  @Option({
-    flags: '-f, fromAccountId=<fromAccountId>',
-    description: 'From account',
-  })
   parseFromAccountId(fromAccountId: string): string {
     if (!fromAccountId) {
       console.error('User id not specified');
@@ -69,10 +65,6 @@ export class CreateTransactionCommand implements CommandRunner {
     return fromAccountId;
   }
 
-  @Option({
-    flags: '-t, toAccountId=<toAccountId>',
-    description: 'To account',
-  })
   parseToAccountId(toAccountId: string): string {
     if (!toAccountId) {
       console.error('User id not specified');
@@ -82,10 +74,6 @@ export class CreateTransactionCommand implements CommandRunner {
     return toAccountId;
   }
 
-  @Option({
-    flags: '-v, value=<value>',
-    description: 'value',
-  })
   parseValue(value: string): number {
     const val = Number.parseInt(value);
 

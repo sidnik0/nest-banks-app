@@ -1,11 +1,13 @@
-import { Command, CommandRunner, Option } from 'nest-commander';
+import { Injectable } from '@nestjs/common';
 import { RegistrationsService } from '../../registrations/registrations.service';
 import { HelpersService } from '../../common/helpers/helpers.service';
 
 import { RegistrationBankDto } from '../../registrations/dto/registration-bank.dto';
+import { commands } from '../commands';
+import { createBankHelp } from '../helps';
 
-@Command({ name: 'create-bank', description: 'Create a bank in the app' })
-export class RegistrationBankCommand implements CommandRunner {
+@Injectable()
+export class RegistrationBankCommand {
   private readonly name = 'name';
   private readonly comEnt = 'comEnt';
   private readonly comInd = 'comInd';
@@ -16,58 +18,51 @@ export class RegistrationBankCommand implements CommandRunner {
     private readonly helpersService: HelpersService,
   ) {}
 
-  async run(args: Array<string>, options: RegistrationBankDto): Promise<void> {
+  async run(args: Array<string>): Promise<void> {
+    if (args[0] === commands.help || !args[0]) {
+      console.log(createBankHelp);
+      process.exit(0);
+    }
+
     const registrationBankDto = this.helpersService.convertingArgs(
       args,
       this.properties,
     );
 
-    console.log(registrationBankDto);
-    console.log(options);
-
-    if (!options[this.name]) {
+    try {
       registrationBankDto[this.name] = this.parseName(
         registrationBankDto[this.name],
       );
-    }
 
-    if (!options[this.comEnt]) {
       registrationBankDto[this.comEnt] = this.parseComEnt(
         registrationBankDto[this.comEnt],
       );
-    }
 
-    if (!options[this.comInd]) {
       registrationBankDto[this.comInd] = this.parseComInd(
         registrationBankDto[this.comInd],
       );
+
+      const bank = await this.registrationService.registrationBank(
+        registrationBankDto as RegistrationBankDto,
+      );
+
+      console.log(bank);
+    } catch (e) {
+      console.log(e.message);
+      console.error('Internal error');
+      process.exit(0);
     }
-
-    const bank = await this.registrationService.registrationBank({
-      ...registrationBankDto,
-      ...options,
-    });
-
-    console.log(bank);
   }
 
-  @Option({
-    flags: '-n, name <name>',
-    description: 'Bank name',
-  })
   parseName(name: string): string {
     if (!name) {
-      console.error('Bank name not specified. Use name=value or -n value');
+      console.error('Bank name not specified');
       process.exit(0);
     }
 
     return name;
   }
 
-  @Option({
-    flags: '-e, comEnt <comEnt>',
-    description: 'Entity commission',
-  })
   parseComEnt(comEnt: string): number {
     if (!comEnt) {
       console.error('Entity commission not specified');
@@ -79,10 +74,6 @@ export class RegistrationBankCommand implements CommandRunner {
     return com || 0;
   }
 
-  @Option({
-    flags: '-i, comInd <comInd>',
-    description: 'Individuals commission',
-  })
   parseComInd(comInd: string): number {
     if (!comInd) {
       console.error('Name not specified');

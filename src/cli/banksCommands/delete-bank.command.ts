@@ -1,9 +1,11 @@
-import { Command, CommandRunner, Option } from 'nest-commander';
+import { Injectable } from '@nestjs/common';
 import { BanksService } from '../../banks/banks.service';
 import { HelpersService } from '../../common/helpers/helpers.service';
+import { commands } from '../commands';
+import { deleteBankHelp } from '../helps';
 
-@Command({ name: 'delete-bank', description: 'Delete bank' })
-export class DeleteBankCommand implements CommandRunner {
+@Injectable()
+export class DeleteBankCommand {
   private readonly id = 'id';
   private readonly properties = [this.id];
 
@@ -12,13 +14,18 @@ export class DeleteBankCommand implements CommandRunner {
     private readonly helpersService: HelpersService,
   ) {}
 
-  async run(args: Array<string>, options: { id: string }): Promise<void> {
+  async run(args: Array<string>): Promise<void> {
+    if (args[0] === commands.help || !args[0]) {
+      console.log(deleteBankHelp);
+      process.exit(0);
+    }
+
     const bankId = this.helpersService.convertingArgs(args, this.properties);
 
     try {
-      const bank = await this.banksService.deleteById(
-        bankId[this.id] || options.id,
-      );
+      bankId[this.id] = this.parseId(bankId[this.id]);
+
+      const bank = await this.banksService.deleteById(bankId[this.id]);
 
       console.log(bank);
     } catch (e) {
@@ -28,10 +35,6 @@ export class DeleteBankCommand implements CommandRunner {
     }
   }
 
-  @Option({
-    flags: '-i, id=<id>',
-    description: 'Bank id',
-  })
   parseId(id: string): string {
     if (!id) {
       console.error('Bank id not specified');

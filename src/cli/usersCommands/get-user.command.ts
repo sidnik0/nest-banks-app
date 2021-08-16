@@ -1,9 +1,11 @@
-import { Command, CommandRunner, Option } from 'nest-commander';
+import { Injectable } from '@nestjs/common';
 import { UsersService } from '../../users/users.service';
 import { HelpersService } from '../../common/helpers/helpers.service';
+import { commands } from '../commands';
+import { getUserHelp } from '../helps';
 
-@Command({ name: 'get-user', description: 'Get user' })
-export class GetUserCommand implements CommandRunner {
+@Injectable()
+export class GetUserCommand {
   private readonly id = 'id';
   private readonly properties = [this.id];
 
@@ -12,13 +14,18 @@ export class GetUserCommand implements CommandRunner {
     private readonly helpersService: HelpersService,
   ) {}
 
-  async run(args: Array<string>, options: { id: string }): Promise<void> {
+  async run(args: Array<string>): Promise<void> {
+    if (args[0] === commands.help || !args[0]) {
+      console.log(getUserHelp);
+      process.exit(0);
+    }
+
     const userId = this.helpersService.convertingArgs(args, this.properties);
 
     try {
-      const user = await this.usersService.getById(
-        userId[this.id] || options.id,
-      );
+      userId[this.id] = this.parseId(userId[this.id]);
+
+      const user = await this.usersService.getById(userId[this.id]);
 
       console.log(user);
     } catch (e) {
@@ -28,10 +35,6 @@ export class GetUserCommand implements CommandRunner {
     }
   }
 
-  @Option({
-    flags: '-i, id=<id>',
-    description: 'User id',
-  })
   parseId(id: string): string {
     if (!id) {
       console.error('User id not specified');
