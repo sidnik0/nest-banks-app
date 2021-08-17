@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { RestModule } from './rest.module';
-import { CliModule } from './cli/cli.module';
-import { CliService } from './cli/cli.service';
+import { CliModule } from './bin/cli/cli.module';
+import { CliService } from './bin/cli/cli.service';
 
 async function bootstrap() {
   switch ('cli' as string) {
