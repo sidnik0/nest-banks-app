@@ -16,6 +16,10 @@ export class FsUserBankRepository
     this.data = fsHelperService.readFile<UserBankModel>(this.fileName);
   }
 
+  async update(): Promise<never> {
+    throw Error('Prohibited operation');
+  }
+
   async getBanksByUser(id: string): Promise<Array<UserBankModel>> {
     const result: Array<UserBankModel> = [];
 
