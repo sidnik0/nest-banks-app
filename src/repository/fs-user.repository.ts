@@ -10,7 +10,7 @@ export class FsUserRepository
   implements UserRepository
 {
   constructor(protected readonly fsHelperService: FsHelperService) {
-    super(fsHelperService);
+    super();
 
     this.fileName = 'users';
     this.data = fsHelperService.readFile<UserModel>(this.fileName);

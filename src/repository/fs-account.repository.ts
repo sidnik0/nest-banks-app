@@ -10,7 +10,7 @@ export class FsAccountRepository
   implements AccountRepository
 {
   constructor(protected readonly fsHelperService: FsHelperService) {
-    super(fsHelperService);
+    super();
 
     this.fileName = 'accounts';
     this.data = fsHelperService.readFile<AccountModel>(this.fileName);

@@ -1,19 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { FsBaseRepository } from './fs-base.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { DbBaseRepository } from './db-base.repository';
 import { TransactionRepository } from './interface/transaction.repository';
-import { FsHelperService } from '../common/helper/fs-helper.service';
+import { TransactionEntity } from '../model/transaction.entity';
 import { TransactionModel } from '../model/transaction.model';
 
 @Injectable()
-export class FsTransactionRepository
-  extends FsBaseRepository<TransactionModel>
+export class DbTransactionRepository
+  extends DbBaseRepository<TransactionEntity>
   implements TransactionRepository
 {
-  constructor(protected readonly fsHelperService: FsHelperService) {
+  constructor(
+    @InjectRepository(TransactionEntity)
+    protected readonly repository: Repository<TransactionEntity>,
+  ) {
     super();
-
-    this.fileName = 'transactions';
-    this.data = fsHelperService.readFile<TransactionModel>(this.fileName);
   }
 
   async update(): Promise<never> {
@@ -28,17 +30,13 @@ export class FsTransactionRepository
     id: string,
     period?: { from: number; to: number },
   ): Promise<Array<TransactionModel>> {
-    const result: Array<TransactionModel> = [];
-
-    for (const obj of Object.values(this.data)) {
-      if (obj.fromAccountId === id || obj.toAccountId === id) {
-        result.push(obj);
-      }
-    }
+    const data = await this.repository.find({
+      where: [{ toAccountId: id }, { fromAccountId: id }],
+    });
 
     return !period
-      ? result
-      : FsTransactionRepository.filterByPeriod(result, period);
+      ? data
+      : DbTransactionRepository.filterByPeriod(data, period);
   }
 
   private static filterByPeriod(

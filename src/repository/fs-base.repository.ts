@@ -4,10 +4,9 @@ import { FsHelperService } from '../common/helper/fs-helper.service';
 export abstract class FsBaseRepository<T extends { id: string }>
   implements BaseRepository<T>
 {
+  protected readonly fsHelperService: FsHelperService;
   protected data: { [index: string]: T };
   protected fileName: string;
-
-  protected constructor(protected readonly fsHelperService: FsHelperService) {}
 
   async create(model: T): Promise<T> {
     this.data[model.id] = model;

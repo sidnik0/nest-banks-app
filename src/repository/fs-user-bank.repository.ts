@@ -10,7 +10,7 @@ export class FsUserBankRepository
   implements UserBankRepository
 {
   constructor(protected readonly fsHelperService: FsHelperService) {
-    super(fsHelperService);
+    super();
 
     this.fileName = 'users-banks';
     this.data = fsHelperService.readFile<UserBankModel>(this.fileName);

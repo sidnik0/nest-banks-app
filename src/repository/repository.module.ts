@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { HelperModule } from '../common/helper/helper.module';
 import { AccountRepository } from './interface/account.repository';
 import { FsAccountRepository } from './fs-account.repository';
@@ -12,7 +13,7 @@ import { UserBankRepository } from './interface/user-bank.repository';
 import { FsUserBankRepository } from './fs-user-bank.repository';
 
 @Module({
-  imports: [HelperModule],
+  imports: [HelperModule, TypeOrmModule.forFeature([])],
   providers: [
     {
       provide: AccountRepository,

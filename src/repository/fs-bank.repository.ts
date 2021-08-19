@@ -10,7 +10,7 @@ export class FsBankRepository
   implements BankRepository
 {
   constructor(protected readonly fsHelperService: FsHelperService) {
-    super(fsHelperService);
+    super();
 
     this.fileName = 'banks';
     this.data = fsHelperService.readFile<BankModel>(this.fileName);
