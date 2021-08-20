@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { AccountModel } from './account.model';
+import { AccountModel } from './interface/account.model';
 import { CurrencyType } from '../types/currency.type';
 import { UserBankEntity } from './user-bank.entity';
 

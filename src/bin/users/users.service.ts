@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { HelpersService } from '../../common/helpers/helpers.service';
+import { RIdHelper } from '../../common/helper/r-id.helper';
 
 import { UserInterface } from './interfaces/user.interface';
 
@@ -10,7 +10,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UsersService {
   private users: Map<string, UserInterface> = new Map();
 
-  constructor(private readonly helpersService: HelpersService) {}
+  constructor(private readonly helpersService: RIdHelper) {}
 
   async create(createUserDto: CreateUserDto): Promise<UserInterface> {
     const id = this.helpersService.createId();

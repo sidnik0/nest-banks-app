@@ -4,11 +4,11 @@ import { DeleteUserCommand } from './delete-user.command';
 import { GetUserCommand } from './get-user.command';
 import { GetUsersCommand } from './get-users.command';
 
-import { HelpersModule } from '../../../common/helpers/helpers.module';
+import { HelperModule } from '../../../common/helper/helper.module';
 import { UsersModule } from '../../users/users.module';
 
 @Module({
-  imports: [HelpersModule, UsersModule],
+  imports: [HelperModule, UsersModule],
   providers: [
     UpdateUserCommand,
     DeleteUserCommand,

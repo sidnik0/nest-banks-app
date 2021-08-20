@@ -3,11 +3,11 @@ import { GetTransactionCommand } from './get-transaction.command';
 import { CreateTransactionCommand } from './create-transaction.command';
 import { GetAllTransactionsAccountCommand } from './get-all-transactions-account.command';
 
-import { HelpersModule } from '../../../common/helpers/helpers.module';
+import { HelperModule } from '../../../common/helper/helper.module';
 import { TransactionsModule } from '../../transactions/transactions.module';
 
 @Module({
-  imports: [HelpersModule, TransactionsModule],
+  imports: [HelperModule, TransactionsModule],
   providers: [
     GetTransactionCommand,
     CreateTransactionCommand,

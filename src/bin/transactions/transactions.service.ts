@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { HelpersService } from '../../common/helpers/helpers.service';
+import { RIdHelper } from '../../common/helper/r-id.helper';
 import { AccountsService } from '../accounts/accounts.service';
 import { BanksService } from '../banks/banks.service';
 import { UsersService } from '../users/users.service';
@@ -15,7 +15,7 @@ export class TransactionsService {
   private transactions: Map<string, TransactionInterface> = new Map();
 
   constructor(
-    private readonly helpersService: HelpersService,
+    private readonly helpersService: RIdHelper,
     private readonly accountsService: AccountsService,
     private readonly banksService: BanksService,
     private readonly usersService: UsersService,

@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { BankModel } from './bank.model';
+import { BankModel } from './interface/bank.model';
 
 @Entity()
 export class BankEntity implements BankModel {

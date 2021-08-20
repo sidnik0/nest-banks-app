@@ -1,8 +1,9 @@
 import * as fs from 'fs';
 import { Injectable } from '@nestjs/common';
+import { FsHelper } from './interface/fs.helper';
 
 @Injectable()
-export class FsHelperService {
+export class RFsHelper implements FsHelper {
   private readonly dir: string = process.cwd();
 
   readFile<T>(file: string): { [index: string]: T } {

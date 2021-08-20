@@ -1,5 +1,5 @@
 import { BaseRepository } from './base.repository';
-import { TransactionModel } from '../../model/transaction.model';
+import { TransactionModel } from '../../model/interface/transaction.model';
 
 export abstract class TransactionRepository extends BaseRepository<TransactionModel> {
   abstract getByAccount(

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 
 import { BankUsersService } from '../../bankUsers/bank-users.service';
-import { HelpersService } from '../../../common/helpers/helpers.service';
+import { RIdHelper } from '../../../common/helper/r-id.helper';
 
-import { CreateBankUserDto } from '../../bankUsers/dto/create-bank-user.dto';
+// import { CreateBankUserDto } from '../../bankUsers/dto/create-bank-user.dto';
 import { commands } from '../commands';
 import { bankRegistrationHelp } from '../helps';
 
@@ -22,7 +22,7 @@ export class BankRegistrationCommand {
 
   constructor(
     private readonly bankUsersService: BankUsersService,
-    private readonly helpersService: HelpersService,
+    private readonly helpersService: RIdHelper,
   ) {}
 
   async run(args: Array<string>): Promise<void> {
@@ -42,11 +42,11 @@ export class BankRegistrationCommand {
 
       regUser[this.balance] = this.parseBalance(regUser[this.balance]);
 
-      const account = await this.bankUsersService.createWithAccount(
-        regUser as CreateBankUserDto,
-      );
+      // const account = await this.bankUsersService.createWithAccount(
+      //   regUser as CreateBankUserDto,
+      // );
 
-      console.log(account);
+      // console.log(account);
     } catch (e) {
       console.log(e.message);
       console.error('Internal error');

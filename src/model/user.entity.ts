@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
-import { UserModel } from './user.model';
+import { UserModel } from './interface/user.model';
 import { FaceType } from '../types/face.type';
 
 @Entity()

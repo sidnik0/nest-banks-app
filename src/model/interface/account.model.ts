@@ -1,7 +1,7 @@
-import { CurrencyType } from '../types/currency.type';
+import { CurrencyType } from '../../types/currency.type';
 
 export interface AccountModel {
-  id: string;
+  id?: string;
   userBankId: string;
   currency: CurrencyType;
   balance: number;

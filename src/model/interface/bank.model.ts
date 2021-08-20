@@ -1,5 +1,5 @@
 export interface BankModel {
-  id: string;
+  id?: string;
   name: string;
   comEnt: number;
   comInd: number;

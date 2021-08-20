@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AccountsService } from './accounts.service';
 
-import { HelpersModule } from '../../common/helpers/helpers.module';
+import { HelperModule } from '../../common/helper/helper.module';
 
 @Module({
-  imports: [HelpersModule],
+  imports: [HelperModule],
   providers: [AccountsService],
   exports: [AccountsService],
 })

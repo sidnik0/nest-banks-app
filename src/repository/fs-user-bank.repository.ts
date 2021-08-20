@@ -1,19 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { FsBaseRepository } from './fs-base.repository';
 import { UserBankRepository } from './interface/user-bank.repository';
-import { FsHelperService } from '../common/helper/fs-helper.service';
-import { UserBankModel } from '../model/user-bank.model';
+import { FsHelper } from '../common/helper/interface/fs.helper';
+import { IdHelper } from '../common/helper/interface/id.helper';
+import { UserBankModel } from '../model/interface/user-bank.model';
 
 @Injectable()
 export class FsUserBankRepository
   extends FsBaseRepository<UserBankModel>
   implements UserBankRepository
 {
-  constructor(protected readonly fsHelperService: FsHelperService) {
+  constructor(
+    protected readonly fsHelper: FsHelper,
+    protected readonly idHelper: IdHelper,
+  ) {
     super();
 
     this.fileName = 'users-banks';
-    this.data = fsHelperService.readFile<UserBankModel>(this.fileName);
+    this.data = fsHelper.readFile<UserBankModel>(this.fileName);
   }
 
   async update(): Promise<never> {

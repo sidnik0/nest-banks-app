@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { TransactionModel } from './transaction.model';
+import { TransactionModel } from './interface/transaction.model';
 import { AccountEntity } from './account.entity';
 
 @Entity()

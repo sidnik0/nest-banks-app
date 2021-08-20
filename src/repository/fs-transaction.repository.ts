@@ -1,19 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { FsBaseRepository } from './fs-base.repository';
 import { TransactionRepository } from './interface/transaction.repository';
-import { FsHelperService } from '../common/helper/fs-helper.service';
-import { TransactionModel } from '../model/transaction.model';
+import { FsHelper } from '../common/helper/interface/fs.helper';
+import { IdHelper } from '../common/helper/interface/id.helper';
+import { TransactionModel } from '../model/interface/transaction.model';
 
 @Injectable()
 export class FsTransactionRepository
   extends FsBaseRepository<TransactionModel>
   implements TransactionRepository
 {
-  constructor(protected readonly fsHelperService: FsHelperService) {
+  constructor(
+    protected readonly fsHelper: FsHelper,
+    protected readonly idHelper: IdHelper,
+  ) {
     super();
 
     this.fileName = 'transactions';
-    this.data = fsHelperService.readFile<TransactionModel>(this.fileName);
+    this.data = fsHelper.readFile<TransactionModel>(this.fileName);
   }
 
   async update(): Promise<never> {

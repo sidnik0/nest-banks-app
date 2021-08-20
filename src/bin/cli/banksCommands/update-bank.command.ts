@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { BanksService } from '../../banks/banks.service';
-import { HelpersService } from '../../../common/helpers/helpers.service';
+import { RIdHelper } from '../../../common/helper/r-id.helper';
 
 import { UpdateBankDto } from '../../banks/dto/update-bank.dto';
 import { commands } from '../commands';
@@ -16,7 +16,7 @@ export class UpdateBankCommand {
 
   constructor(
     private readonly banksService: BanksService,
-    private readonly helpersService: HelpersService,
+    private readonly helpersService: RIdHelper,
   ) {}
 
   async run(args: Array<string>): Promise<void> {

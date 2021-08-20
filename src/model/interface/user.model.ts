@@ -1,7 +1,7 @@
-import { FaceType } from '../types/face.type';
+import { FaceType } from '../../types/face.type';
 
 export interface UserModel {
-  id: string;
+  id?: string;
   name: string;
   face: FaceType;
 }

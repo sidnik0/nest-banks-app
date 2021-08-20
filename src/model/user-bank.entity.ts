@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
-import { UserBankModel } from './user-bank.model';
+import { UserBankModel } from './interface/user-bank.model';
 import { UserEntity } from './user.entity';
 import { BankEntity } from './bank.entity';
 

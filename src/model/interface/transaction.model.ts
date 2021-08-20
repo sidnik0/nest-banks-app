@@ -1,5 +1,5 @@
 export interface TransactionModel {
-  id: string;
+  id?: string;
   fromAccountId: string;
   toAccountId: string;
   value: number;

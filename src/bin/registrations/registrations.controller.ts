@@ -1,7 +1,7 @@
 import { Controller, Post, Body } from '@nestjs/common';
 import { RegistrationsService } from './registrations.service';
-// import { RegistrationUserInterface } from './interfaces/registration-user.interface';
-// import { RegistrationBankInterface } from './interfaces/registration-bank.interface';
+// import { RegistrationUserInterface } from './interface/registration-user.interface';
+// import { RegistrationBankInterface } from './interface/registration-bank.interface';
 import { RegistrationUserDto } from './dto/registration-user.dto';
 import { RegistrationBankDto } from './dto/registration-bank.dto';
 

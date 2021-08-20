@@ -3,11 +3,11 @@ import { BankRegistrationCommand } from './bank-registration.command';
 import { GetAllBanksUserCommand } from './get-all-banks-user.command';
 import { GetAllUsersBankCommand } from './get-all-users-bank.command';
 
-import { HelpersModule } from '../../../common/helpers/helpers.module';
+import { HelperModule } from '../../../common/helper/helper.module';
 import { BankUsersModule } from '../../bankUsers/bank-users.module';
 
 @Module({
-  imports: [HelpersModule, BankUsersModule],
+  imports: [HelperModule, BankUsersModule],
   providers: [
     BankRegistrationCommand,
     GetAllBanksUserCommand,

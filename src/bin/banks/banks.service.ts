@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { HelpersService } from '../../common/helpers/helpers.service';
+import { RIdHelper } from '../../common/helper/r-id.helper';
 // import { BankUsersService } from '../bankUsers/bank-users.service';
 // import { AccountsService } from '../accounts/accounts.service';
 // import { TransactionsService } from '../transactions/transactions.service';
 // import { UsersService } from '../users/users.service';
 
 import { BankInterface } from './interfaces/bank.interface';
-// import { AccountInterface } from '../accounts/interfaces/account.interface';
-// import { UserInterface } from '../users/interfaces/user.interface';
-// import { TransactionInterface } from '../transactions/interfaces/transaction.interface';
+// import { AccountInterface } from '../accounts/interface/account.interface';
+// import { UserInterface } from '../users/interface/user.interface';
+// import { TransactionInterface } from '../transactions/interface/transaction.interface';
 
 import { CreateBankDto } from './dto/create-bank.dto';
 import { UpdateBankDto } from './dto/update-bank.dto';
@@ -18,7 +18,7 @@ export class BanksService {
   private banks: Map<string, BankInterface> = new Map();
 
   constructor(
-    private readonly helpersService: HelpersService, // private readonly currentUsersOfBanksService: BankUsersService, // private readonly accountsService: AccountsService, // private readonly transactionsService: TransactionsService, // private readonly usersService: UsersService,
+    private readonly helpersService: RIdHelper, // private readonly currentUsersOfBanksService: BankUsersService, // private readonly accountsService: AccountsService, // private readonly transactionsService: TransactionsService, // private readonly usersService: UsersService,
   ) {}
 
   async create(createBankDto: CreateBankDto): Promise<BankInterface> {

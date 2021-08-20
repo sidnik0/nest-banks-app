@@ -3,11 +3,11 @@ import { CreateAccountCommand } from './create-account.command';
 import { GetAccountCommand } from './get-account.command';
 import { GetAllAccountsUserCommand } from './get-all-accounts-user.command';
 
-import { HelpersModule } from '../../../common/helpers/helpers.module';
+import { HelperModule } from '../../../common/helper/helper.module';
 import { AccountsModule } from '../../accounts/accounts.module';
 
 @Module({
-  imports: [HelpersModule, AccountsModule],
+  imports: [HelperModule, AccountsModule],
   providers: [
     CreateAccountCommand,
     GetAccountCommand,

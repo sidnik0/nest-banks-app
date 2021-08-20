@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AccountsService } from '../../accounts/accounts.service';
-import { HelpersService } from '../../../common/helpers/helpers.service';
+import { RIdHelper } from '../../../common/helper/r-id.helper';
 
 import { CreateAccountDto } from '../../accounts/dto/create-account.dto';
 import { commands } from '../commands';
@@ -21,7 +21,7 @@ export class CreateAccountCommand {
 
   constructor(
     private readonly accountsService: AccountsService,
-    private readonly helpersService: HelpersService,
+    private readonly helpersService: RIdHelper,
   ) {}
 
   async run(args: Array<string>): Promise<void> {

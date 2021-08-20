@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { DbBaseRepository } from './db-base.repository';
 import { UserBankRepository } from './interface/user-bank.repository';
 import { UserBankEntity } from '../model/user-bank.entity';
-import { UserBankModel } from '../model/user-bank.model';
 
 @Injectable()
 export class DbUserBankRepository
@@ -22,11 +21,11 @@ export class DbUserBankRepository
     throw Error('Prohibited operation');
   }
 
-  async getBanksByUser(id: string): Promise<Array<UserBankModel>> {
+  async getBanksByUser(id: string): Promise<Array<UserBankEntity>> {
     return await this.repository.find({ userId: id });
   }
 
-  async getUsersByBank(id: string): Promise<Array<UserBankModel>> {
+  async getUsersByBank(id: string): Promise<Array<UserBankEntity>> {
     return await this.repository.find({ bankId: id });
   }
 }

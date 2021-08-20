@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
-import { HelpersModule } from '../../common/helpers/helpers.module';
+import { HelperModule } from '../../common/helper/helper.module';
 // import { BankUsersModule } from '../bankUsers/bank-users.module';
 // import { AccountsModule } from '../accounts/accounts.module';
 // import { TransactionsModule } from '../transactions/transactions.module';
@@ -10,7 +10,7 @@ import { HelpersModule } from '../../common/helpers/helpers.module';
 
 @Module({
   imports: [
-    HelpersModule,
+    HelperModule,
     // BankUsersModule,
     // AccountsModule,
     // TransactionsModule,

@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import { DbBaseRepository } from './db-base.repository';
 import { TransactionRepository } from './interface/transaction.repository';
 import { TransactionEntity } from '../model/transaction.entity';
-import { TransactionModel } from '../model/transaction.model';
 
 @Injectable()
 export class DbTransactionRepository
@@ -29,7 +28,7 @@ export class DbTransactionRepository
   async getByAccount(
     id: string,
     period?: { from: number; to: number },
-  ): Promise<Array<TransactionModel>> {
+  ): Promise<Array<TransactionEntity>> {
     const data = await this.repository.find({
       where: [{ toAccountId: id }, { fromAccountId: id }],
     });
@@ -40,9 +39,9 @@ export class DbTransactionRepository
   }
 
   private static filterByPeriod(
-    data: Array<TransactionModel>,
+    data: Array<TransactionEntity>,
     period: { from: number; to: number },
-  ): Array<TransactionModel> {
+  ): Array<TransactionEntity> {
     return data.map((transaction) => {
       if (
         period.from <= transaction.create &&

@@ -4,11 +4,11 @@ import { GetBankCommand } from './get-bank.command';
 import { GetBanksCommand } from './get-banks.command';
 import { UpdateBankCommand } from './update-bank.command';
 
-import { HelpersModule } from '../../../common/helpers/helpers.module';
+import { HelperModule } from '../../../common/helper/helper.module';
 import { BanksModule } from '../../banks/banks.module';
 
 @Module({
-  imports: [HelpersModule, BanksModule],
+  imports: [HelperModule, BanksModule],
   providers: [
     DeleteBankCommand,
     GetBankCommand,

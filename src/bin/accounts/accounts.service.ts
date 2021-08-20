@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { HelpersService } from '../../common/helpers/helpers.service';
+import { RIdHelper } from '../../common/helper/r-id.helper';
 
 import { AccountInterface } from './interfaces/account.interface';
 
@@ -10,7 +10,7 @@ import { UpdateAccountDto } from './dto/update-account.dto';
 export class AccountsService {
   private accounts: Map<string, AccountInterface> = new Map();
 
-  constructor(private readonly helpersService: HelpersService) {}
+  constructor(private readonly helpersService: RIdHelper) {}
 
   async create(createAccountDto: CreateAccountDto): Promise<AccountInterface> {
     const id = this.helpersService.createId();

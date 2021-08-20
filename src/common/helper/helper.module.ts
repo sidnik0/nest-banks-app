@@ -1,9 +1,26 @@
 import { Module } from '@nestjs/common';
-import { HelperService } from './helper.service';
-import { FsHelperService } from './fs-helper.service';
+import { RFsHelper } from './r-fs.helper';
+import { FsHelper } from './interface/fs.helper';
+import { RIdHelper } from './r-id.helper';
+import { IdHelper } from './interface/id.helper';
+import { RCliHelper } from './r-cli.helper';
+import { CliHelper } from './interface/cli.helper';
 
 @Module({
-  providers: [FsHelperService],
-  exports: [HelperService],
+  providers: [
+    {
+      provide: FsHelper,
+      useClass: RFsHelper,
+    },
+    {
+      provide: IdHelper,
+      useClass: RIdHelper,
+    },
+    {
+      provide: CliHelper,
+      useClass: RCliHelper,
+    },
+  ],
+  exports: [FsHelper, IdHelper, CliHelper],
 })
 export class HelperModule {}

@@ -3,10 +3,10 @@ import { RegistrationUserCommand } from './registration-user.command';
 import { RegistrationBankCommand } from './registration-bank.command';
 
 import { RegistrationsModule } from '../../registrations/registrations.module';
-import { HelpersModule } from '../../../common/helpers/helpers.module';
+import { HelperModule } from '../../../common/helper/helper.module';
 
 @Module({
-  imports: [RegistrationsModule, HelpersModule],
+  imports: [RegistrationsModule, HelperModule],
   providers: [RegistrationUserCommand, RegistrationBankCommand],
   exports: [RegistrationUserCommand, RegistrationBankCommand],
 })

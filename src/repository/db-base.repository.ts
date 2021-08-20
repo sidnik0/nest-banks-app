@@ -23,8 +23,8 @@ export abstract class DbBaseRepository<T> implements BaseRepository<T> {
   }
 
   async deleteById(id: string): Promise<boolean> {
-    const row = await this.repository.delete(id);
+    await this.repository.delete(id);
 
-    return !!row;
+    return true;
   }
 }

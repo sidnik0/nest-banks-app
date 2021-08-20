@@ -2,10 +2,10 @@ import { Controller, Get, Put, Delete, Param, Body } from '@nestjs/common';
 import { UsersService } from './users.service';
 
 import { UserInterface } from './interfaces/user.interface';
-// import { AccountInterface } from '../accounts/interfaces/account.interface';
-// import { BankInterface } from '../banks/interfaces/bank.interface';
-// import { TransactionInterface } from '../transactions/interfaces/transaction.interface';
-// import { AllTransactionInterface } from '../transactions/interfaces/all-transaction.interface';
+// import { AccountInterface } from '../accounts/interface/account.interface';
+// import { BankInterface } from '../banks/interface/bank.interface';
+// import { TransactionInterface } from '../transactions/interface/transaction.interface';
+// import { AllTransactionInterface } from '../transactions/interface/all-transaction.interface';
 
 import { UpdateUserDto } from './dto/update-user.dto';
 // import { CreateBankUserDto } from '../bankUsers/dto/create-bank-user.dto';
