@@ -1,7 +1,8 @@
-export interface TransactionModel {
-  id?: string;
+import { BaseModel } from './base.model';
+
+export interface TransactionModel extends BaseModel {
   fromAccountId: string;
   toAccountId: string;
-  value: number;
-  create: number;
+  amount: number;
+  createAt: Date;
 }

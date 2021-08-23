@@ -38,8 +38,8 @@ export class TransactionsService {
       toAccountPromise,
     ]);
 
-    TransactionsService.balanceCheck(fromAccount, createTransactionDto);
     TransactionsService.currencyCheck(fromAccount, toAccount);
+    TransactionsService.balanceCheck(fromAccount, createTransactionDto);
 
     const commission = await this.getCurrentCommission(fromAccount, toAccount);
 

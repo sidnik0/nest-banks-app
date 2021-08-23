@@ -1,6 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { FsBaseRepository } from './fs-base.repository';
-import { TransactionRepository } from './interface/transaction.repository';
+import { ITransactionRepository } from './interface/transaction.repository';
 import { FsHelper } from '../common/helper/interface/fs.helper';
 import { IdHelper } from '../common/helper/interface/id.helper';
 import { TransactionModel } from '../model/interface/transaction.model';
@@ -8,14 +8,15 @@ import { TransactionModel } from '../model/interface/transaction.model';
 @Injectable()
 export class FsTransactionRepository
   extends FsBaseRepository<TransactionModel>
-  implements TransactionRepository
+  implements ITransactionRepository
 {
   constructor(
     protected readonly fsHelper: FsHelper,
     protected readonly idHelper: IdHelper,
   ) {
-    super();
+    super(fsHelper, idHelper);
 
+    this.logger = new Logger('FsTransactionRepository');
     this.fileName = 'transactions';
     this.data = fsHelper.readFile<TransactionModel>(this.fileName);
   }
@@ -28,11 +29,11 @@ export class FsTransactionRepository
     throw Error('Prohibited operation');
   }
 
-  async getByAccount(
+  async getAllByAccount(
     id: string,
-    period?: { from: number; to: number },
-  ): Promise<Array<TransactionModel>> {
-    const result: Array<TransactionModel> = [];
+    period?: { from: Date; to: Date },
+  ): Promise<TransactionModel[]> {
+    const result: TransactionModel[] = [];
 
     for (const obj of Object.values(this.data)) {
       if (obj.fromAccountId === id || obj.toAccountId === id) {
@@ -40,22 +41,24 @@ export class FsTransactionRepository
       }
     }
 
-    return !period
-      ? result
-      : FsTransactionRepository.filterByPeriod(result, period);
+    return result;
+
+    // return !period
+    //   ? result
+    //   : FsTransactionRepository.filterByPeriod(result, period);
   }
 
-  private static filterByPeriod(
-    data: Array<TransactionModel>,
-    period: { from: number; to: number },
-  ): Array<TransactionModel> {
-    return data.map((transaction) => {
-      if (
-        period.from <= transaction.create &&
-        transaction.create <= period.to
-      ) {
-        return transaction;
-      }
-    });
-  }
+  // private static filterByPeriod(
+  //   data: TransactionModel[],
+  //   period: { from: Date; to: Date },
+  // ): TransactionModel[] {
+  //   return data.map((transaction) => {
+  //     if (
+  //       period.from <= transaction.createAt &&
+  //       transaction.createAt <= period.to
+  //     ) {
+  //       return transaction;
+  //     }
+  //   });
+  // }
 }

@@ -1,16 +1,14 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column } from 'typeorm';
+import { BaseEntity } from './base.entity';
 import { BankModel } from './interface/bank.model';
 
 @Entity()
-export class BankEntity implements BankModel {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+export class BankEntity extends BaseEntity implements BankModel {
+  @Column()
+  commissionForEntities: number;
 
   @Column()
-  comEnt: number;
-
-  @Column()
-  comInd: number;
+  commissionForIndividual: number;
 
   @Column()
   name: string;

@@ -1,19 +1,17 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column } from 'typeorm';
+import { BaseEntity } from './base.entity';
 import { UserModel } from './interface/user.model';
 import { FaceType } from '../types/face.type';
 
 @Entity()
-export class UserEntity implements UserModel {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class UserEntity extends BaseEntity implements UserModel {
   @Column()
   name: string;
 
   @Column({
     type: 'enum',
     enum: FaceType,
-    default: FaceType.individual,
+    default: FaceType.INDIVIDUAL,
   })
   face: FaceType;
 }

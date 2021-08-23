@@ -1,6 +1,7 @@
-export interface BankModel {
-  id?: string;
+import { BaseModel } from './base.model';
+
+export interface BankModel extends BaseModel {
   name: string;
-  comEnt: number;
-  comInd: number;
+  commissionForEntities: number;
+  commissionForIndividual: number;
 }

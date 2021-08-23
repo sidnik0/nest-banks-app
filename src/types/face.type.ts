@@ -1,4 +1,4 @@
 export enum FaceType {
-  individual = 'individual',
-  entity = 'entity',
+  INDIVIDUAL = 'individual',
+  ENTITY = 'entity',
 }

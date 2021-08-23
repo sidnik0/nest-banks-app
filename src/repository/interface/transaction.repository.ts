@@ -1,9 +1,9 @@
-import { BaseRepository } from './base.repository';
+import { IBaseRepository } from './base.repository';
 import { TransactionModel } from '../../model/interface/transaction.model';
 
-export abstract class TransactionRepository extends BaseRepository<TransactionModel> {
-  abstract getByAccount(
+export abstract class ITransactionRepository extends IBaseRepository<TransactionModel> {
+  abstract getAllByAccount(
     id: string,
-    period?: { from: number; to: number },
-  ): Promise<Array<TransactionModel>>;
+    period?: { from: Date; to: Date },
+  ): Promise<TransactionModel[]>;
 }
