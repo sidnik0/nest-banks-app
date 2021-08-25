@@ -17,18 +17,18 @@ export class DbAccountRepository
     super(repository);
   }
 
-  getAllByUser(id: string): Promise<Array<AccountEntity>> {
+  getAllByUser(id: string): Promise<AccountEntity[]> {
     return this.repository.find({ userId: id });
   }
 
-  getAllByBank(id: string): Promise<Array<AccountEntity>> {
+  getAllByBank(id: string): Promise<AccountEntity[]> {
     return this.repository.find({ bankId: id });
   }
 
   getAllByUserAndBank(
     userId: string,
     bankId: string,
-  ): Promise<Array<AccountEntity>> {
+  ): Promise<AccountEntity[]> {
     return this.repository.find({ userId, bankId });
   }
 }

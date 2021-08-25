@@ -1,8 +1,8 @@
 import { Logger } from '@nestjs/common';
 import { IBaseRepository } from './interface/base.repository';
 import { BaseModel } from '../model/interface/base.model';
-import { FsHelper } from '../common/helper/interface/fs.helper';
-import { IdHelper } from '../common/helper/interface/id.helper';
+import { IFsHelper } from '../common/helper/interface/fs.helper';
+import { IIdHelper } from '../common/helper/interface/id.helper';
 
 export abstract class FsBaseRepository<T extends BaseModel>
   implements IBaseRepository<T>
@@ -12,32 +12,38 @@ export abstract class FsBaseRepository<T extends BaseModel>
   protected data: { [i: string]: T };
 
   protected constructor(
-    protected readonly fsHelper: FsHelper,
-    protected readonly idHelper: IdHelper,
+    protected readonly fsHelper: IFsHelper,
+    protected readonly idHelper: IIdHelper,
   ) {}
+
+  abstract getLoggingModelId(model: T | string): string;
 
   async create(model: T): Promise<T> {
     const id = this.idHelper.createId();
 
     this.data[id] = { id, ...model };
 
-    const result = this.fsHelper.writeFile(this.fileName, this.data);
+    try {
+      this.fsHelper.writeFile(this.fileName, this.data);
 
-    if (result) return this.data[id];
+      return this.data[id];
+    } catch (e) {
+      this.logger.error(`Data ${this.getLoggingModelId(model)} not created`);
 
-    this.logger.error(`Data ${id} not created`);
-
-    return null;
+      throw e;
+    }
   }
 
   async get(id: string): Promise<T> {
     const data = this.data[id];
 
-    if (data) return data;
+    if (!data) {
+      this.logger.error(`Data ${this.getLoggingModelId(id)} not found`);
 
-    this.logger.error(`Data ${id} not found`);
+      throw Error(`Data ${this.getLoggingModelId(id)} not found`);
+    }
 
-    return null;
+    return data;
   }
 
   async getAll(): Promise<T[]> {
@@ -47,24 +53,28 @@ export abstract class FsBaseRepository<T extends BaseModel>
   async update(model: T): Promise<T> {
     this.data[model.id] = model;
 
-    const result = this.fsHelper.writeFile(this.fileName, this.data);
+    try {
+      this.fsHelper.writeFile(this.fileName, this.data);
 
-    if (result) return this.data[model.id];
+      return this.data[model.id];
+    } catch (e) {
+      this.logger.error(`Data ${this.getLoggingModelId(model)} not updated`);
 
-    this.logger.error(`Data ${model.id} not updated`);
-
-    return null;
+      throw e;
+    }
   }
 
   async delete(id: string): Promise<boolean> {
     delete this.data[id];
 
-    const result = this.fsHelper.writeFile(this.fileName, this.data);
+    try {
+      this.fsHelper.writeFile(this.fileName, this.data);
 
-    if (result) return true;
+      return true;
+    } catch (e) {
+      this.logger.error(`Data ${this.getLoggingModelId(id)} not deleted`);
 
-    this.logger.error(`Data ${id} not deleted`);
-
-    return false;
+      throw e;
+    }
   }
 }

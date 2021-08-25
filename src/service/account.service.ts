@@ -18,10 +18,12 @@ export class AccountService {
     return await this.accountRepository.getAll();
   }
 
-  async update(model: AccountModel): Promise<AccountModel> {
-    const data = await this.accountRepository.get(model.id);
+  async updateBalance(id: string, balance: number): Promise<AccountModel> {
+    const data = await this.accountRepository.get(id);
 
-    return await this.accountRepository.update({ ...data, ...model });
+    data.balance = Math.floor((data.balance + balance) * 100) / 100;
+
+    return await this.accountRepository.update(data);
   }
 
   async delete(id: string): Promise<boolean> {

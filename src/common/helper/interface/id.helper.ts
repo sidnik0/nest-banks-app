@@ -1,3 +1,3 @@
-export abstract class IdHelper {
+export abstract class IIdHelper {
   abstract createId(): string;
 }

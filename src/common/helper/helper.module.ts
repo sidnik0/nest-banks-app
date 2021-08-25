@@ -1,26 +1,20 @@
 import { Module } from '@nestjs/common';
-import { RFsHelper } from './r-fs.helper';
-import { FsHelper } from './interface/fs.helper';
-import { RIdHelper } from './r-id.helper';
-import { IdHelper } from './interface/id.helper';
-import { RCliHelper } from './r-cli.helper';
-import { CliHelper } from './interface/cli.helper';
+import { FsHelper } from './fs.helper';
+import { IFsHelper } from './interface/fs.helper';
+import { IdHelper } from './id.helper';
+import { IIdHelper } from './interface/id.helper';
 
 @Module({
   providers: [
     {
-      provide: FsHelper,
-      useClass: RFsHelper,
+      provide: IFsHelper,
+      useClass: FsHelper,
     },
     {
-      provide: IdHelper,
-      useClass: RIdHelper,
-    },
-    {
-      provide: CliHelper,
-      useClass: RCliHelper,
+      provide: IIdHelper,
+      useClass: IdHelper,
     },
   ],
-  exports: [FsHelper, IdHelper, CliHelper],
+  exports: [IFsHelper, IIdHelper],
 })
 export class HelperModule {}

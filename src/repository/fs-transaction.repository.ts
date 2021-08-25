@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { FsBaseRepository } from './fs-base.repository';
 import { ITransactionRepository } from './interface/transaction.repository';
-import { FsHelper } from '../common/helper/interface/fs.helper';
-import { IdHelper } from '../common/helper/interface/id.helper';
+import { IFsHelper } from '../common/helper/interface/fs.helper';
+import { IIdHelper } from '../common/helper/interface/id.helper';
 import { TransactionModel } from '../model/interface/transaction.model';
 
 @Injectable()
@@ -11,8 +11,8 @@ export class FsTransactionRepository
   implements ITransactionRepository
 {
   constructor(
-    protected readonly fsHelper: FsHelper,
-    protected readonly idHelper: IdHelper,
+    protected readonly fsHelper: IFsHelper,
+    protected readonly idHelper: IIdHelper,
   ) {
     super(fsHelper, idHelper);
 
@@ -21,11 +21,19 @@ export class FsTransactionRepository
     this.data = fsHelper.readFile<TransactionModel>(this.fileName);
   }
 
+  getLoggingModelId(model: string | TransactionModel): string {
+    if (typeof model === 'string') return model;
+
+    return model.id
+      ? `id=${model.id}`
+      : `fromAccountId=${model.fromAccountId}, toAccountId=${model.toAccountId}, createAt=${model.createAt}`;
+  }
+
   async update(): Promise<never> {
     throw Error('Prohibited operation');
   }
 
-  async deleteById(): Promise<never> {
+  async delete(): Promise<never> {
     throw Error('Prohibited operation');
   }
 
@@ -42,23 +50,5 @@ export class FsTransactionRepository
     }
 
     return result;
-
-    // return !period
-    //   ? result
-    //   : FsTransactionRepository.filterByPeriod(result, period);
   }
-
-  // private static filterByPeriod(
-  //   data: TransactionModel[],
-  //   period: { from: Date; to: Date },
-  // ): TransactionModel[] {
-  //   return data.map((transaction) => {
-  //     if (
-  //       period.from <= transaction.createAt &&
-  //       transaction.createAt <= period.to
-  //     ) {
-  //       return transaction;
-  //     }
-  //   });
-  // }
 }

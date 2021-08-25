@@ -1,7 +1,10 @@
 import { IBaseRepository } from './interface/base.repository';
 import { Repository } from 'typeorm';
+import { BaseEntity } from '../model/base.entity';
 
-export abstract class DbBaseRepository<T> implements IBaseRepository<T> {
+export abstract class DbBaseRepository<T extends BaseEntity>
+  implements IBaseRepository<T>
+{
   protected constructor(protected readonly repository: Repository<T>) {}
 
   async create(model: T): Promise<T> {
@@ -21,8 +24,6 @@ export abstract class DbBaseRepository<T> implements IBaseRepository<T> {
   }
 
   async delete(id: string): Promise<boolean> {
-    const data = await this.repository.delete(id);
-
-    return !!data.affected;
+    return await this.repository.delete(id).then((data) => !!data.affected);
   }
 }

@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { FsBaseRepository } from './fs-base.repository';
 import { IAccountRepository } from './interface/account.repository';
-import { FsHelper } from '../common/helper/interface/fs.helper';
-import { IdHelper } from '../common/helper/interface/id.helper';
+import { IFsHelper } from '../common/helper/interface/fs.helper';
+import { IIdHelper } from '../common/helper/interface/id.helper';
 import { AccountModel } from '../model/interface/account.model';
 
 @Injectable()
@@ -11,14 +11,22 @@ export class FsAccountRepository
   implements IAccountRepository
 {
   constructor(
-    protected readonly fsHelper: FsHelper,
-    protected readonly idHelper: IdHelper,
+    protected readonly fsHelper: IFsHelper,
+    protected readonly idHelper: IIdHelper,
   ) {
     super(fsHelper, idHelper);
 
     this.logger = new Logger('FsAccountRepository');
     this.fileName = 'accounts';
     this.data = fsHelper.readFile<AccountModel>(this.fileName);
+  }
+
+  getLoggingModelId(model: AccountModel | string): string {
+    if (typeof model === 'string') return model;
+
+    return model.id
+      ? `id=${model.id}`
+      : `userId=${model.userId}, bankId=${model.bankId}`;
   }
 
   async getAllByUser(id: string): Promise<AccountModel[]> {
