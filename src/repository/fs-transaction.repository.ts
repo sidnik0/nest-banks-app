@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { FsBaseRepository } from './fs-base.repository';
 import { ITransactionRepository } from './interface/transaction.repository';
-import { IFsHelper } from '../common/helper/interface/fs.helper';
-import { IIdHelper } from '../common/helper/interface/id.helper';
+import { IFsHelper } from '../common/helper/interface/fs-helper';
+import { IIdHelper } from '../common/helper/interface/id-helper';
 import { TransactionModel } from '../model/interface/transaction.model';
 
 @Injectable()

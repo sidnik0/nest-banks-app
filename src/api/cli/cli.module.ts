@@ -1,10 +1,20 @@
 import { Module } from '@nestjs/common';
 import { ConsoleInterpreter } from './console-interpreter';
-import { ConsoleExecutor } from './console-executor';
-import { CommandDescriptor } from './command-descriptor';
+import { CommandExecutor } from './command-executor';
+import { CommandLineParser } from './command-line-parser';
+import { ServiceModule } from '../../service/service.module';
+import { CreateUserCommand } from './commands/create-user-command';
+import { CreateUserCreator } from './commands/create-user-creator';
 
 @Module({
-  providers: [ConsoleInterpreter, ConsoleExecutor, CommandDescriptor],
+  imports: [ServiceModule],
+  providers: [
+    ConsoleInterpreter,
+    CommandExecutor,
+    CommandLineParser,
+    CreateUserCommand,
+    CreateUserCreator,
+  ],
   exports: [ConsoleInterpreter],
 })
 export class CliModule {}

@@ -8,7 +8,7 @@ export abstract class DbBaseRepository<T extends BaseEntity>
   protected constructor(protected readonly repository: Repository<T>) {}
 
   async create(model: T): Promise<T> {
-    return await this.repository.save(model);
+    return await this.repository.save(model as any);
   }
 
   async get(id: string): Promise<T> {
@@ -20,7 +20,7 @@ export abstract class DbBaseRepository<T extends BaseEntity>
   }
 
   async update(model: T): Promise<T> {
-    return await this.repository.save(model);
+    return await this.repository.save(model as any);
   }
 
   async delete(id: string): Promise<boolean> {

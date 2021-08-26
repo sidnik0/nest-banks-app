@@ -1,14 +1,13 @@
 import { NestFactory } from '@nestjs/core';
-// import { RestModule } from './rest.module';
 import { CliModule } from './api/cli/cli.module';
-import { CliService } from './api/cli/cli.service';
+import { ConsoleInterpreter } from './api/cli/console-interpreter';
 
 async function bootstrap() {
   switch ('cli' as string) {
     case 'cli':
       const cli = await NestFactory.createApplicationContext(CliModule);
-      const cliService = cli.get(CliService);
-      await cliService.runApp();
+      const consoleInterpreter = cli.get(ConsoleInterpreter);
+      await consoleInterpreter.run();
 
       break;
     case 'rest':

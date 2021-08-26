@@ -1,3 +1,3 @@
 export abstract class CommandInterface {
-  abstract execute(params: { [i: string]: string }[]): Promise<string>;
+  abstract execute(params: string[]): Promise<string>;
 }

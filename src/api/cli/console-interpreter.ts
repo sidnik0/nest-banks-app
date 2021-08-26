@@ -1,49 +1,49 @@
+import * as readline from 'readline';
 import { Injectable } from '@nestjs/common';
-import { ConsoleExecutor } from './console-executor';
-import { CommandDescriptor } from './command-descriptor';
+import { CommandExecutor } from './command-executor';
+import { CommandLineParser } from './command-line-parser';
+import { CommandLineParserException } from '../../common/exseption/command-line-parser-exception';
 
 @Injectable()
 export class ConsoleInterpreter {
   constructor(
-    private readonly commandDescriptor: CommandDescriptor,
-    private readonly consoleExecutor: ConsoleExecutor,
+    private readonly consoleExecutor: CommandExecutor,
+    private readonly commandLineParser: CommandLineParser,
   ) {}
 
-  async interpretCommand(input: string): Promise<void> {
-    const [commandArg, processedArgs] = ConsoleInterpreter.parseArgs(input);
+  async run(): Promise<void> {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
 
-    const creatorCommand = await this.commandDescriptor.getCommand(commandArg);
+    rl.prompt();
 
-    const data = await this.consoleExecutor.executeCommand(
-      creatorCommand,
-      processedArgs,
-    );
+    rl.on('line', async (input) => {
+      try {
+        const commandDescriptor = this.commandLineParser.parseInput(input);
 
-    console.log(data);
-  }
+        const data = await this.consoleExecutor.executeCommand(
+          commandDescriptor,
+        );
 
-  private static parseArgs(args: string): [string, { [i: string]: string }[]] {
-    const [commandArg, ...rawArgs] = args.trim().split(' ');
+        console.log(data);
 
-    if (!rawArgs || !rawArgs.length)
-      return [commandArg, [{ ['help']: 'help' }]];
+        rl.prompt();
+      } catch (e) {
+        if (e instanceof CommandLineParserException) {
+          console.log(e.message);
 
-    const processedArgs: { [i: string]: string }[] = [];
+          rl.prompt();
+        } else {
+          console.log(e);
+          rl.close();
+        }
+      }
+    });
 
-    for (const item of rawArgs) {
-      const arrayStrings = item.split('=');
-
-      if (
-        arrayStrings.length !== 2 ||
-        (arrayStrings[0] !== 'help' && arrayStrings[0] !== 'exit')
-      )
-        continue;
-
-      processedArgs.push({
-        [arrayStrings[0]]: arrayStrings[1] || arrayStrings[0],
-      });
-    }
-
-    return [commandArg, processedArgs];
+    rl.on('close', () => {
+      console.log('app close');
+    });
   }
 }

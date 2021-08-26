@@ -3,7 +3,7 @@ import { CommandInterface } from './command.interface';
 export abstract class CreatorCommand {
   abstract factoryMethod(): CommandInterface;
 
-  create(params): Promise<string> {
+  executeCommand(params: string[]): Promise<string> {
     const command = this.factoryMethod();
 
     return command.execute(params);

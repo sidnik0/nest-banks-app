@@ -1,4 +1,6 @@
-export abstract class IBaseRepository<T> {
+import { BaseModel } from '../../model/interface/base.model';
+
+export abstract class IBaseRepository<T extends BaseModel> {
   abstract create(model: T): Promise<T>;
   abstract get(id: string): Promise<T>;
   abstract getAll(): Promise<T[]>;

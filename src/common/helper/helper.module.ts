@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { FsHelper } from './fs.helper';
-import { IFsHelper } from './interface/fs.helper';
-import { IdHelper } from './id.helper';
-import { IIdHelper } from './interface/id.helper';
+import { FsHelper } from './fs-helper';
+import { IFsHelper } from './interface/fs-helper';
+import { IdHelper } from './id-helper';
+import { IIdHelper } from './interface/id-helper';
 
 @Module({
   providers: [
