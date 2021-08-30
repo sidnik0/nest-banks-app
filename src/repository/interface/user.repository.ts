@@ -1,4 +1,4 @@
-import { IBaseRepository } from './base.repository';
+import { BaseRepository } from './base.repository';
 import { UserModel } from '../../model/interface/user.model';
 
-export abstract class IUserRepository extends IBaseRepository<UserModel> {}
+export abstract class UserRepository extends BaseRepository<UserModel> {}

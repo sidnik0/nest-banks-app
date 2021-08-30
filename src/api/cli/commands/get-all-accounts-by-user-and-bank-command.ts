@@ -1,7 +1,9 @@
-import { CommandInterface } from '../interface/command.interface';
+import { Command } from './command';
+import { CommandDescriptor } from '../interface/command-descriptor';
+import { CommandResult } from '../interface/command-result';
 
-export class GetAllAccountsByUserAndBankCommand implements CommandInterface {
-  async execute(): Promise<string> {
-    return 'get-all-accounts-by-user-and-bank';
+export class GetAllAccountsByUserAndBankCommand extends Command {
+  async execute(commandDescriptor: CommandDescriptor): Promise<CommandResult> {
+    return undefined;
   }
 }

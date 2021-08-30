@@ -1,7 +1,9 @@
-import { CommandInterface } from '../interface/command.interface';
+import { Command } from './command';
+import { CommandDescriptor } from '../interface/command-descriptor';
+import { CommandResult } from '../interface/command-result';
 
-export class ExitCommand implements CommandInterface {
-  async execute(): Promise<string> {
-    return 'exit';
+export class ExitCommand extends Command {
+  async execute(commandDescriptor: CommandDescriptor): Promise<CommandResult> {
+    return undefined;
   }
 }

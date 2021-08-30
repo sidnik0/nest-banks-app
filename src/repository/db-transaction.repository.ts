@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DbBaseRepository } from './db-base.repository';
-import { ITransactionRepository } from './interface/transaction.repository';
+import { TransactionRepository } from './interface/transaction.repository';
 import { TransactionEntity } from '../model/transaction.entity';
 
 @Injectable()
 export class DbTransactionRepository
   extends DbBaseRepository<TransactionEntity>
-  implements ITransactionRepository
+  implements TransactionRepository
 {
   constructor(
     @InjectRepository(TransactionEntity)
@@ -32,23 +32,5 @@ export class DbTransactionRepository
     return await this.repository.find({
       where: [{ toAccountId: id }, { fromAccountId: id }],
     });
-
-    // return !period
-    //   ? data
-    //   : DbTransactionRepository.filterByPeriod(data, period);
   }
-
-  // private static filterByPeriod(
-  //   data: Array<TransactionEntity>,
-  //   period: { from: Date; to: Date },
-  // ): Array<TransactionEntity> {
-  //   return data.map((transaction) => {
-  //     if (
-  //       period.from <= transaction.createAt &&
-  //       transaction.createAt <= period.to
-  //     ) {
-  //       return transaction;
-  //     }
-  //   });
-  // }
 }

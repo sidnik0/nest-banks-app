@@ -1,40 +1,40 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HelperModule } from '../common/helper/helper.module';
-import { IAccountRepository } from './interface/account.repository';
+import { AccountRepository } from './interface/account.repository';
 import { FsAccountRepository } from './fs-account.repository';
-import { IBankRepository } from './interface/bank.repository';
+import { BankRepository } from './interface/bank.repository';
 import { FsBankRepository } from './fs-bank.repository';
-import { ITransactionRepository } from './interface/transaction.repository';
+import { TransactionRepository } from './interface/transaction.repository';
 import { FsTransactionRepository } from './fs-transaction.repository';
-import { IUserRepository } from './interface/user.repository';
+import { UserRepository } from './interface/user.repository';
 import { FsUserRepository } from './fs-user.repository';
 
 @Module({
   imports: [HelperModule, TypeOrmModule.forFeature([])],
   providers: [
     {
-      provide: IAccountRepository,
+      provide: AccountRepository,
       useClass: FsAccountRepository,
     },
     {
-      provide: IBankRepository,
+      provide: BankRepository,
       useClass: FsBankRepository,
     },
     {
-      provide: ITransactionRepository,
+      provide: TransactionRepository,
       useClass: FsTransactionRepository,
     },
     {
-      provide: IUserRepository,
+      provide: UserRepository,
       useClass: FsUserRepository,
     },
   ],
   exports: [
-    IAccountRepository,
-    IBankRepository,
-    ITransactionRepository,
-    IUserRepository,
+    AccountRepository,
+    BankRepository,
+    TransactionRepository,
+    UserRepository,
   ],
 })
 export class RepositoryModule {}

@@ -1,31 +1,31 @@
 import { Logger } from '@nestjs/common';
-import { IBaseRepository } from './interface/base.repository';
+import { BaseRepository } from './interface/base.repository';
 import { BaseModel } from '../model/interface/base.model';
-import { IFsHelper } from '../common/helper/interface/fs-helper';
-import { IIdHelper } from '../common/helper/interface/id-helper';
+import { FileSystem } from '../common/helper/file-system';
+import { IdGenerator } from '../common/helper/id-generator';
 import { NotFountException } from '../common/exseption/not-fount-exception';
 
 export abstract class FsBaseRepository<T extends BaseModel>
-  implements IBaseRepository<T>
+  implements BaseRepository<T>
 {
   protected logger: Logger;
   protected fileName: string;
-  protected data: { [i: string]: T };
+  protected data: Record<string, T>;
 
   protected constructor(
-    protected readonly fsHelper: IFsHelper,
-    protected readonly idHelper: IIdHelper,
+    protected readonly fileSystem: FileSystem,
+    protected readonly idGenerator: IdGenerator,
   ) {}
 
   abstract getLoggingModelId(model: T | string): string;
 
   async create(model: T): Promise<T> {
-    const id = this.idHelper.createId();
+    const id = this.idGenerator.createId();
 
     this.data[id] = { id, ...model };
 
     try {
-      this.fsHelper.writeFile(this.fileName, this.data);
+      this.fileSystem.writeFile(this.fileName, this.data);
 
       return this.data[id];
     } catch (e) {
@@ -60,7 +60,7 @@ export abstract class FsBaseRepository<T extends BaseModel>
     this.data[model.id] = model;
 
     try {
-      this.fsHelper.writeFile(this.fileName, this.data);
+      this.fileSystem.writeFile(this.fileName, this.data);
 
       return this.data[model.id];
     } catch (e) {
@@ -77,7 +77,7 @@ export abstract class FsBaseRepository<T extends BaseModel>
     delete this.data[id];
 
     try {
-      this.fsHelper.writeFile(this.fileName, this.data);
+      this.fileSystem.writeFile(this.fileName, this.data);
 
       return true;
     } catch (e) {

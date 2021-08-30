@@ -1,9 +1,9 @@
-import { IBaseRepository } from './interface/base.repository';
+import { BaseRepository } from './interface/base.repository';
 import { Repository } from 'typeorm';
 import { BaseEntity } from '../model/base.entity';
 
 export abstract class DbBaseRepository<T extends BaseEntity>
-  implements IBaseRepository<T>
+  implements BaseRepository<T>
 {
   protected constructor(protected readonly repository: Repository<T>) {}
 

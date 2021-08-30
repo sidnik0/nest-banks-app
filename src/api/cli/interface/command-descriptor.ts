@@ -1,4 +1,4 @@
 export interface CommandDescriptor {
   name: string;
-  params: string[];
+  params: Map<string, string>;
 }

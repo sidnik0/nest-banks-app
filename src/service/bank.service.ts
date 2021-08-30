@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { IBankRepository } from '../repository/interface/bank.repository';
+import { BankRepository } from '../repository/interface/bank.repository';
 import { BankModel } from '../model/interface/bank.model';
 
 @Injectable()
 export class BankService {
-  constructor(private readonly bankRepository: IBankRepository) {}
+  constructor(private readonly bankRepository: BankRepository) {}
 
   async create(model: BankModel): Promise<BankModel> {
     return await this.bankRepository.create(model);

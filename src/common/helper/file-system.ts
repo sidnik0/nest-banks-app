@@ -1,9 +1,8 @@
 import * as fs from 'fs';
 import { Injectable, Logger } from '@nestjs/common';
-import { IFsHelper } from './interface/fs-helper';
 
 @Injectable()
-export class FsHelper implements IFsHelper {
+export class FileSystem {
   private readonly dir: string = process.cwd();
   private readonly path: string = `${this.dir}/database`;
   private readonly logger = new Logger('FsHelper');

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { ITransactionRepository } from '../repository/interface/transaction.repository';
-import { IAccountRepository } from '../repository/interface/account.repository';
-import { IBankRepository } from '../repository/interface/bank.repository';
-import { IUserRepository } from '../repository/interface/user.repository';
+import { TransactionRepository } from '../repository/interface/transaction.repository';
+import { AccountRepository } from '../repository/interface/account.repository';
+import { BankRepository } from '../repository/interface/bank.repository';
+import { UserRepository } from '../repository/interface/user.repository';
 import { TransactionModel } from '../model/interface/transaction.model';
 import { AccountModel } from '../model/interface/account.model';
 import { FaceType } from '../types/face.type';
@@ -10,10 +10,10 @@ import { FaceType } from '../types/face.type';
 @Injectable()
 export class TransactionService {
   constructor(
-    private readonly transactionRepository: ITransactionRepository,
-    private readonly accountRepository: IAccountRepository,
-    private readonly bankRepository: IBankRepository,
-    private readonly userRepository: IUserRepository,
+    private readonly transactionRepository: TransactionRepository,
+    private readonly accountRepository: AccountRepository,
+    private readonly bankRepository: BankRepository,
+    private readonly userRepository: UserRepository,
   ) {}
 
   async create(

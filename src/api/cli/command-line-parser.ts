@@ -7,14 +7,17 @@ export class CommandLineParser {
   parseInput(args: string): CommandDescriptor {
     const [firstArg, ...rawArgs] = args.trim().split(' ');
 
-    if (!firstArg) throw new CommandLineParserException('unknown commands');
+    if (!firstArg)
+      throw new CommandLineParserException(`unknown commands: ${firstArg}`);
 
-    const processedArgs = [];
+    const processedArgs = new Map<string, string>();
 
     for (const item of rawArgs) {
       if (!item) continue;
 
-      processedArgs.push(item);
+      const arrayStrings = item.split('=');
+
+      processedArgs.set(arrayStrings[0], arrayStrings[1]);
     }
 
     return { name: firstArg, params: processedArgs };

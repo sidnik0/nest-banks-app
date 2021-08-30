@@ -1,20 +1,16 @@
 import { Module } from '@nestjs/common';
-import { FsHelper } from './fs-helper';
-import { IFsHelper } from './interface/fs-helper';
-import { IdHelper } from './id-helper';
-import { IIdHelper } from './interface/id-helper';
+import { FileSystem } from './file-system';
+import { IdGenerator } from './id-generator';
+import { PropertyParser } from './property-parser';
+import { RequiredPropertyValidator } from './required-property-validator';
 
 @Module({
   providers: [
-    {
-      provide: IFsHelper,
-      useClass: FsHelper,
-    },
-    {
-      provide: IIdHelper,
-      useClass: IdHelper,
-    },
+    FileSystem,
+    IdGenerator,
+    PropertyParser,
+    RequiredPropertyValidator,
   ],
-  exports: [IFsHelper, IIdHelper],
+  exports: [FileSystem, IdGenerator, PropertyParser, RequiredPropertyValidator],
 })
 export class HelperModule {}
