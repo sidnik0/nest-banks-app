@@ -8,7 +8,7 @@ import { CommandResult } from '../interface/command-result';
 
 export abstract class Command {
   protected optionalFlags: string[] = ['help'];
-  protected requiredProperties: Record<string, any>;
+  protected requiredProperties: Record<string, string>;
 
   @Inject(RequiredPropertyValidator)
   protected readonly requiredPropertiesValidator: RequiredPropertyValidator;
@@ -26,7 +26,7 @@ export abstract class Command {
       this.requiredPropertiesValidator.validate(prop, properties);
 
       obj[prop] = this.propertyParser.parse(
-        properties[prop],
+        properties.get(prop),
         this.requiredProperties[prop],
       );
     }
@@ -38,9 +38,9 @@ export abstract class Command {
     const optionalFlags: string[] = [];
 
     for (const prop of this.optionalFlags) {
-      if (!properties.has(prop)) {
-        optionalFlags.push(prop);
-      }
+      if (!properties.has(prop)) continue;
+
+      optionalFlags.push(prop);
     }
 
     return optionalFlags;

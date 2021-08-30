@@ -18,13 +18,17 @@ export class CreateAccountCommand extends Command {
     };
   }
   async execute({ params }: CommandDescriptor): Promise<CommandResult> {
-    const model = this.validateAndParseProperties<AccountModel>(params);
     const flags = this.getOptionalFlags(params);
 
-    if (flags.includes('help')) return { message: 'HELP', result: '' };
+    console.log(flags);
+
+    if (flags.includes('help')) return { result: '' };
+
+    const model = this.validateAndParseProperties<AccountModel>(params);
+
 
     const result = await this.accountService.create(model);
 
-    return { message: 'OK', result };
+    return { result };
   }
 }

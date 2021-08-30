@@ -23,10 +23,10 @@ export class CreateTransactionCommand extends Command {
     const model = this.validateAndParseProperties<TransactionModel>(params);
     const flags = this.getOptionalFlags(params);
 
-    if (flags.includes('help')) return { message: 'HELP', result: '' };
+    if (flags.includes('help')) return { result: '' };
 
     const result = await this.transactionService.create('', '', 0);
 
-    return { message: 'OK', result };
+    return { result };
   }
 }

@@ -1,10 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Type } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 
 import { Command } from './commands/command';
 import { CommandDescriptor } from './interface/command-descriptor';
 import { CommandType } from '../../types/command.type';
-import { CommandLineParserException } from '../../common/exseption/command-line-parser-exception';
 
 import { CreateAccountCommand } from './commands/create-account-command';
 import { CreateBankCommand } from './commands/create-bank-command';
@@ -30,33 +29,28 @@ import { UpdateBankCommand } from './commands/update-bank-command';
 import { UpdateUserCommand } from './commands/update-user-command';
 import { ExitCommand } from './commands/exit-command';
 import { HelpCommand } from './commands/help-command';
+import { CommandFactoryException } from '../../common/exseption/command-factory-exception';
 
 @Injectable()
 export class CommandFactory {
-  private commandsLib: Map<string, any>;
+  private static commandsLib: Map<string, Type<Command>>;
 
   constructor(private readonly moduleRef: ModuleRef) {
-    this.commandsLib = this.getCommandLib();
+    CommandFactory.commandsLib = this.getCommandLib();
   }
 
   getCommand({ name }: CommandDescriptor): Command {
-    if (!this.commandsLib.has(name)) {
-      throw new CommandLineParserException(`unknown command: ${name}`);
+    if (!CommandFactory.commandsLib.has(name)) {
+      throw new CommandFactoryException(`unknown command: ${name}`);
     }
 
-    const commandClass = this.commandsLib.get(name);
+    const commandClass = CommandFactory.commandsLib.get(name);
 
-    const command = this.moduleRef.get(commandClass);
-
-    if (command instanceof Command) return command;
-
-    throw new CommandLineParserException(
-      `current command: ${name} not instance of base-command`,
-    );
+    return this.moduleRef.get(commandClass);
   }
 
-  private getCommandLib(): Map<string, any> {
-    return new Map<string, any>([
+  private getCommandLib(): Map<string, Type<Command>> {
+    return new Map<string, Type<Command>>([
       [CommandType.CREATE_ACCOUNT, CreateAccountCommand],
       [CommandType.CREATE_BANK, CreateBankCommand],
       [CommandType.CREATE_TRANSACTION, CreateTransactionCommand],

@@ -7,6 +7,7 @@ import { ConsoleInterpreter } from './console-interpreter';
 import { CommandExecutor } from './command-executor';
 import { CommandLineParser } from './command-line-parser';
 import { CommandFactory } from './command-factory';
+import { ConsoleCommandResultViewer } from './console-command-result-viewer';
 
 import { commands } from './commands';
 
@@ -17,8 +18,9 @@ import { commands } from './commands';
     CommandExecutor,
     CommandLineParser,
     CommandFactory,
+    ConsoleCommandResultViewer,
     ...commands,
   ],
-  exports: [ConsoleInterpreter, CommandExecutor, CommandLineParser],
+  exports: [ConsoleInterpreter, CommandExecutor],
 })
 export class CliModule {}

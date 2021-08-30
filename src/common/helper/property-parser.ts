@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CurrencyType } from '../../types/currency.type';
 import { FaceType } from '../../types/face.type';
-import { ParserException } from '../exseption/parser-exception';
+import { ConvertorException } from '../exseption/convertor-exception';
 
 @Injectable()
 export class PropertyParser {
@@ -20,7 +20,7 @@ export class PropertyParser {
       case 'Date':
         return PropertyParser.parseDate(value);
       default:
-        throw new ParserException('unknown type');
+        throw new ConvertorException('unknown type');
     }
   }
 
@@ -28,7 +28,7 @@ export class PropertyParser {
     const string = String(value);
 
     if (!string && string !== '') {
-      throw new ParserException('String parser error');
+      throw new ConvertorException('String parser error');
     }
 
     return string;
@@ -38,7 +38,7 @@ export class PropertyParser {
     const number = Number(value);
 
     if (!number && number !== 0) {
-      throw new ParserException('Number parser error');
+      throw new ConvertorException('Number parser error');
     }
 
     return number;
@@ -50,19 +50,19 @@ export class PropertyParser {
 
   private static parseCurrencyType(value: any): CurrencyType {
     if (
-      value !== CurrencyType.RUB ||
-      value !== CurrencyType.USD ||
+      value !== CurrencyType.RUB &&
+      value !== CurrencyType.USD &&
       value !== CurrencyType.EUR
     ) {
-      throw new ParserException('Currency Type parser error');
+      throw new ConvertorException('Currency Type parser error');
     }
 
     return value;
   }
 
   private static parseFaceType(value: any): FaceType {
-    if (value !== FaceType.INDIVIDUAL || value !== FaceType.ENTITY) {
-      throw new ParserException('Face Type parser error');
+    if (value !== FaceType.INDIVIDUAL && value !== FaceType.ENTITY) {
+      throw new ConvertorException('Face Type parser error');
     }
 
     return value;
@@ -71,6 +71,6 @@ export class PropertyParser {
   private static parseDate(value: any): Date {
     if (value instanceof Date) return value;
 
-    throw new ParserException('Face Type parser error');
+    throw new ConvertorException('Face Type parser error');
   }
 }

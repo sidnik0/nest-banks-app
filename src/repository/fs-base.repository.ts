@@ -20,6 +20,7 @@ export abstract class FsBaseRepository<T extends BaseModel>
   abstract getLoggingModelId(model: T | string): string;
 
   async create(model: T): Promise<T> {
+    console.log(1);
     const id = this.idGenerator.createId();
 
     this.data[id] = { id, ...model };

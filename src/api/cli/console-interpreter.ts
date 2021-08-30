@@ -2,21 +2,17 @@ import * as readline from 'readline';
 import { Injectable } from '@nestjs/common';
 import { CommandExecutor } from './command-executor';
 import { CommandLineParser } from './command-line-parser';
-import { CommandLineParserException } from '../../common/exseption/command-line-parser-exception';
-import { ParserException } from '../../common/exseption/parser-exception';
-import { ValidatorException } from '../../common/exseption/validator-exception';
-import { ModuleRef } from '@nestjs/core';
+import { ConsoleCommandResultViewer } from './console-command-result-viewer';
 
 @Injectable()
 export class ConsoleInterpreter {
   private readonly rl;
-  private commandLineParser: CommandLineParser;
-  private consoleExecutor: CommandExecutor;
 
-  constructor(private readonly moduleRef: ModuleRef) {
-    this.commandLineParser = this.moduleRef.get(CommandLineParser);
-    this.consoleExecutor = this.moduleRef.get(CommandExecutor);
-
+  constructor(
+    private readonly commandLineParser: CommandLineParser,
+    private readonly consoleExecutor: CommandExecutor,
+    private readonly consoleCommandResultViewer: ConsoleCommandResultViewer,
+  ) {
     this.rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout,
@@ -26,7 +22,7 @@ export class ConsoleInterpreter {
   async run(): Promise<void> {
     this.rl.prompt();
 
-    this.rl.on('line', this.lineHandler);
+    this.rl.on('line', this.lineHandler.bind(this));
 
     this.rl.on('close', () => console.log('app close'));
   }
@@ -35,48 +31,30 @@ export class ConsoleInterpreter {
     try {
       const commandDescriptor = this.commandLineParser.parseInput(input);
 
-      const data = await this.consoleExecutor.executeCommand(commandDescriptor);
+      const commandResult = await this.consoleExecutor.executeCommand(
+        commandDescriptor,
+      );
 
-      switch (data.message) {
-        case 'OK':
-          const result = this.parseResultToString(data.result);
-          console.log(result);
-          this.rl.prompt();
+      if (commandResult.onExit) this.rl.close();
 
-          break;
-        case 'HELP':
-          console.log(data.result);
-          this.rl.prompt();
+      const resultString =
+        this.consoleCommandResultViewer.parseCommandResult(commandResult);
 
-          break;
-        case 'EXIT':
-          this.rl.close();
-        default:
-          throw new Error(`Unknown message: ${data.message}`);
-      }
+      console.log(resultString);
+
+      this.rl.prompt();
     } catch (e) {
-      if (
-        e instanceof CommandLineParserException ||
-        e instanceof ParserException ||
-        e instanceof ValidatorException
-      ) {
-        console.log(e.message);
+      const resultError = this.consoleCommandResultViewer.parseError(e);
+
+      if (typeof resultError === 'string') {
+        console.log(resultError);
 
         this.rl.prompt();
       } else {
         console.log(e);
+
         this.rl.close();
       }
     }
-  }
-
-  private parseResultToString(result: Record<string, any>): string {
-    let string = '';
-
-    for (const key of Object.keys(result)) {
-      string += `${key}: ${result[key]}\n`;
-    }
-
-    return string;
   }
 }
