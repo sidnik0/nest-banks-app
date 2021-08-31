@@ -1,4 +1,4 @@
 export interface CommandResult {
-  result: Record<string, any> | string;
+  result: Record<string, any> | Record<string, any>[] | string;
   onExit?: boolean;
 }

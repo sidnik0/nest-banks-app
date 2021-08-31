@@ -103,7 +103,7 @@ export class TransactionService {
     const commission =
       user.face === FaceType.INDIVIDUAL
         ? bank.commissionForIndividual
-        : bank.commissionForEntities;
+        : bank.commissionForEntity;
 
     return 1 + commission / 100;
   }

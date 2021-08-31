@@ -4,6 +4,7 @@ import { AccountService } from '../../../service/account.service';
 import { AccountModel } from '../../../model/interface/account.model';
 import { CommandDescriptor } from '../interface/command-descriptor';
 import { CommandResult } from '../interface/command-result';
+import { createAccountHelp } from './helps-string';
 
 @Injectable()
 export class CreateAccountCommand extends Command {
@@ -13,19 +14,16 @@ export class CreateAccountCommand extends Command {
     this.requiredProperties = {
       userId: 'string',
       bankId: 'string',
-      currency: 'CurrencyType',
       balance: 'number',
+      currency: 'CurrencyType',
     };
   }
   async execute({ params }: CommandDescriptor): Promise<CommandResult> {
     const flags = this.getOptionalFlags(params);
 
-    console.log(flags);
-
-    if (flags.includes('help')) return { result: '' };
+    if (flags.includes('help')) return { result: createAccountHelp };
 
     const model = this.validateAndParseProperties<AccountModel>(params);
-
 
     const result = await this.accountService.create(model);
 

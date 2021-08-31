@@ -71,6 +71,6 @@ export class PropertyParser {
   private static parseDate(value: any): Date {
     if (value instanceof Date) return value;
 
-    throw new ConvertorException('Face Type parser error');
+    throw new ConvertorException('Date parser error');
   }
 }

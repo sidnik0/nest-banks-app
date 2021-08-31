@@ -5,7 +5,7 @@ import { BankModel } from './interface/bank.model';
 @Entity()
 export class BankEntity extends BaseEntity implements BankModel {
   @Column()
-  commissionForEntities: number;
+  commissionForEntity: number;
 
   @Column()
   commissionForIndividual: number;

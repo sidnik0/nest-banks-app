@@ -1,8 +1,6 @@
 import { Inject } from '@nestjs/common';
-
 import { RequiredPropertyValidator } from '../../../common/helper/required-property-validator';
 import { PropertyParser } from '../../../common/helper/property-parser';
-
 import { CommandDescriptor } from '../interface/command-descriptor';
 import { CommandResult } from '../interface/command-result';
 
@@ -20,6 +18,8 @@ export abstract class Command {
   ): Promise<CommandResult>;
 
   protected validateAndParseProperties<T>(properties: Map<string, string>): T {
+    if (!this.requiredProperties) return null;
+
     const obj: Record<string, any> = {};
 
     for (const prop of Object.keys(this.requiredProperties)) {

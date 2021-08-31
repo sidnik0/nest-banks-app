@@ -41,7 +41,7 @@ export class CommandFactory {
 
   getCommand({ name }: CommandDescriptor): Command {
     if (!CommandFactory.commandsLib.has(name)) {
-      throw new CommandFactoryException(`unknown command: ${name}`);
+      throw new CommandFactoryException(`Unknown command: ${name}`);
     }
 
     const commandClass = CommandFactory.commandsLib.get(name);

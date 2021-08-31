@@ -8,15 +8,19 @@ import { CommandFactoryException } from '../../common/exseption/command-factory-
 @Injectable()
 export class ConsoleCommandResultViewer {
   parseCommandResult({ result }: CommandResult): string {
-    if (typeof result === 'string') return result;
+    if (typeof result === 'string') {
+      return result;
+    } else if (Array.isArray(result)) {
+      let string = '';
 
-    let string = '';
+      for (const obj of result) {
+        string += `${ConsoleCommandResultViewer.parseObjToString(obj)}\n`;
+      }
 
-    for (const key of Object.keys(result)) {
-      string += `${key}: ${result[key]}\n`;
+      return string;
+    } else {
+      return ConsoleCommandResultViewer.parseObjToString(result);
     }
-
-    return string;
   }
 
   parseError(e: Error): string | Error {
@@ -30,5 +34,15 @@ export class ConsoleCommandResultViewer {
     } else {
       return e;
     }
+  }
+
+  private static parseObjToString(obj: Record<string, any>): string {
+    let string = '';
+
+    for (const key of Object.keys(obj)) {
+      string += `${key}: ${obj[key]} `;
+    }
+
+    return string;
   }
 }

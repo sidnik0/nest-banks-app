@@ -1,5 +1,5 @@
 import * as readline from 'readline';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CommandExecutor } from './command-executor';
 import { CommandLineParser } from './command-line-parser';
 import { ConsoleCommandResultViewer } from './console-command-result-viewer';
@@ -7,6 +7,7 @@ import { ConsoleCommandResultViewer } from './console-command-result-viewer';
 @Injectable()
 export class ConsoleInterpreter {
   private readonly rl;
+  private readonly logger = new Logger('ConsoleInterpreter');
 
   constructor(
     private readonly commandLineParser: CommandLineParser,
@@ -47,11 +48,11 @@ export class ConsoleInterpreter {
       const resultError = this.consoleCommandResultViewer.parseError(e);
 
       if (typeof resultError === 'string') {
-        console.log(resultError);
+        this.logger.warn(resultError);
 
         this.rl.prompt();
       } else {
-        console.log(e);
+        this.logger.error(e.message, e.stack);
 
         this.rl.close();
       }

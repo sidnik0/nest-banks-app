@@ -8,7 +8,7 @@ export class CommandLineParser {
     const [firstArg, ...rawArgs] = args.trim().split(' ');
 
     if (!firstArg)
-      throw new CommandLineParserException(`command: ${firstArg} not entered`);
+      throw new CommandLineParserException(`Command: ${firstArg} not entered`);
 
     const processedArgs = new Map<string, string>();
 

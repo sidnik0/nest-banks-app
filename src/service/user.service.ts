@@ -23,4 +23,8 @@ export class UserService {
 
     return this.userRepository.update({ ...data, ...model });
   }
+
+  async delete(id: string): Promise<boolean> {
+    return await this.userRepository.delete(id);
+  }
 }

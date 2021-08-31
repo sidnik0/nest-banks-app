@@ -18,10 +18,16 @@ export class AccountService {
     return await this.accountRepository.getAll();
   }
 
-  async updateBalance(id: string, balance: number): Promise<AccountModel> {
+  async updateBalance(
+    id: string,
+    obj: { amount: number; boolean: boolean },
+  ): Promise<AccountModel> {
     const data = await this.accountRepository.get(id);
 
-    data.balance = Math.floor((data.balance + balance) * 100) / 100;
+    data.balance =
+      Math.floor(
+        (data.balance + (obj.boolean ? obj.amount : -obj.amount)) * 100,
+      ) / 100;
 
     return await this.accountRepository.update(data);
   }
