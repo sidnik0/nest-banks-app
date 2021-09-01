@@ -4,6 +4,8 @@ import { CommandLineParserException } from '../../common/exseption/command-line-
 import { ConvertorException } from '../../common/exseption/convertor-exception';
 import { ValidatorException } from '../../common/exseption/validator-exception';
 import { CommandFactoryException } from '../../common/exseption/command-factory-exception';
+import { TransactionCurrencyException } from '../../common/exseption/transaction-currency-exception';
+import { TransactionBalanceException } from '../../common/exseption/transaction-balance-exception';
 
 @Injectable()
 export class ConsoleCommandResultViewer {
@@ -28,7 +30,9 @@ export class ConsoleCommandResultViewer {
       e instanceof CommandLineParserException ||
       e instanceof ConvertorException ||
       e instanceof ValidatorException ||
-      e instanceof CommandFactoryException
+      e instanceof CommandFactoryException ||
+      e instanceof TransactionCurrencyException ||
+      e instanceof TransactionBalanceException
     ) {
       return e.message;
     } else {

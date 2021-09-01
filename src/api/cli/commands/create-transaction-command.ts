@@ -26,7 +26,7 @@ export class CreateTransactionCommand extends Command {
 
     const model = this.validateAndParseProperties<TransactionModel>(params);
 
-    const result = await this.transactionService.create(
+    const result = await this.transactionService.createTransaction(
       model.fromAccountId,
       model.toAccountId,
       model.amount,

@@ -1,53 +1,47 @@
 import { Injectable } from '@nestjs/common';
+import { BaseService } from './base.service';
 import { AccountRepository } from '../repository/interface/account.repository';
 import { AccountModel } from '../model/interface/account.model';
+import { OperationType } from '../types/operation.type';
 
 @Injectable()
-export class AccountService {
-  constructor(private readonly accountRepository: AccountRepository) {}
-
-  async create(model: AccountModel): Promise<AccountModel> {
-    return await this.accountRepository.create(model);
+export class AccountService extends BaseService<AccountModel> {
+  constructor(protected readonly repository: AccountRepository) {
+    super(repository);
   }
 
-  async get(id: string): Promise<AccountModel> {
-    return await this.accountRepository.get(id);
-  }
-
-  async getAll(): Promise<AccountModel[]> {
-    return await this.accountRepository.getAll();
+  async update(): Promise<never> {
+    throw Error('Prohibited operation');
   }
 
   async updateBalance(
     id: string,
-    obj: { amount: number; boolean: boolean },
+    obj: { amount: number; operation: OperationType },
   ): Promise<AccountModel> {
-    const data = await this.accountRepository.get(id);
+    const data = await this.repository.get(id);
 
     data.balance =
       Math.floor(
-        (data.balance + (obj.boolean ? obj.amount : -obj.amount)) * 100,
+        (data.balance +
+          (obj.operation === 'replenishment' ? obj.amount : -obj.amount)) *
+          100,
       ) / 100;
 
-    return await this.accountRepository.update(data);
-  }
-
-  async delete(id: string): Promise<boolean> {
-    return await this.accountRepository.delete(id);
+    return await this.repository.update(data);
   }
 
   async getAllByUser(id: string): Promise<AccountModel[]> {
-    return this.accountRepository.getAllByUser(id);
+    return this.repository.getAllByUser(id);
   }
 
   async getAllByBank(id: string): Promise<AccountModel[]> {
-    return this.accountRepository.getAllByBank(id);
+    return this.repository.getAllByBank(id);
   }
 
   async getAllByUserAndBank(
     userId: string,
     bankId: string,
   ): Promise<AccountModel[]> {
-    return await this.accountRepository.getAllByUserAndBank(userId, bankId);
+    return await this.repository.getAllByUserAndBank(userId, bankId);
   }
 }

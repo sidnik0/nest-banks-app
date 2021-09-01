@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CurrencyType } from '../../types/currency.type';
 import { FaceType } from '../../types/face.type';
 import { ConvertorException } from '../exseption/convertor-exception';
+import { OperationType } from '../../types/operation.type';
 
 @Injectable()
 export class PropertyParser {
@@ -17,8 +18,8 @@ export class PropertyParser {
         return PropertyParser.parseCurrencyType(value);
       case 'FaceType':
         return PropertyParser.parseFaceType(value);
-      case 'Date':
-        return PropertyParser.parseDate(value);
+      case 'OperationType':
+        return PropertyParser.parseOperationType(value);
       default:
         throw new ConvertorException('unknown type');
     }
@@ -68,9 +69,14 @@ export class PropertyParser {
     return value;
   }
 
-  private static parseDate(value: any): Date {
-    if (value instanceof Date) return value;
+  private static parseOperationType(value: any): FaceType {
+    if (
+      value !== OperationType.REPLENISHMENT &&
+      value !== OperationType.WITHDRAWAL
+    ) {
+      throw new ConvertorException('Operation type parser error');
+    }
 
-    throw new ConvertorException('Date parser error');
+    return value;
   }
 }

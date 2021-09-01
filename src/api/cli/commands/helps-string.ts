@@ -185,7 +185,7 @@ export const updateAccountHelp = `Update account by id
 Options:
   id=<accountId>                    Account id
   amount=<amount>                   Amount
-  boolean=<boolean>                 (true: + || false: -)
+  operation=<boolean>               Operation ("replenishment" || "withdrawal")
   
   help                              Display help for command
 `;

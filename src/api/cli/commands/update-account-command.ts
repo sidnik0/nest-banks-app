@@ -4,6 +4,7 @@ import { Command } from './command';
 import { CommandDescriptor } from '../interface/command-descriptor';
 import { CommandResult } from '../interface/command-result';
 import { updateAccountHelp } from './helps-string';
+import { OperationType } from '../../../types/operation.type';
 
 @Injectable()
 export class UpdateAccountCommand extends Command {
@@ -13,7 +14,7 @@ export class UpdateAccountCommand extends Command {
     this.requiredProperties = {
       id: 'string',
       amount: 'number',
-      boolean: 'boolean',
+      operation: 'OperationType',
     };
   }
   async execute({ params }: CommandDescriptor): Promise<CommandResult> {
@@ -22,9 +23,9 @@ export class UpdateAccountCommand extends Command {
     if (flags.includes('help')) return { result: updateAccountHelp };
 
     const { id, ...model } = this.validateAndParseProperties<{
+      id: string;
       amount: number;
-      boolean: boolean;
-      id?: string;
+      operation: OperationType;
     }>(params);
 
     const result = await this.accountService.updateBalance(id, model);

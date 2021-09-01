@@ -14,8 +14,6 @@ export class UpdateUserCommand extends Command {
     this.requiredProperties = {
       id: 'string',
       name: 'string',
-      commissionForEntities: 'number',
-      commissionForIndividual: 'number',
     };
   }
   async execute({ params }: CommandDescriptor): Promise<CommandResult> {

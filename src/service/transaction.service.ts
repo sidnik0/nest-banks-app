@@ -6,17 +6,22 @@ import { UserRepository } from '../repository/interface/user.repository';
 import { TransactionModel } from '../model/interface/transaction.model';
 import { AccountModel } from '../model/interface/account.model';
 import { FaceType } from '../types/face.type';
+import { TransactionCurrencyException } from '../common/exseption/transaction-currency-exception';
+import { TransactionBalanceException } from '../common/exseption/transaction-balance-exception';
+import { BaseService } from './base.service';
 
 @Injectable()
-export class TransactionService {
+export class TransactionService extends BaseService<TransactionModel> {
   constructor(
-    private readonly transactionRepository: TransactionRepository,
+    protected readonly repository: TransactionRepository,
     private readonly accountRepository: AccountRepository,
     private readonly bankRepository: BankRepository,
     private readonly userRepository: UserRepository,
-  ) {}
+  ) {
+    super(repository);
+  }
 
-  async create(
+  async createTransaction(
     fromAccountId: string,
     toAccountId: string,
     amount: number,
@@ -49,7 +54,7 @@ export class TransactionService {
 
     const createAt = new Date();
 
-    return await this.transactionRepository.create({
+    return await this.repository.create({
       fromAccountId,
       toAccountId,
       amount,
@@ -57,32 +62,34 @@ export class TransactionService {
     });
   }
 
-  async get(id): Promise<TransactionModel> {
-    return await this.transactionRepository.get(id);
+  async create(): Promise<never> {
+    throw Error('Prohibited operation');
   }
 
-  async getAll(): Promise<TransactionModel[]> {
-    return this.transactionRepository.getAll();
+  async update(): Promise<never> {
+    throw Error('Prohibited operation');
   }
 
-  async update(model: TransactionModel): Promise<TransactionModel> {
-    return await this.transactionRepository.update(model);
-  }
-
-  async delete(id: string): Promise<boolean> {
-    return await this.transactionRepository.delete(id);
+  async delete(): Promise<never> {
+    throw Error('Prohibited operation');
   }
 
   async getAllByAccount(id: string): Promise<TransactionModel[]> {
-    return await this.transactionRepository.getAllByAccount(id);
+    return await this.repository.getAllByAccount(id);
   }
 
   private static checkCurrency(from: AccountModel, to: AccountModel): void {
-    if (from.currency !== to.currency) throw Error();
+    if (from.currency !== to.currency)
+      throw new TransactionCurrencyException(
+        `Currency do not match. fromAccountId: ${from.id}-${from.currency} toAccountId: ${to.id}-${to.currency}`,
+      );
   }
 
   private static checkBalance(from: AccountModel, value: number): void {
-    if (from.balance < value) throw Error();
+    if (from.balance < value)
+      throw new TransactionBalanceException(
+        `Insufficient funds in the account: ${from.id} balance: ${from.balance} amount: ${value}`,
+      );
   }
 
   private static updateBalance(a: number, b: number): number {
