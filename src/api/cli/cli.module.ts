@@ -10,9 +10,21 @@ import { CommandFactory } from './command-factory';
 import { ConsoleCommandResultViewer } from './console-command-result-viewer';
 
 import { commands } from './commands';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [ServiceModule, HelperModule],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      url: 'postgres://user:password@localhost:5432/db',
+      autoLoadEntities: true,
+      synchronize: true,
+    }),
+    ServiceModule, 
+    HelperModule
+  ],
   providers: [
     ConsoleInterpreter,
     CommandExecutor,

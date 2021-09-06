@@ -9,25 +9,41 @@ import { TransactionRepository } from './interface/transaction.repository';
 import { FsTransactionRepository } from './fs-transaction.repository';
 import { UserRepository } from './interface/user.repository';
 import { FsUserRepository } from './fs-user.repository';
+import { AccountEntity } from 'src/model/account.entity';
+import { BankEntity } from 'src/model/bank.entity';
+import { TransactionEntity } from 'src/model/transaction.entity';
+import { UserEntity } from 'src/model/user.entity';
+import { DbAccountRepository } from './db-account.repository';
+import { DbBankRepository } from './db-bank.repository';
+import { DbTransactionRepository } from './db-transaction.repository';
+import { DbUserRepository } from './db-user.repository';
 
 @Module({
-  imports: [HelperModule, TypeOrmModule.forFeature([])],
+  imports: [
+    HelperModule, 
+    TypeOrmModule.forFeature([
+      AccountEntity, 
+      BankEntity, 
+      TransactionEntity, 
+      UserEntity
+    ])
+  ],
   providers: [
     {
       provide: AccountRepository,
-      useClass: FsAccountRepository,
+      useClass: DbAccountRepository,
     },
     {
       provide: BankRepository,
-      useClass: FsBankRepository,
+      useClass: DbBankRepository,
     },
     {
       provide: TransactionRepository,
-      useClass: FsTransactionRepository,
+      useClass: DbTransactionRepository,
     },
     {
       provide: UserRepository,
-      useClass: FsUserRepository,
+      useClass: DbUserRepository,
     },
   ],
   exports: [
