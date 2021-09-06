@@ -81,7 +81,7 @@ export class TransactionService extends BaseService<TransactionModel> {
   private static checkCurrency(from: AccountModel, to: AccountModel): void {
     if (from.currency !== to.currency)
       throw new TransactionCurrencyException(
-        `Currency do not match. fromAccountId: ${from.id}-${from.currency} toAccountId: ${to.id}-${to.currency}`,
+        `Currency do not match. From Account: ${from.id}-${from.currency} To Account: ${to.id}-${to.currency}`,
       );
   }
 
