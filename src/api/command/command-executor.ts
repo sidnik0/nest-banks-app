@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CommandFactory } from './command-factory';
-import { CommandDescriptor } from './interface/command-descriptor';
-import { CommandResult } from './interface/command-result';
+import { CommandDescriptor } from '../command/interface/command-descriptor';
+import { CommandResult } from '../command/interface/command-result';
 
 @Injectable()
 export class CommandExecutor {

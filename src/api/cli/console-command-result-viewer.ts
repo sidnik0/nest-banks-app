@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CommandResult } from './interface/command-result';
+import { CommandResult } from '../command/interface/command-result';
 import { CommandLineParserException } from '../../common/exseption/command-line-parser-exception';
 import { ConvertorException } from '../../common/exseption/convertor-exception';
 import { ValidatorException } from '../../common/exseption/validator-exception';

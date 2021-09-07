@@ -1,7 +1,7 @@
 import * as readline from 'readline';
 import { Injectable, Logger } from '@nestjs/common';
-import { CommandExecutor } from './command-executor';
-import { CommandLineParser } from './command-line-parser';
+import { CommandExecutor } from '../command/command-executor';
+import { CommandLineParser } from '../command/command-line-parser';
 import { ConsoleCommandResultViewer } from './console-command-result-viewer';
 
 @Injectable()
@@ -28,7 +28,7 @@ export class ConsoleInterpreter {
     this.rl.on('close', () => console.log('app close'));
   }
 
-  private async lineHandler(input) {
+  private async lineHandler(input: string) {
     try {
       const commandDescriptor = this.commandLineParser.parseInput(input);
 

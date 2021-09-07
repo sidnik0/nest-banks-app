@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CommandDescriptor } from './interface/command-descriptor';
+import { CommandDescriptor } from '../command/interface/command-descriptor';
 import { CommandLineParserException } from '../../common/exseption/command-line-parser-exception';
 
 @Injectable()
