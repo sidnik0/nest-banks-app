@@ -17,7 +17,7 @@ export enum CommandType {
   GET_BANK = 'get-bank',
   GET_BANKS = 'get-banks',
   GET_TRANSACTION = 'get-transaction',
-  GET_TRANSACTIONS = 'get-all-transactions',
+  GET_TRANSACTIONS = 'get-transactions',
   GET_USER = 'get-user',
   GET_USERS = 'get-users',
   UPDATE_ACCOUNT = 'get-account',
