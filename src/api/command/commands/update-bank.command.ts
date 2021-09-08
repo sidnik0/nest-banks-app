@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { BankService } from '../../../service/bank.service';
 import { BankModel } from '../../../model/interface/bank.model';
 import { Command } from './command';
+import { UpdateBankDto } from 'src/api/rest-dto/update-bank.dto';
 
 @Injectable()
 export class UpdateBankCommand extends Command {
@@ -28,8 +29,8 @@ export class UpdateBankCommand extends Command {
     };
   }
 
-  async performAdditionally(model: BankModel): Promise<BankModel> {
-    return await this.bankService.update(model);
+  async performAdditionally(model: UpdateBankDto): Promise<BankModel> {
+    return await this.bankService.update(model as BankModel);
   }
 
   getCommandDescription(): string {

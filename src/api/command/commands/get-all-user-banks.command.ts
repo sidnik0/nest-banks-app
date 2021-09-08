@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { UserService } from '../../../service/user.service';
-import { UserModel } from '../../../model/interface/user.model';
+import { GetAllUserBanksDto } from 'src/api/rest-dto/get-all-user-banks.dto';
+import { BankModel } from 'src/model/interface/bank.model';
+import { UserService } from 'src/service/user.service';
 import { Command } from './command';
 
 @Injectable()
-export class DeleteUserCommand extends Command {
+export class GetAllUserBanksCommand extends Command {
   constructor(private readonly userService: UserService) {
     super();
 
@@ -16,18 +17,16 @@ export class DeleteUserCommand extends Command {
     };
   }
 
-  async performAdditionally(model: UserModel): Promise<string> {
-    await this.userService.delete(model.id);
-
-    return `User with id=${model.id} deleted`;
+  async performAdditionally(model: GetAllUserBanksDto): Promise<BankModel[]> {
+    return await this.userService.getAllBanks(model.id);
   }
 
   getCommandDescription(): string {
-    return `Delete user by id
+    return `Get all user banks
 
     Options:
       id=<userId>                       User id
-      
+    
       help                              Display help for command
     `;
   }

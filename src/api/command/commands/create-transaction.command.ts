@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { TransactionService } from '../../../service/transaction.service';
 import { TransactionModel } from '../../../model/interface/transaction.model';
 import { Command } from './command';
+import { CreateTransactionDto } from 'src/api/rest-dto/create-transaction.dto';
 
 @Injectable()
 export class CreateTransactionCommand extends Command {
@@ -24,12 +25,8 @@ export class CreateTransactionCommand extends Command {
     };
   }
 
-  async performAdditionally(model: TransactionModel): Promise<TransactionModel> {
-    return await this.transactionService.createTransaction(
-      model.fromAccountId,
-      model.toAccountId,
-      model.amount,
-    );
+  async performAdditionally(model: CreateTransactionDto): Promise<TransactionModel> {
+    return await this.transactionService.createTransaction(model);
   }
 
   getCommandDescription(): string {

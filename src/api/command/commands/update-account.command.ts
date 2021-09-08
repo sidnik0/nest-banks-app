@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AccountService } from '../../../service/account.service';
 import { Command } from './command';
-import { OperationType } from '../../../types/operation.type';
+import { UpdateAccountDto } from 'src/api/rest-dto/update-account.dto';
 
 @Injectable()
 export class UpdateAccountCommand extends Command {
@@ -24,7 +24,7 @@ export class UpdateAccountCommand extends Command {
     };
   }
 
-  async performAdditionally({id, ...model}: { id: string; amount: number; operation: OperationType }): Promise<any> {
+  async performAdditionally({id, ...model}: UpdateAccountDto): Promise<any> {
     return await this.accountService.updateBalance(id, model);
   }
 

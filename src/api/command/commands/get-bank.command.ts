@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { BankService } from '../../../service/bank.service';
 import { BankModel } from '../../../model/interface/bank.model';
 import { Command } from './command';
+import { GetBankDto } from 'src/api/rest-dto/get-bank.dto';
 
 @Injectable()
-export class DeleteBankCommand extends Command {
+export class GetBankCommand extends Command {
   constructor(private readonly bankService: BankService) {
     super();
 
@@ -16,14 +17,12 @@ export class DeleteBankCommand extends Command {
     };
   }
 
-  async performAdditionally(model: BankModel): Promise<string> {
-    await this.bankService.delete(model.id);
-
-    return `Bank with id=${model.id} deleted`;
+  async performAdditionally(model: GetBankDto): Promise<BankModel> {
+    return await this.bankService.get(model.id);
   }
 
   getCommandDescription(): string {
-    return `Delete bank by id
+    return `Get bank by id
 
     Options:
       id=<bankId>                       Bank id

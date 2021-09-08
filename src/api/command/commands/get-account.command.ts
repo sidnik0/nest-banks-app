@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { AccountService } from '../../../service/account.service';
 import { AccountModel } from '../../../model/interface/account.model';
 import { Command } from './command';
+import { GetAccountDto } from 'src/api/rest-dto/get-account.dto';
 
 @Injectable()
-export class GetAllAccountsByBankCommand extends Command {
+export class GetAccountCommand extends Command {
   constructor(private readonly accountService: AccountService) {
     super();
 
@@ -16,16 +17,16 @@ export class GetAllAccountsByBankCommand extends Command {
     };
   }
 
-  async performAdditionally(model: AccountModel): Promise<AccountModel[]> {
-    return await this.accountService.getAllByBank(model.id);
+  async performAdditionally(model: GetAccountDto): Promise<AccountModel> {
+    return await this.accountService.get(model.id);
   }
 
   getCommandDescription(): string {
-    return `Get all bank accounts
+    return `Get account by id
 
     Options:
-      id=<bankId>                       Bank id
-    
+      id=<accountId>                    Account id
+      
       help                              Display help for command
     `;
   }

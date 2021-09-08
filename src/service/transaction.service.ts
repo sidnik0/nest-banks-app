@@ -9,6 +9,7 @@ import { FaceType } from '../types/face.type';
 import { TransactionCurrencyException } from '../common/exseption/transaction-currency-exception';
 import { TransactionBalanceException } from '../common/exseption/transaction-balance-exception';
 import { BaseService } from './base.service';
+import { CreateTransactionDto } from 'src/api/rest-dto/create-transaction.dto';
 
 @Injectable()
 export class TransactionService extends BaseService<TransactionModel> {
@@ -21,11 +22,7 @@ export class TransactionService extends BaseService<TransactionModel> {
     super(repository);
   }
 
-  async createTransaction(
-    fromAccountId: string,
-    toAccountId: string,
-    amount: number,
-  ): Promise<TransactionModel> {
+  async createTransaction({ fromAccountId, toAccountId, amount }: CreateTransactionDto): Promise<TransactionModel> {
     const fromAccountPromise = this.accountRepository.get(fromAccountId);
     const toAccountPromise = this.accountRepository.get(toAccountId);
 

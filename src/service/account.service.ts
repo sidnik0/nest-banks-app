@@ -6,6 +6,7 @@ import { BankRepository } from 'src/repository/interface/bank.repository';
 import { AccountModel } from '../model/interface/account.model';
 import { OperationType } from '../types/operation.type';
 import { AccountCreatorException } from 'src/common/exseption/account-creator-exception';
+import { CreateAccountDto } from 'src/api/rest-dto/create-account.dto';
 
 @Injectable()
 export class AccountService extends BaseService<AccountModel> {
@@ -17,7 +18,7 @@ export class AccountService extends BaseService<AccountModel> {
     super(repository);
   }
 
-  async create(model: AccountModel): Promise<AccountModel> {
+  async create(model: CreateAccountDto): Promise<AccountModel> {
     const userPromise = this.userRepository.get(model.userId);
     const bankPromise = this.bankRepository.get(model.bankId);
 
@@ -25,7 +26,9 @@ export class AccountService extends BaseService<AccountModel> {
 
     if (!user || !bank) throw new AccountCreatorException(`Not found user:${model.userId} or bank:${model.bankId}`)
 
-    return await this.repository.create(model);
+    const data = model.balance ? model : { ...model, balance: 0 }
+
+    return await this.repository.create(data as AccountModel);
   }
 
   async update(): Promise<never> {

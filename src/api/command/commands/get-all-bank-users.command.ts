@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { BankService } from '../../../service/bank.service';
-import { BankModel } from '../../../model/interface/bank.model';
+import { GetAllBankUsersDto } from 'src/api/rest-dto/get-all-bank-users.dto';
+import { UserModel } from 'src/model/interface/user.model';
+import { BankService } from 'src/service/bank.service';
 import { Command } from './command';
 
 @Injectable()
-export class GetBankCommand extends Command {
+export class GetAllBankUsersCommand extends Command {
   constructor(private readonly bankService: BankService) {
     super();
 
@@ -16,16 +17,16 @@ export class GetBankCommand extends Command {
     };
   }
 
-  async performAdditionally(model: BankModel): Promise<BankModel> {
-    return await this.bankService.get(model.id);
+  async performAdditionally(model: GetAllBankUsersDto): Promise<UserModel[]> {
+    return await this.bankService.getAllUsers(model.id);
   }
 
   getCommandDescription(): string {
-    return `Get bank by id
+    return `Get all users in the bank
 
     Options:
       id=<bankId>                       Bank id
-      
+    
       help                              Display help for command
     `;
   }

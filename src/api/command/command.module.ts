@@ -11,6 +11,6 @@ import { commands } from './commands';
 @Module({
   imports: [ServiceModule, HelperModule],
   providers: [CommandExecutor, CommandFactory, ...commands],
-  exports: [CommandExecutor, CommandFactory],
+  exports: [CommandExecutor],
 })
 export class CommandModule {}

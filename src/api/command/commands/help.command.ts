@@ -30,7 +30,9 @@ export class HelpCommand extends Command {
     get-all-accounts-by-bank [options]          Get all bank accounts
     get-all-accounts-by-user-and-bank [options] Get all user accounts in the bank
     get-all-accounts-by-user [options]          Get all user accounts
+    get-all-bank-users [options]                Get all users in the bank
     get-all-transactions-by-account [options]   Get all account transactions
+    get-all-user-banks [options]                Get all user banks
     get-bank [options]                          Get bank by id
     get-banks                                   Get all banks
     get-transaction [options]                   Get transaction by id

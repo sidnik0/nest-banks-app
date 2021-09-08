@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Command } from './command';
 import { AccountService } from '../../../service/account.service';
 import { AccountModel } from '../../../model/interface/account.model';
+import { CreateAccountDto } from 'src/api/rest-dto/create-account.dto';
 
 
 @Injectable()
@@ -20,7 +21,7 @@ export class CreateAccountCommand extends Command {
       },
       balance: {
         type: 'number',
-        required: true,
+        required: false,
       },
       currency: {
         type: 'CurrencyType',
@@ -29,7 +30,7 @@ export class CreateAccountCommand extends Command {
     };
   }
 
-  async performAdditionally(model: AccountModel): Promise<AccountModel> {
+  async performAdditionally(model: CreateAccountDto): Promise<AccountModel> {
     return await this.accountService.create(model);
   }
 

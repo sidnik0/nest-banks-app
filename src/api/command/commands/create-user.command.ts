@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Command } from './command';
 import { UserService } from '../../../service/user.service';
 import { UserModel } from '../../../model/interface/user.model';
+import { CreateUserDto } from 'src/api/rest-dto/create-user.dto';
 
 @Injectable()
 export class CreateUserCommand extends Command {
@@ -20,7 +21,7 @@ export class CreateUserCommand extends Command {
     };
   }
 
-  async performAdditionally(model: UserModel): Promise<UserModel> {
+  async performAdditionally(model: CreateUserDto): Promise<UserModel> {
     return await this.userService.create(model)
   }
 
