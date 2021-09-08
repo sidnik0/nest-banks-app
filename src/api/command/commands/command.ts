@@ -1,48 +1,50 @@
 import { Inject } from '@nestjs/common';
+import { ICommand } from './command.interface';
 import { RequiredPropertyValidator } from '../../../common/helper/required-property-validator';
 import { PropertyParser } from '../../../common/helper/property-parser';
 import { CommandDescriptor } from '../interface/command-descriptor';
 import { CommandResult } from '../interface/command-result';
 
-export abstract class Command {
-  protected optionalFlags: string[] = ['help'];
-  protected requiredProperties: Record<string, string>;
+export abstract class Command implements ICommand {
+  protected paramsDefinition: Record<string, {type: string, required: boolean}>;
 
   @Inject(RequiredPropertyValidator)
   protected readonly requiredPropertiesValidator: RequiredPropertyValidator;
   @Inject(PropertyParser)
   protected readonly propertyParser: PropertyParser;
 
-  abstract execute(
-    commandDescriptor: CommandDescriptor,
-  ): Promise<CommandResult>;
+  async execute({params}: CommandDescriptor): Promise<CommandResult> {
+    if (params.has('help')) return Promise.resolve({result: this.getCommandDescription()});
 
-  protected validateAndParseProperties<T>(properties: Map<string, string>): T {
-    if (!this.requiredProperties) return null;
+    const model = this.validateAndParseProperties(params);
+
+    const result = await this.performAdditionally(model);
+
+    return { result };
+  }
+
+  validateAndParseProperties(params: Map<string, string>): Record<string, any> {
+    if (!this.paramsDefinition) return null;
 
     const obj: Record<string, any> = {};
 
-    for (const prop of Object.keys(this.requiredProperties)) {
-      this.requiredPropertiesValidator.validate(prop, properties);
+    for (const prop of Object.keys(this.paramsDefinition)) {
+      if (this.paramsDefinition[prop].required) {
+        this.requiredPropertiesValidator.validate(prop, params); 
+      }
 
-      obj[prop] = this.propertyParser.parse(
-        properties.get(prop),
-        this.requiredProperties[prop],
-      );
+      if (params.has(prop)) {
+        obj[prop] = this.propertyParser.parse(
+          params.get(prop),
+          this.paramsDefinition[prop].type,
+        );
+      }
     }
 
-    return obj as T;
+    return obj;
   }
 
-  protected getOptionalFlags(properties: Map<string, string>): string[] {
-    const optionalFlags: string[] = [];
+  abstract performAdditionally(model: Record<string, any>): Promise<any>;
 
-    for (const prop of this.optionalFlags) {
-      if (!properties.has(prop)) continue;
-
-      optionalFlags.push(prop);
-    }
-
-    return optionalFlags;
-  }
+  abstract getCommandDescription(): string;
 }

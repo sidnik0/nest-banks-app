@@ -2,28 +2,31 @@ import { Injectable } from '@nestjs/common';
 import { BankService } from '../../../service/bank.service';
 import { BankModel } from '../../../model/interface/bank.model';
 import { Command } from './command';
-import { CommandDescriptor } from '../interface/command-descriptor';
-import { CommandResult } from '../interface/command-result';
-import { getBankHelp } from './helps-string';
 
 @Injectable()
 export class GetBankCommand extends Command {
   constructor(private readonly bankService: BankService) {
     super();
 
-    this.requiredProperties = {
-      id: 'string',
+    this.paramsDefinition = {
+      id: {
+        type: 'string',
+        required: true,
+      },
     };
   }
-  async execute({ params }: CommandDescriptor): Promise<CommandResult> {
-    const flags = this.getOptionalFlags(params);
 
-    if (flags.includes('help')) return { result: getBankHelp };
+  async performAdditionally(model: BankModel): Promise<BankModel> {
+    return await this.bankService.get(model.id);
+  }
 
-    const model = this.validateAndParseProperties<BankModel>(params);
+  getCommandDescription(): string {
+    return `Get bank by id
 
-    const result = await this.bankService.get(model.id);
-
-    return { result };
+    Options:
+      id=<bankId>                       Bank id
+      
+      help                              Display help for command
+    `;
   }
 }

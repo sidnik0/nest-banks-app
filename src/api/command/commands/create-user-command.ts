@@ -2,29 +2,36 @@ import { Injectable } from '@nestjs/common';
 import { Command } from './command';
 import { UserService } from '../../../service/user.service';
 import { UserModel } from '../../../model/interface/user.model';
-import { CommandDescriptor } from '../interface/command-descriptor';
-import { CommandResult } from '../interface/command-result';
-import { createUserHelp } from './helps-string';
 
 @Injectable()
 export class CreateUserCommand extends Command {
   constructor(private readonly userService: UserService) {
     super();
 
-    this.requiredProperties = {
-      name: 'string',
-      face: 'FaceType',
+    this.paramsDefinition = {
+      name: {
+        type: 'string',
+        required: true,
+      },
+      face: {
+        type: 'FaceType',
+        required: true,
+      },
     };
   }
-  async execute({ params }: CommandDescriptor): Promise<CommandResult> {
-    const flags = this.getOptionalFlags(params);
 
-    if (flags.includes('help')) return { result: createUserHelp };
+  async performAdditionally(model: UserModel): Promise<UserModel> {
+    return await this.userService.create(model)
+  }
 
-    const model = this.validateAndParseProperties<UserModel>(params);
+  getCommandDescription(): string {
+    return `Create user
 
-    const result = await this.userService.create(model);
-
-    return { result };
+    Options:
+      name=<name>                       User name
+      face=<face>                       User face ("entity" || "individual")
+      
+      help                              Display help for command
+    `;
   }
 }

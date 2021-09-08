@@ -2,31 +2,47 @@ import { Injectable } from '@nestjs/common';
 import { Command } from './command';
 import { AccountService } from '../../../service/account.service';
 import { AccountModel } from '../../../model/interface/account.model';
-import { CommandDescriptor } from '../interface/command-descriptor';
-import { CommandResult } from '../interface/command-result';
-import { createAccountHelp } from './helps-string';
+
 
 @Injectable()
 export class CreateAccountCommand extends Command {
   constructor(private readonly accountService: AccountService) {
     super();
 
-    this.requiredProperties = {
-      userId: 'string',
-      bankId: 'string',
-      balance: 'number',
-      currency: 'CurrencyType',
+    this.paramsDefinition = {
+      userId: {
+        type: 'string', 
+        required: true,
+      },
+      bankId: {
+        type: 'string',
+        required: true,
+      },
+      balance: {
+        type: 'number',
+        required: true,
+      },
+      currency: {
+        type: 'CurrencyType',
+        required: true,
+      },
     };
   }
-  async execute({ params }: CommandDescriptor): Promise<CommandResult> {
-    const flags = this.getOptionalFlags(params);
 
-    if (flags.includes('help')) return { result: createAccountHelp };
+  async performAdditionally(model: AccountModel): Promise<AccountModel> {
+    return await this.accountService.create(model);
+  }
 
-    const model = this.validateAndParseProperties<AccountModel>(params);
+  getCommandDescription(): string {
+    return `Create account
 
-    const result = await this.accountService.create(model);
-
-    return { result };
+    Options:
+      userId=<userId>                   User id
+      bankId=<bankId>                   Bank id
+      balance=<balance>                 Starting balance
+      currency=<currency>               Currency ("RUB" || "USD" || "EUR")
+      
+      help                              Display help for command
+    `;
   }
 }

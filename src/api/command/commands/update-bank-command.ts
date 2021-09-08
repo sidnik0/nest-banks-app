@@ -1,39 +1,47 @@
 import { Injectable } from '@nestjs/common';
 import { BankService } from '../../../service/bank.service';
 import { BankModel } from '../../../model/interface/bank.model';
-import { CommandWithOptionalProperties } from './command-with-optional-properties';
-import { CommandDescriptor } from '../interface/command-descriptor';
-import { CommandResult } from '../interface/command-result';
-import { updateBankHelp } from './helps-string';
+import { Command } from './command';
 
 @Injectable()
-export class UpdateBankCommand extends CommandWithOptionalProperties {
+export class UpdateBankCommand extends Command {
   constructor(private readonly bankService: BankService) {
     super();
 
-    this.requiredProperties = {
-      id: 'string',
-    };
-
-    this.optionalProperties = {
-      name: 'string',
-      commissionForEntity: 'number',
-      commissionForIndividual: 'number',
+    this.paramsDefinition = {
+      id: {
+        type: 'string',
+        required: true
+      },
+      name: {
+        type: 'string',
+        required: false
+      },
+      commissionForEntity: {
+        type: 'number',
+        required: false,
+      },
+      commissionForIndividual: {
+        type: 'number',
+        required: false,
+      },
     };
   }
-  async execute({ params }: CommandDescriptor): Promise<CommandResult> {
-    const flags = this.getOptionalFlags(params);
 
-    if (flags.includes('help')) return { result: updateBankHelp };
+  async performAdditionally(model: BankModel): Promise<BankModel> {
+    return await this.bankService.update(model);
+  }
 
-    const requiredModel = this.validateAndParseProperties<BankModel>(params);
-    const optionalModel = this.parseOptionalProperties<BankModel>(params);
+  getCommandDescription(): string {
+    return `Update bank by id
 
-    const result = await this.bankService.update({
-      ...requiredModel,
-      ...optionalModel,
-    });
-
-    return { result };
+    Options:
+      id=<id>                           Bank id
+      name=[name]                       Bank name
+      commissionForEntity=[comEnt]      Entity commission
+      commissionForIndividual=[comInd]  Individuals commission
+      
+      help                              Display help for command
+    `;
   }
 }

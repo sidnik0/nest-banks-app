@@ -15,13 +15,11 @@ export class ConsoleCommandResultViewer {
     if (typeof result === 'string') {
       return result;
     } else if (Array.isArray(result)) {
-      let string = '';
-
-      for (const obj of result) {
-        string += `${ConsoleCommandResultViewer.parseObjToString(obj)}\n`;
-      }
-
-      return string;
+      return result.reduce((previous, current) => {
+        if (!previous) return previous + ConsoleCommandResultViewer.parseObjToString(current)
+        
+        return previous + `\n\n${ConsoleCommandResultViewer.parseObjToString(current)}`
+      }, '')
     } else {
       return ConsoleCommandResultViewer.parseObjToString(result);
     }
@@ -44,13 +42,13 @@ export class ConsoleCommandResultViewer {
     }
   }
 
-  private static parseObjToString(obj: Record<string, any>): string {
+  private static parseObjToString(result: Record<string, any>): string {
     let string = '';
 
-    for (const key of Object.keys(obj)) {
-      string += `${key}: ${obj[key]} `;
-    }
-
-    return string;
+    return Object.keys(result).reduce((previous, current) => {
+      if (!previous) return previous + `${current}: ${result[current]}`
+      
+      return previous + `\n${current}: ${result[current]}`
+    }, '')
   }
 }

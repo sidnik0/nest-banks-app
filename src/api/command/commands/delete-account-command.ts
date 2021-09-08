@@ -2,28 +2,33 @@ import { Injectable } from '@nestjs/common';
 import { Command } from './command';
 import { AccountService } from '../../../service/account.service';
 import { AccountModel } from '../../../model/interface/account.model';
-import { CommandDescriptor } from '../interface/command-descriptor';
-import { CommandResult } from '../interface/command-result';
-import { deleteAccountHelp } from './helps-string';
 
 @Injectable()
 export class DeleteAccountCommand extends Command {
   constructor(private readonly accountService: AccountService) {
     super();
 
-    this.requiredProperties = {
-      id: 'string',
+    this.paramsDefinition = {
+      id: {
+        type: 'string',
+        required: true,
+      },
     };
   }
-  async execute({ params }: CommandDescriptor): Promise<CommandResult> {
-    const flags = this.getOptionalFlags(params);
 
-    if (flags.includes('help')) return { result: deleteAccountHelp };
-
-    const model = this.validateAndParseProperties<AccountModel>(params);
-
+  async performAdditionally(model: AccountModel): Promise<string> {
     await this.accountService.delete(model.id);
 
-    return { result: `Account with id=${model.id} deleted` };
+    return `Account with id=${model.id} deleted`;
+  }
+
+  getCommandDescription(): string {
+    return `Delete account by id
+
+    Options:
+      id=<AccountId>                    Account id
+      
+      help                              Display help for command
+    `;
   }
 }

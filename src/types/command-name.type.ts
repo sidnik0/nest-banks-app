@@ -1,4 +1,4 @@
-export enum CommandType {
+export enum CommandName {
   HELP = 'help',
   EXIT = 'exit',
   CREATE_ACCOUNT = 'create-account',

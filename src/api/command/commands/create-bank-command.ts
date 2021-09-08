@@ -2,30 +2,41 @@ import { Injectable } from '@nestjs/common';
 import { Command } from './command';
 import { BankService } from '../../../service/bank.service';
 import { BankModel } from '../../../model/interface/bank.model';
-import { CommandDescriptor } from '../interface/command-descriptor';
-import { CommandResult } from '../interface/command-result';
-import { createBankHelp } from './helps-string';
 
 @Injectable()
 export class CreateBankCommand extends Command {
   constructor(private readonly bankService: BankService) {
     super();
 
-    this.requiredProperties = {
-      name: 'string',
-      commissionForEntity: 'number',
-      commissionForIndividual: 'number',
+    this.paramsDefinition = {
+      name: {
+        type: 'string',
+        required: true,
+      },
+      commissionForEntity: {
+        type: 'number',
+        required: true,
+      },
+      commissionForIndividual: {
+        type: 'number',
+        required: true,
+      },
     };
   }
-  async execute({ params }: CommandDescriptor): Promise<CommandResult> {
-    const flags = this.getOptionalFlags(params);
 
-    if (flags.includes('help')) return { result: createBankHelp };
+  async performAdditionally(model: BankModel): Promise<BankModel> {
+    return await this.bankService.create(model);
+  }
 
-    const model = this.validateAndParseProperties<BankModel>(params);
+  getCommandDescription(): string {
+    return `Create bank
 
-    const result = await this.bankService.create(model);
-
-    return { result };
+    Options:
+      name=<name>                       Bank name
+      commissionForEntity=<comEnt>      Entity commission
+      commissionForIndividual=<comInd>  Individuals commission
+      
+      help                              Display help for command
+    `;
   }
 }

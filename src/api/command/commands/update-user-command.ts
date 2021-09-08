@@ -2,29 +2,36 @@ import { Injectable } from '@nestjs/common';
 import { UserService } from '../../../service/user.service';
 import { UserModel } from '../../../model/interface/user.model';
 import { Command } from './command';
-import { CommandDescriptor } from '../interface/command-descriptor';
-import { CommandResult } from '../interface/command-result';
-import { updateUserHelp } from './helps-string';
 
 @Injectable()
 export class UpdateUserCommand extends Command {
   constructor(private readonly userService: UserService) {
     super();
 
-    this.requiredProperties = {
-      id: 'string',
-      name: 'string',
+    this.paramsDefinition = {
+      id: {
+        type: 'string',
+        required: true,
+      },
+      name: {
+        type: 'string',
+        required: false,
+      },
     };
   }
-  async execute({ params }: CommandDescriptor): Promise<CommandResult> {
-    const flags = this.getOptionalFlags(params);
 
-    if (flags.includes('help')) return { result: updateUserHelp };
+  async performAdditionally(model: UserModel): Promise<UserModel> {
+    return await this.userService.update(model);
+  }
 
-    const model = this.validateAndParseProperties<UserModel>(params);
+  getCommandDescription(): string {
+    return `Update user by id
 
-    const result = await this.userService.update(model);
-
-    return { result };
+    Options:
+      id=<id>                           User id
+      name=[name]                       User name
+      
+      help                              Display help for command
+    `;
   }
 }

@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AccountService } from '../../../service/account.service';
 import { Command } from './command';
-import { CommandDescriptor } from '../interface/command-descriptor';
-import { CommandResult } from '../interface/command-result';
-import { updateAccountHelp } from './helps-string';
 import { OperationType } from '../../../types/operation.type';
 
 @Injectable()
@@ -11,25 +8,35 @@ export class UpdateAccountCommand extends Command {
   constructor(private readonly accountService: AccountService) {
     super();
 
-    this.requiredProperties = {
-      id: 'string',
-      amount: 'number',
-      operation: 'OperationType',
+    this.paramsDefinition = {
+      id: {
+        type: 'string',
+        required: true,
+      },
+      amount: {
+        type: 'number',
+        required: true,
+      },
+      operation: {
+        type: 'OperationType',
+        required: true,
+      },
     };
   }
-  async execute({ params }: CommandDescriptor): Promise<CommandResult> {
-    const flags = this.getOptionalFlags(params);
 
-    if (flags.includes('help')) return { result: updateAccountHelp };
+  async performAdditionally({id, ...model}: { id: string; amount: number; operation: OperationType }): Promise<any> {
+    return await this.accountService.updateBalance(id, model);
+  }
 
-    const { id, ...model } = this.validateAndParseProperties<{
-      id: string;
-      amount: number;
-      operation: OperationType;
-    }>(params);
+  getCommandDescription(): string {
+    return `Update account by id
 
-    const result = await this.accountService.updateBalance(id, model);
-
-    return { result };
+    Options:
+      id=<accountId>                    Account id
+      amount=<amount>                   Amount
+      operation=<boolean>               Operation ("replenishment" || "withdrawal")
+      
+      help                              Display help for command
+    `;
   }
 }

@@ -4,6 +4,7 @@ import { ConsoleCommandResultViewer } from './console-command-result-viewer';
 import { CommandModule } from '../command/command.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { CommandLineParser } from './command-line-parser';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { ConfigModule } from '@nestjs/config';
     }),
     CommandModule,
   ],
-  providers: [ConsoleInterpreter, ConsoleCommandResultViewer],
+  providers: [ConsoleInterpreter, ConsoleCommandResultViewer, CommandLineParser],
   exports: [ConsoleInterpreter],
 })
 export class CliModule {}

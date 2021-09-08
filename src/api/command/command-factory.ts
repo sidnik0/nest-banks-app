@@ -1,9 +1,9 @@
 import { Injectable, Type } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 
-import { Command } from '../command/commands/command';
+import { ICommand } from '../command/commands/command.interface';
 import { CommandDescriptor } from '../command/interface/command-descriptor';
-import { CommandType } from '../../types/command.type';
+import { CommandName } from '../../types/command-name.type';
 
 import { CreateAccountCommand } from '../command/commands/create-account-command';
 import { CreateBankCommand } from '../command/commands/create-bank-command';
@@ -33,54 +33,52 @@ import { CommandFactoryException } from '../../common/exseption/command-factory-
 
 @Injectable()
 export class CommandFactory {
-  private static commandsLib: Map<string, Type<Command>>;
+  private static COMMAND_LIB: Map<string, Type<ICommand>> = CommandFactory.getCommandLib();
 
-  constructor(private readonly moduleRef: ModuleRef) {
-    CommandFactory.commandsLib = this.getCommandLib();
-  }
+  constructor(private readonly moduleRef: ModuleRef) {}
 
-  getCommand({ name }: CommandDescriptor): Command {
-    if (!CommandFactory.commandsLib.has(name)) {
+  getCommand({ name }: CommandDescriptor): ICommand {
+    if (!CommandFactory.COMMAND_LIB.has(name)) {
       throw new CommandFactoryException(`Unknown command: ${name}`);
     }
 
-    const commandClass = CommandFactory.commandsLib.get(name);
+    const commandClass = CommandFactory.COMMAND_LIB.get(name);
 
     return this.moduleRef.get(commandClass);
   }
 
-  private getCommandLib(): Map<string, Type<Command>> {
-    return new Map<string, Type<Command>>([
-      [CommandType.CREATE_ACCOUNT, CreateAccountCommand],
-      [CommandType.CREATE_BANK, CreateBankCommand],
-      [CommandType.CREATE_TRANSACTION, CreateTransactionCommand],
-      [CommandType.CREATE_USER, CreateUserCommand],
-      [CommandType.DELETE_ACCOUNT, DeleteAccountCommand],
-      [CommandType.DELETE_BANK, DeleteBankCommand],
-      [CommandType.DELETE_USER, DeleteUserCommand],
-      [CommandType.GET_ACCOUNT, GetAccountCommand],
-      [CommandType.GET_ACCOUNTS, GetAccountsCommand],
-      [CommandType.GET_ALL_ACCOUNTS_BY_BANK, GetAllAccountsByBankCommand],
+  private static getCommandLib(): Map<string, Type<ICommand>> {
+    return new Map<string, Type<ICommand>>([
+      [CommandName.CREATE_ACCOUNT, CreateAccountCommand],
+      [CommandName.CREATE_BANK, CreateBankCommand],
+      [CommandName.CREATE_TRANSACTION, CreateTransactionCommand],
+      [CommandName.CREATE_USER, CreateUserCommand],
+      [CommandName.DELETE_ACCOUNT, DeleteAccountCommand],
+      [CommandName.DELETE_BANK, DeleteBankCommand],
+      [CommandName.DELETE_USER, DeleteUserCommand],
+      [CommandName.GET_ACCOUNT, GetAccountCommand],
+      [CommandName.GET_ACCOUNTS, GetAccountsCommand],
+      [CommandName.GET_ALL_ACCOUNTS_BY_BANK, GetAllAccountsByBankCommand],
       [
-        CommandType.GET_ALL_ACCOUNTS_BY_USER_AND_BANK,
+        CommandName.GET_ALL_ACCOUNTS_BY_USER_AND_BANK,
         GetAllAccountsByUserAndBankCommand,
       ],
-      [CommandType.GET_ALL_ACCOUNTS_BY_USER, GetAllAccountsByUserCommand],
+      [CommandName.GET_ALL_ACCOUNTS_BY_USER, GetAllAccountsByUserCommand],
       [
-        CommandType.GET_ALL_TRANSACTIONS_BY_ACCOUNT,
+        CommandName.GET_ALL_TRANSACTIONS_BY_ACCOUNT,
         GetAllTransactionsByAccountCommand,
       ],
-      [CommandType.GET_BANK, GetBankCommand],
-      [CommandType.GET_BANKS, GetBanksCommand],
-      [CommandType.GET_TRANSACTION, GetTransactionCommand],
-      [CommandType.GET_TRANSACTIONS, GetTransactionsCommand],
-      [CommandType.GET_USER, GetUserCommand],
-      [CommandType.GET_USERS, GetUsersCommand],
-      [CommandType.UPDATE_ACCOUNT, UpdateAccountCommand],
-      [CommandType.UPDATE_BANK, UpdateBankCommand],
-      [CommandType.UPDATE_USER, UpdateUserCommand],
-      [CommandType.EXIT, ExitCommand],
-      [CommandType.HELP, HelpCommand],
+      [CommandName.GET_BANK, GetBankCommand],
+      [CommandName.GET_BANKS, GetBanksCommand],
+      [CommandName.GET_TRANSACTION, GetTransactionCommand],
+      [CommandName.GET_TRANSACTIONS, GetTransactionsCommand],
+      [CommandName.GET_USER, GetUserCommand],
+      [CommandName.GET_USERS, GetUsersCommand],
+      [CommandName.UPDATE_ACCOUNT, UpdateAccountCommand],
+      [CommandName.UPDATE_BANK, UpdateBankCommand],
+      [CommandName.UPDATE_USER, UpdateUserCommand],
+      [CommandName.EXIT, ExitCommand],
+      [CommandName.HELP, HelpCommand],
     ]);
   }
 }
