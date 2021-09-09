@@ -3,7 +3,7 @@ import { CommandDescriptor } from '../command/interface/command-descriptor';
 import { CommandLineParserException } from '../../common/exseption/command-line-parser-exception';
 
 @Injectable()
-export class CommandLineParser {
+export class ConsoleLineParser {
   parseInput(args: string): CommandDescriptor {
     const [firstArg, ...rawArgs] = args.trim().split(' ');
 
@@ -12,10 +12,10 @@ export class CommandLineParser {
 
     const processedArgs = new Map<string, string>();
 
-    for (const item of rawArgs) {
-      if (!item) continue;
+    for (const arg of rawArgs) {
+      if (!arg) continue;
 
-      const arrayStrings = item.split('=');
+      const arrayStrings = arg.split('=');
 
       processedArgs.set(arrayStrings[0], arrayStrings[1]);
     }

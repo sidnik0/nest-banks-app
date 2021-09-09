@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { ConsoleInterpreter } from './console-interpreter';
-import { ConsoleCommandResultViewer } from './console-command-result-viewer';
-import { CommandModule } from '../command/command.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
-import { CommandLineParser } from './command-line-parser';
+import { CommandModule } from '../command/command.module';
+import { ConsoleInterpreter } from './console-interpreter';
+import { ConsoleCommandResultViewer } from './console-command-result-viewer';
+import { ConsoleLineParser } from './console-line-parser';
 
 @Module({
   imports: [
@@ -17,7 +17,7 @@ import { CommandLineParser } from './command-line-parser';
     }),
     CommandModule,
   ],
-  providers: [ConsoleInterpreter, ConsoleCommandResultViewer, CommandLineParser],
+  providers: [ConsoleInterpreter, ConsoleCommandResultViewer, ConsoleLineParser],
   exports: [ConsoleInterpreter],
 })
 export class CliModule {}

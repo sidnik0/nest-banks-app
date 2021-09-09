@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { BankService } from '../../../service/bank.service';
-import { BankModel } from '../../../model/interface/bank.model';
 import { Command } from './command';
+import { IBankService } from '../../../service/interface/bank.service';
+import { BankModel } from '../../../model/interface/bank.model';
 
 @Injectable()
 export class GetBanksCommand extends Command {
-  constructor(private readonly bankService: BankService) {
+  constructor(private readonly bankService: IBankService) {
     super();
   }
 
-  async performAdditionally(): Promise<BankModel[]> {
+  async executeMainLogic(): Promise<BankModel[]> {
     return await this.bankService.getAll();
   }
 

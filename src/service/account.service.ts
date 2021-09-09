@@ -1,19 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { BaseService } from './base.service';
-import { AccountRepository } from '../repository/interface/account.repository';
-import { UserRepository } from 'src/repository/interface/user.repository';
-import { BankRepository } from 'src/repository/interface/bank.repository';
+import { IAccountService } from './interface/account.service';
+import { IAccountRepository } from '../repository/interface/account.repository';
+import { IUserRepository } from '../repository/interface/user.repository';
+import { IBankRepository } from '../repository/interface/bank.repository';
 import { AccountModel } from '../model/interface/account.model';
-import { OperationType } from '../types/operation.type';
-import { AccountCreatorException } from 'src/common/exseption/account-creator-exception';
-import { CreateAccountDto } from 'src/api/rest-dto/create-account.dto';
+import { CreateAccountDto } from '../api/rest-dto/create-account.dto';
+import { UpdateAccountDto } from '../api/rest-dto/update-account.dto';
+import { AccountCreatorException } from '../common/exseption/account-creator-exception';
 
 @Injectable()
-export class AccountService extends BaseService<AccountModel> {
+export class AccountService extends BaseService<AccountModel> implements IAccountService {
   constructor(
-    protected readonly repository: AccountRepository,
-    private readonly userRepository: UserRepository,
-    private readonly bankRepository: BankRepository
+    protected readonly repository: IAccountRepository,
+    private readonly userRepository: IUserRepository,
+    private readonly bankRepository: IBankRepository
   ) {
     super(repository);
   }
@@ -37,15 +38,13 @@ export class AccountService extends BaseService<AccountModel> {
 
   async updateBalance(
     id: string,
-    obj: { amount: number; operation: OperationType },
+    obj: Omit<UpdateAccountDto, 'id'>,
   ): Promise<AccountModel> {
     const data = await this.repository.get(id);
 
     data.balance =
       Math.floor(
-        (data.balance +
-          (obj.operation === 'replenishment' ? obj.amount : -obj.amount)) *
-          100,
+        (data.balance + (obj.operation === 'replenishment' ? obj.amount : -obj.amount)) * 100
       ) / 100;
 
     return await this.repository.update(data);
@@ -59,10 +58,7 @@ export class AccountService extends BaseService<AccountModel> {
     return this.repository.getAllByBank(id);
   }
 
-  async getAllByUserAndBank(
-    userId: string,
-    bankId: string,
-  ): Promise<AccountModel[]> {
+  async getAllByUserAndBank(userId: string, bankId: string): Promise<AccountModel[]> {
     return await this.repository.getAllByUserAndBank(userId, bankId);
   }
 }

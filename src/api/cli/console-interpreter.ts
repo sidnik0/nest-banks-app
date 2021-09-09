@@ -1,24 +1,22 @@
 import * as readline from 'readline';
 import { Injectable, Logger } from '@nestjs/common';
-import { CommandExecutor } from '../command/command-executor';
-import { CommandLineParser } from './command-line-parser';
+import { ICommandExecutor } from '../command/interface/command-executor';
+import { ConsoleLineParser } from './console-line-parser';
 import { ConsoleCommandResultViewer } from './console-command-result-viewer';
 
 @Injectable()
 export class ConsoleInterpreter {
-  private readonly rl;
+  private readonly rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
   private readonly logger = new Logger('ConsoleInterpreter');
 
   constructor(
-    private readonly commandLineParser: CommandLineParser,
-    private readonly consoleExecutor: CommandExecutor,
+    private readonly commandExecutor: ICommandExecutor,
+    private readonly consoleLineParser: ConsoleLineParser,
     private readonly consoleCommandResultViewer: ConsoleCommandResultViewer,
-  ) {
-    this.rl = readline.createInterface({
-      input: process.stdin,
-      output: process.stdout,
-    });
-  }
+  ) {}
 
   async run(): Promise<void> {
     this.rl.prompt();
@@ -30,16 +28,16 @@ export class ConsoleInterpreter {
 
   private async lineHandler(input: string) {
     try {
-      const commandDescriptor = this.commandLineParser.parseInput(input);
+      const commandDescriptor = this.consoleLineParser.parseInput(input);
 
-      const commandResult = await this.consoleExecutor.executeCommand(
+      const commandResult = await this.commandExecutor.executeCommand(
         commandDescriptor,
       );
 
       if (commandResult.exit) this.rl.close();
 
       const resultString =
-        this.consoleCommandResultViewer.parseCommandResult(commandResult);
+ this.consoleCommandResultViewer.parseCommandResult(commandResult);
 
       console.log(resultString);
 

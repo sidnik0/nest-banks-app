@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { UserService } from '../../../service/user.service';
-import { UserModel } from '../../../model/interface/user.model';
 import { Command } from './command';
+import { IUserService } from '../../../service/interface/user.service';
+import { UserModel } from '../../../model/interface/user.model';
 
 @Injectable()
 export class GetUsersCommand extends Command {
-  constructor(private readonly userService: UserService) {
+  constructor(private readonly userService: IUserService) {
     super();
   }
 
-  async performAdditionally(): Promise<UserModel[]> {
+  async executeMainLogic(): Promise<UserModel[]> {
     return await this.userService.getAll();
   }
 

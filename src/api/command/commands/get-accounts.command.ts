@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { AccountService } from '../../../service/account.service';
+import { Command } from './command';
+import { IAccountService } from '../../../service/interface/account.service';
 import { AccountModel } from '../../../model/interface/account.model';
 
-import { Command } from './command';
 @Injectable()
 export class GetAccountsCommand extends Command {
-  constructor(private readonly accountService: AccountService) {
+  constructor(private readonly accountService: IAccountService) {
     super();
   }
 
-  async performAdditionally(): Promise<AccountModel[]> {
+  async executeMainLogic(): Promise<AccountModel[]> {
     return await this.accountService.getAll();
   }
 

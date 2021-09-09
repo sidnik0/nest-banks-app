@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { AccountService } from '../../../service/account.service';
-import { AccountModel } from '../../../model/interface/account.model';
 import { Command } from './command';
-import { GetAccountDto } from 'src/api/rest-dto/get-account.dto';
+import { IAccountService } from '../../../service/interface/account.service';
+import { AccountModel } from '../../../model/interface/account.model';
+import { GetAccountDto } from '../../rest-dto/get-account.dto';
 
 @Injectable()
 export class GetAccountCommand extends Command {
-  constructor(private readonly accountService: AccountService) {
+  constructor(private readonly accountService: IAccountService) {
     super();
 
     this.paramsDefinition = {
@@ -17,7 +17,7 @@ export class GetAccountCommand extends Command {
     };
   }
 
-  async performAdditionally(model: GetAccountDto): Promise<AccountModel> {
+  async executeMainLogic(model: GetAccountDto): Promise<AccountModel> {
     return await this.accountService.get(model.id);
   }
 

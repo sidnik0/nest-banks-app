@@ -18,12 +18,12 @@ export abstract class Command implements ICommand {
 
     const model = this.validateAndParseProperties(params);
 
-    const result = await this.performAdditionally(model);
+    const result = await this.executeMainLogic(model);
 
     return { result };
   }
 
-  validateAndParseProperties(params: Map<string, string>): Record<string, any> {
+  protected validateAndParseProperties(params: Map<string, string>): Record<string, any> {
     if (!this.paramsDefinition) return null;
 
     const obj: Record<string, any> = {};
@@ -44,7 +44,7 @@ export abstract class Command implements ICommand {
     return obj;
   }
 
-  abstract performAdditionally(model: Record<string, any>): Promise<any>;
+  abstract executeMainLogic(model: Record<string, any>): Promise<any>;
 
   abstract getCommandDescription(): string;
 }

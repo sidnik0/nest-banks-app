@@ -1,8 +1,9 @@
-import { BaseRepository } from '../repository/interface/base.repository';
+import { IBaseService } from './interface/base.service';
+import { IBaseRepository } from '../repository/interface/base.repository';
 import { BaseModel } from '../model/interface/base.model';
 
-export abstract class BaseService<T extends BaseModel> {
-  protected constructor(protected readonly repository: BaseRepository<T>) {}
+export abstract class BaseService<T extends BaseModel> implements IBaseService<T> {
+  protected constructor(protected readonly repository: IBaseRepository<T>) {}
 
   async create(model: T): Promise<T> {
     return await this.repository.create(model);

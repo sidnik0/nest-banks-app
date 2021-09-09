@@ -1,21 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { FsBaseRepository } from './fs-base.repository';
-import { AccountRepository } from './interface/account.repository';
-
+import { IAccountRepository } from './interface/account.repository';
 import { AccountModel } from '../model/interface/account.model';
-import { FileSystem } from '../common/helper/file-system';
-import { IdGenerator } from '../common/helper/id-generator';
+
 
 @Injectable()
 export class FsAccountRepository
   extends FsBaseRepository<AccountModel>
-  implements AccountRepository
+  implements IAccountRepository
 {
-  constructor(
-    protected readonly fileSystem: FileSystem,
-    protected readonly idGenerator: IdGenerator,
-  ) {
-    super(fileSystem, idGenerator);
+  constructor() {
+    super();
 
     this.logger = new Logger('FsAccountRepository');
     this.fileName = 'accounts';

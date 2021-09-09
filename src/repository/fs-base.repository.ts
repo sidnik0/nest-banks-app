@@ -1,21 +1,21 @@
-import { Logger } from '@nestjs/common';
-import { BaseRepository } from './interface/base.repository';
+import { Inject, Logger } from '@nestjs/common';
+import { IBaseRepository } from './interface/base.repository';
 import { BaseModel } from '../model/interface/base.model';
 import { FileSystem } from '../common/helper/file-system';
 import { IdGenerator } from '../common/helper/id-generator';
 import { NotFountException } from '../common/exseption/not-fount-exception';
 
 export abstract class FsBaseRepository<T extends BaseModel>
-  implements BaseRepository<T>
+  implements IBaseRepository<T>
 {
   protected logger: Logger;
   protected fileName: string;
   protected data: Record<string, T>;
 
-  protected constructor(
-    protected readonly fileSystem: FileSystem,
-    protected readonly idGenerator: IdGenerator,
-  ) {}
+  @Inject(FileSystem)
+  protected readonly fileSystem: FileSystem
+  @Inject(IdGenerator)
+  protected readonly idGenerator: IdGenerator
 
   abstract getLoggingModelId(model: T | string): string;
 

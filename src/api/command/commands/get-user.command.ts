@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { UserService } from '../../../service/user.service';
-import { UserModel } from '../../../model/interface/user.model';
 import { Command } from './command';
-import { GetUserDto } from 'src/api/rest-dto/get-user.dto';
+import { IUserService } from '../../../service/interface/user.service';
+import { UserModel } from '../../../model/interface/user.model';
+import { GetUserDto } from '../../rest-dto/get-user.dto';
 
 @Injectable()
 export class GetUserCommand extends Command {
-  constructor(private readonly userService: UserService) {
+  constructor(private readonly userService: IUserService) {
     super();
 
     this.paramsDefinition = {
@@ -17,7 +17,7 @@ export class GetUserCommand extends Command {
     };
   }
 
-  async performAdditionally(model: GetUserDto): Promise<UserModel> {
+  async executeMainLogic(model: GetUserDto): Promise<UserModel> {
     return await this.userService.get(model.id);
   }
 

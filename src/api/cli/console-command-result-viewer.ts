@@ -6,8 +6,8 @@ import { ValidatorException } from '../../common/exseption/validator-exception';
 import { CommandFactoryException } from '../../common/exseption/command-factory-exception';
 import { TransactionCurrencyException } from '../../common/exseption/transaction-currency-exception';
 import { TransactionBalanceException } from '../../common/exseption/transaction-balance-exception';
-import { NotFountException } from 'src/common/exseption/not-fount-exception';
-import { AccountCreatorException } from 'src/common/exseption/account-creator-exception';
+import { NotFountException } from '../../common/exseption/not-fount-exception';
+import { AccountCreatorException } from '../../common/exseption/account-creator-exception';
 
 @Injectable()
 export class ConsoleCommandResultViewer {

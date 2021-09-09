@@ -9,7 +9,7 @@ export class HelpCommand extends Command {
     return { result: this.getCommandDescription() };
   }
 
-  async performAdditionally(): Promise<never> {
+  async executeMainLogic(): Promise<never> {
     throw new Error('Prohibited operation')
   }
 

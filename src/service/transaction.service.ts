@@ -1,23 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { TransactionRepository } from '../repository/interface/transaction.repository';
-import { AccountRepository } from '../repository/interface/account.repository';
-import { BankRepository } from '../repository/interface/bank.repository';
-import { UserRepository } from '../repository/interface/user.repository';
+import { BaseService } from './base.service';
+import { ITransactionService } from './interface/transaction.service';
+import { ITransactionRepository } from '../repository/interface/transaction.repository';
+import { IAccountRepository } from '../repository/interface/account.repository';
+import { IBankRepository } from '../repository/interface/bank.repository';
+import { IUserRepository } from '../repository/interface/user.repository';
 import { TransactionModel } from '../model/interface/transaction.model';
 import { AccountModel } from '../model/interface/account.model';
+import { CreateTransactionDto } from '../api/rest-dto/create-transaction.dto';
 import { FaceType } from '../types/face.type';
 import { TransactionCurrencyException } from '../common/exseption/transaction-currency-exception';
 import { TransactionBalanceException } from '../common/exseption/transaction-balance-exception';
-import { BaseService } from './base.service';
-import { CreateTransactionDto } from 'src/api/rest-dto/create-transaction.dto';
 
 @Injectable()
-export class TransactionService extends BaseService<TransactionModel> {
+export class TransactionService extends BaseService<TransactionModel>implements ITransactionService {
   constructor(
-    protected readonly repository: TransactionRepository,
-    private readonly accountRepository: AccountRepository,
-    private readonly bankRepository: BankRepository,
-    private readonly userRepository: UserRepository,
+    protected readonly repository: ITransactionRepository,
+    private readonly accountRepository: IAccountRepository,
+    private readonly bankRepository: IBankRepository,
+    private readonly userRepository: IUserRepository,
   ) {
     super(repository);
   }
@@ -40,11 +41,11 @@ export class TransactionService extends BaseService<TransactionModel> {
 
     const updateFromAccountPromise = this.accountRepository.update({
       ...fromAccount,
-      balance: TransactionService.updateBalance(fromAccount.balance, -value),
+      balance: TransactionService.getRecalculatedBalance(fromAccount.balance, -value),
     });
     const updateToAccountPromise = this.accountRepository.update({
       ...toAccount,
-      balance: TransactionService.updateBalance(toAccount.balance, value),
+      balance: TransactionService.getRecalculatedBalance(toAccount.balance, value),
     });
 
     await Promise.all([updateFromAccountPromise, updateToAccountPromise]);
@@ -89,7 +90,7 @@ export class TransactionService extends BaseService<TransactionModel> {
       );
   }
 
-  private static updateBalance(a: number, b: number): number {
+  private static getRecalculatedBalance(a: number, b: number): number {
     return Math.floor((a + b) * 100) / 100;
   }
 

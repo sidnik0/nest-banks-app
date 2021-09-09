@@ -1,17 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { BaseService } from './base.service';
-import { BankRepository } from '../repository/interface/bank.repository';
+import { IBankService } from './interface/bank.service';
+import { IBankRepository } from '../repository/interface/bank.repository';
+import { IAccountRepository } from '../repository/interface/account.repository';
+import { IUserRepository } from '../repository/interface/user.repository';
 import { BankModel } from '../model/interface/bank.model';
-import { AccountRepository } from '../repository/interface/account.repository';
 import { UserModel } from '../model/interface/user.model';
-import { UserRepository } from '../repository/interface/user.repository';
 
 @Injectable()
-export class BankService extends BaseService<BankModel> {
+export class BankService extends BaseService<BankModel> implements IBankService {
   constructor(
-    protected readonly repository: BankRepository,
-    private readonly accountRepository: AccountRepository,
-    private readonly userRepository: UserRepository,
+    protected readonly repository: IBankRepository,
+    private readonly accountRepository: IAccountRepository,
+    private readonly userRepository: IUserRepository,
   ) {
     super(repository);
   }

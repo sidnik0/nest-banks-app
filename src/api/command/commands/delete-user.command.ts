@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { UserService } from '../../../service/user.service';
 import { Command } from './command';
-import { DeleteUserDto } from 'src/api/rest-dto/delete-user.dto';
+import { IUserService } from '../../../service/interface/user.service';
+import { DeleteUserDto } from '../../rest-dto/delete-user.dto';
 
 @Injectable()
 export class DeleteUserCommand extends Command {
-  constructor(private readonly userService: UserService) {
+  constructor(private readonly userService: IUserService) {
     super();
 
     this.paramsDefinition = {
@@ -16,7 +16,7 @@ export class DeleteUserCommand extends Command {
     };
   }
 
-  async performAdditionally(model: DeleteUserDto): Promise<string> {
+  async executeMainLogic(model: DeleteUserDto): Promise<string> {
     await this.userService.delete(model.id);
 
     return `User with id=${model.id} deleted`;

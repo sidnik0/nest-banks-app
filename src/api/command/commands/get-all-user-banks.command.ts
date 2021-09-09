@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { GetAllUserBanksDto } from 'src/api/rest-dto/get-all-user-banks.dto';
-import { BankModel } from 'src/model/interface/bank.model';
-import { UserService } from 'src/service/user.service';
 import { Command } from './command';
+import { IUserService } from '../../../service/interface/user.service';
+import { BankModel } from '../../../model/interface/bank.model';
+import { GetAllUserBanksDto } from '../../rest-dto/get-all-user-banks.dto';
 
 @Injectable()
 export class GetAllUserBanksCommand extends Command {
-  constructor(private readonly userService: UserService) {
+  constructor(private readonly userService: IUserService) {
     super();
 
     this.paramsDefinition = {
@@ -17,7 +17,7 @@ export class GetAllUserBanksCommand extends Command {
     };
   }
 
-  async performAdditionally(model: GetAllUserBanksDto): Promise<BankModel[]> {
+  async executeMainLogic(model: GetAllUserBanksDto): Promise<BankModel[]> {
     return await this.userService.getAllBanks(model.id);
   }
 

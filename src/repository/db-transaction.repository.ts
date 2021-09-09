@@ -2,13 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DbBaseRepository } from './db-base.repository';
-import { TransactionRepository } from './interface/transaction.repository';
+import { ITransactionRepository } from './interface/transaction.repository';
 import { TransactionEntity } from '../model/transaction.entity';
 
 @Injectable()
 export class DbTransactionRepository
   extends DbBaseRepository<TransactionEntity>
-  implements TransactionRepository
+  implements ITransactionRepository
 {
   constructor(
     @InjectRepository(TransactionEntity)

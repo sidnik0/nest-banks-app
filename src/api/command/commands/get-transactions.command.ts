@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { TransactionService } from '../../../service/transaction.service';
-import { TransactionModel } from '../../../model/interface/transaction.model';
 import { Command } from './command';
+import { ITransactionService } from '../../../service/interface/transaction.service';
+import { TransactionModel } from '../../../model/interface/transaction.model';
 
 @Injectable()
 export class GetTransactionsCommand extends Command {
-  constructor(private readonly transactionService: TransactionService) {
+  constructor(private readonly transactionService: ITransactionService) {
     super();
   }
 
-  async performAdditionally(): Promise<TransactionModel[]> {
+  async executeMainLogic(): Promise<TransactionModel[]> {
     return await this.transactionService.getAll();
   }
 

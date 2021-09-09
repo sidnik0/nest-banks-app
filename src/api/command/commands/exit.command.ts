@@ -11,7 +11,7 @@ export class ExitCommand extends Command {
     return { result: 'EXIT', exit: true };
   }
 
-  async performAdditionally(model: any): Promise<never> {
+  async executeMainLogic(model: any): Promise<never> {
     throw new Error('Prohibited operation')
   }
 

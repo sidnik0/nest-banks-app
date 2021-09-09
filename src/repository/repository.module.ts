@@ -1,23 +1,22 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HelperModule } from '../common/helper/helper.module';
-import { AccountRepository } from './interface/account.repository';
-import { FsAccountRepository } from './fs-account.repository';
-import { BankRepository } from './interface/bank.repository';
-import { FsBankRepository } from './fs-bank.repository';
-import { TransactionRepository } from './interface/transaction.repository';
-import { FsTransactionRepository } from './fs-transaction.repository';
-import { UserRepository } from './interface/user.repository';
-import { FsUserRepository } from './fs-user.repository';
-import { AccountEntity } from 'src/model/account.entity';
-import { BankEntity } from 'src/model/bank.entity';
-import { TransactionEntity } from 'src/model/transaction.entity';
-import { UserEntity } from 'src/model/user.entity';
+import { IAccountRepository } from './interface/account.repository';
+import { IBankRepository } from './interface/bank.repository';
+import { ITransactionRepository } from './interface/transaction.repository';
+import { IUserRepository } from './interface/user.repository';
 import { DbAccountRepository } from './db-account.repository';
 import { DbBankRepository } from './db-bank.repository';
 import { DbTransactionRepository } from './db-transaction.repository';
 import { DbUserRepository } from './db-user.repository';
-
+import { FsAccountRepository } from './fs-account.repository';
+import { FsBankRepository } from './fs-bank.repository';
+import { FsTransactionRepository } from './fs-transaction.repository';
+import { FsUserRepository } from './fs-user.repository';
+import { AccountEntity } from '../model/account.entity';
+import { BankEntity } from '../model/bank.entity';
+import { TransactionEntity } from '../model/transaction.entity';
+import { UserEntity } from '../model/user.entity';
 @Module({
   imports: [
     HelperModule, 
@@ -30,27 +29,27 @@ import { DbUserRepository } from './db-user.repository';
   ],
   providers: [
     {
-      provide: AccountRepository,
+      provide: IAccountRepository,
       useClass: DbAccountRepository,
     },
     {
-      provide: BankRepository,
+      provide: IBankRepository,
       useClass: DbBankRepository,
     },
     {
-      provide: TransactionRepository,
+      provide: ITransactionRepository,
       useClass: DbTransactionRepository,
     },
     {
-      provide: UserRepository,
+      provide: IUserRepository,
       useClass: DbUserRepository,
     },
   ],
   exports: [
-    AccountRepository,
-    BankRepository,
-    TransactionRepository,
-    UserRepository,
+    IAccountRepository,
+    IBankRepository,
+    ITransactionRepository,
+    IUserRepository,
   ],
 })
 export class RepositoryModule {}
