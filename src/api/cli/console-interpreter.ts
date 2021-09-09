@@ -34,14 +34,9 @@ export class ConsoleInterpreter {
         commandDescriptor,
       );
 
-      if (commandResult.exit) {
-        this.rl.close();
-        
-        process.exit(0);
-      }
+      if (commandResult.exit) this.rl.close();
 
-      const resultString =
- this.consoleCommandResultViewer.parseCommandResult(commandResult);
+      const resultString = this.consoleCommandResultViewer.parseCommandResult(commandResult);
 
       console.log(resultString);
 
