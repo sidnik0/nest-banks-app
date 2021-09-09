@@ -4,7 +4,6 @@ import { IAccountService } from '../../../service/interface/account.service';
 import { AccountModel } from '../../../model/interface/account.model';
 import { CreateAccountDto } from '../../rest-dto/create-account.dto';
 
-
 @Injectable()
 export class CreateAccountCommand extends Command {
   constructor(private readonly accountService: IAccountService) {
@@ -12,7 +11,7 @@ export class CreateAccountCommand extends Command {
 
     this.paramsDefinition = {
       userId: {
-        type: 'string', 
+        type: 'string',
         required: true,
       },
       bankId: {

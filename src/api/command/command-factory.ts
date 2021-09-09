@@ -35,7 +35,8 @@ import { CommandFactoryException } from '../../common/exseption/command-factory-
 
 @Injectable()
 export class CommandFactory {
-  private static COMMAND_LIB: Map<string, Type<ICommand>> = CommandFactory.getCommandLib();
+  private static COMMAND_LIB: Map<string, Type<ICommand>> =
+    CommandFactory.getCommandLib();
 
   constructor(private readonly moduleRef: ModuleRef) {}
 

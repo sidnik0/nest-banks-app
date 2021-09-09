@@ -15,7 +15,7 @@ import { UserService } from './user.service';
     {
       provide: IAccountService,
       useClass: AccountService,
-    }, 
+    },
     {
       provide: IBankService,
       useClass: BankService,

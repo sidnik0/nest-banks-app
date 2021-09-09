@@ -19,13 +19,13 @@ import { TransactionEntity } from '../model/transaction.entity';
 import { UserEntity } from '../model/user.entity';
 @Module({
   imports: [
-    HelperModule, 
+    HelperModule,
     TypeOrmModule.forFeature([
-      AccountEntity, 
-      BankEntity, 
-      TransactionEntity, 
-      UserEntity
-    ])
+      AccountEntity,
+      BankEntity,
+      TransactionEntity,
+      UserEntity,
+    ]),
   ],
   providers: [
     {

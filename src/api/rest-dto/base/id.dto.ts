@@ -1,3 +1,3 @@
 export abstract class IdDto {
-  readonly id: string
+  readonly id: string;
 }

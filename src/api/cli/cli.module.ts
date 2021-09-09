@@ -17,7 +17,11 @@ import { ConsoleLineParser } from './console-line-parser';
     }),
     CommandModule,
   ],
-  providers: [ConsoleInterpreter, ConsoleCommandResultViewer, ConsoleLineParser],
+  providers: [
+    ConsoleInterpreter,
+    ConsoleCommandResultViewer,
+    ConsoleLineParser,
+  ],
   exports: [ConsoleInterpreter],
 })
 export class CliModule {}

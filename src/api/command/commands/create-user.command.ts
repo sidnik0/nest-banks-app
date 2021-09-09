@@ -22,7 +22,7 @@ export class CreateUserCommand extends Command {
   }
 
   async executeMainLogic(model: CreateUserDto): Promise<UserModel> {
-    return await this.userService.create(model)
+    return await this.userService.create(model);
   }
 
   getCommandDescription(): string {

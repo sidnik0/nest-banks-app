@@ -24,7 +24,7 @@ export class UpdateAccountCommand extends Command {
     };
   }
 
-  async executeMainLogic({id, ...model}: UpdateAccountDto): Promise<any> {
+  async executeMainLogic({ id, ...model }: UpdateAccountDto): Promise<any> {
     return await this.accountService.updateBalance(id, model);
   }
 

@@ -17,7 +17,9 @@ export class GetAllAccountsByUserCommand extends Command {
     };
   }
 
-  async executeMainLogic(model: GetAllAccountsByUserDto): Promise<AccountModel[]> {
+  async executeMainLogic(
+    model: GetAllAccountsByUserDto,
+  ): Promise<AccountModel[]> {
     return await this.accountService.getAllByUser(model.id);
   }
 

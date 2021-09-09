@@ -6,7 +6,10 @@ import { CommandResult } from './interface/command-result';
 
 @Injectable()
 export class CliCommandExecutor extends ICommandExecutor {
-  async factoryMethod(command: ICommand, commandDescriptor: CommandDescriptor): Promise<CommandResult> {
+  async factoryMethod(
+    command: ICommand,
+    commandDescriptor: CommandDescriptor,
+  ): Promise<CommandResult> {
     return await command.execute(commandDescriptor);
   }
 }

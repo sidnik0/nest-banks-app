@@ -3,7 +3,6 @@ import { FsBaseRepository } from './fs-base.repository';
 import { IAccountRepository } from './interface/account.repository';
 import { AccountModel } from '../model/interface/account.model';
 
-
 @Injectable()
 export class FsAccountRepository
   extends FsBaseRepository<AccountModel>

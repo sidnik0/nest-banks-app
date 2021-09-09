@@ -1,4 +1,4 @@
-import { CurrencyType } from "src/types/currency.type";
+import { CurrencyType } from 'src/types/currency.type';
 
 export class CreateAccountDto {
   readonly userId: string;

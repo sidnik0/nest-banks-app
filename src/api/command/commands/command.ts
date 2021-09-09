@@ -6,15 +6,19 @@ import { CommandDescriptor } from '../interface/command-descriptor';
 import { CommandResult } from '../interface/command-result';
 
 export abstract class Command implements ICommand {
-  protected paramsDefinition: Record<string, {type: string, required: boolean}>;
+  protected paramsDefinition: Record<
+    string,
+    { type: string; required: boolean }
+  >;
 
   @Inject(RequiredPropertyValidator)
   protected readonly requiredPropertiesValidator: RequiredPropertyValidator;
   @Inject(PropertyParser)
   protected readonly propertyParser: PropertyParser;
 
-  async execute({params}: CommandDescriptor): Promise<CommandResult> {
-    if (params.has('help')) return Promise.resolve({result: this.getCommandDescription()});
+  async execute({ params }: CommandDescriptor): Promise<CommandResult> {
+    if (params.has('help'))
+      return Promise.resolve({ result: this.getCommandDescription() });
 
     const model = this.validateAndParseProperties(params);
 
@@ -23,14 +27,16 @@ export abstract class Command implements ICommand {
     return { result };
   }
 
-  protected validateAndParseProperties(params: Map<string, string>): Record<string, any> {
+  protected validateAndParseProperties(
+    params: Map<string, string>,
+  ): Record<string, any> {
     if (!this.paramsDefinition) return null;
 
     const obj: Record<string, any> = {};
 
     for (const prop of Object.keys(this.paramsDefinition)) {
       if (this.paramsDefinition[prop].required) {
-        this.requiredPropertiesValidator.validate(prop, params); 
+        this.requiredPropertiesValidator.validate(prop, params);
       }
 
       if (params.has(prop)) {

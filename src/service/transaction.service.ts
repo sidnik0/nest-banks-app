@@ -13,7 +13,10 @@ import { TransactionCurrencyException } from '../common/exseption/transaction-cu
 import { TransactionBalanceException } from '../common/exseption/transaction-balance-exception';
 
 @Injectable()
-export class TransactionService extends BaseService<TransactionModel>implements ITransactionService {
+export class TransactionService
+  extends BaseService<TransactionModel>
+  implements ITransactionService
+{
   constructor(
     protected readonly repository: ITransactionRepository,
     private readonly accountRepository: IAccountRepository,
@@ -23,7 +26,11 @@ export class TransactionService extends BaseService<TransactionModel>implements 
     super(repository);
   }
 
-  async createTransaction({ fromAccountId, toAccountId, amount }: CreateTransactionDto): Promise<TransactionModel> {
+  async createTransaction({
+    fromAccountId,
+    toAccountId,
+    amount,
+  }: CreateTransactionDto): Promise<TransactionModel> {
     const fromAccountPromise = this.accountRepository.get(fromAccountId);
     const toAccountPromise = this.accountRepository.get(toAccountId);
 
@@ -41,11 +48,17 @@ export class TransactionService extends BaseService<TransactionModel>implements 
 
     const updateFromAccountPromise = this.accountRepository.update({
       ...fromAccount,
-      balance: TransactionService.getRecalculatedBalance(fromAccount.balance, -value),
+      balance: TransactionService.getRecalculatedBalance(
+        fromAccount.balance,
+        -value,
+      ),
     });
     const updateToAccountPromise = this.accountRepository.update({
       ...toAccount,
-      balance: TransactionService.getRecalculatedBalance(toAccount.balance, value),
+      balance: TransactionService.getRecalculatedBalance(
+        toAccount.balance,
+        value,
+      ),
     });
 
     await Promise.all([updateFromAccountPromise, updateToAccountPromise]);

@@ -11,11 +11,6 @@ import { RequiredPropertyValidator } from './required-property-validator';
     PropertyParser,
     RequiredPropertyValidator,
   ],
-  exports: [
-    FileSystem, 
-    IdGenerator, 
-    PropertyParser, 
-    RequiredPropertyValidator
-  ],
+  exports: [FileSystem, IdGenerator, PropertyParser, RequiredPropertyValidator],
 })
 export class HelperModule {}

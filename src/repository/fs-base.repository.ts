@@ -13,9 +13,9 @@ export abstract class FsBaseRepository<T extends BaseModel>
   protected data: Record<string, T>;
 
   @Inject(FileSystem)
-  protected readonly fileSystem: FileSystem
+  protected readonly fileSystem: FileSystem;
   @Inject(IdGenerator)
-  protected readonly idGenerator: IdGenerator
+  protected readonly idGenerator: IdGenerator;
 
   abstract getLoggingModelId(model: T | string): string;
 

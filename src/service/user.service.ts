@@ -7,9 +7,11 @@ import { IBankRepository } from '../repository/interface/bank.repository';
 import { UserModel } from '../model/interface/user.model';
 import { BankModel } from '../model/interface/bank.model';
 
-
 @Injectable()
-export class UserService extends BaseService<UserModel> implements IUserService {
+export class UserService
+  extends BaseService<UserModel>
+  implements IUserService
+{
   constructor(
     protected readonly repository: IUserRepository,
     private readonly accountRepository: IAccountRepository,
@@ -23,8 +25,8 @@ export class UserService extends BaseService<UserModel> implements IUserService 
 
     const banksPromise = accounts.map((account) => {
       return this.bankRepository.get(account.bankId);
-    })
+    });
 
-    return await Promise.all(banksPromise)
+    return await Promise.all(banksPromise);
   }
 }

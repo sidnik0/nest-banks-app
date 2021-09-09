@@ -12,7 +12,7 @@ export class ExitCommand extends Command {
   }
 
   async executeMainLogic(model: any): Promise<never> {
-    throw new Error('Prohibited operation')
+    throw new Error('Prohibited operation');
   }
 
   getCommandDescription(): string {

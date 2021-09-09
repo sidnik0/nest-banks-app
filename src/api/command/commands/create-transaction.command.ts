@@ -25,7 +25,9 @@ export class CreateTransactionCommand extends Command {
     };
   }
 
-  async executeMainLogic(model: CreateTransactionDto): Promise<TransactionModel> {
+  async executeMainLogic(
+    model: CreateTransactionDto,
+  ): Promise<TransactionModel> {
     return await this.transactionService.createTransaction(model);
   }
 

@@ -10,11 +10,14 @@ import { UpdateAccountDto } from '../api/rest-dto/update-account.dto';
 import { AccountCreatorException } from '../common/exseption/account-creator-exception';
 
 @Injectable()
-export class AccountService extends BaseService<AccountModel> implements IAccountService {
+export class AccountService
+  extends BaseService<AccountModel>
+  implements IAccountService
+{
   constructor(
     protected readonly repository: IAccountRepository,
     private readonly userRepository: IUserRepository,
-    private readonly bankRepository: IBankRepository
+    private readonly bankRepository: IBankRepository,
   ) {
     super(repository);
   }
@@ -25,9 +28,12 @@ export class AccountService extends BaseService<AccountModel> implements IAccoun
 
     const [user, bank] = await Promise.all([userPromise, bankPromise]);
 
-    if (!user || !bank) throw new AccountCreatorException(`Not found user:${model.userId} or bank:${model.bankId}`)
+    if (!user || !bank)
+      throw new AccountCreatorException(
+        `Not found user:${model.userId} or bank:${model.bankId}`,
+      );
 
-    const data = model.balance ? model : { ...model, balance: 0 }
+    const data = model.balance ? model : { ...model, balance: 0 };
 
     return await this.repository.create(data as AccountModel);
   }
@@ -44,7 +50,9 @@ export class AccountService extends BaseService<AccountModel> implements IAccoun
 
     data.balance =
       Math.floor(
-        (data.balance + (obj.operation === 'replenishment' ? obj.amount : -obj.amount)) * 100
+        (data.balance +
+          (obj.operation === 'replenishment' ? obj.amount : -obj.amount)) *
+          100,
       ) / 100;
 
     return await this.repository.update(data);
@@ -58,7 +66,10 @@ export class AccountService extends BaseService<AccountModel> implements IAccoun
     return this.repository.getAllByBank(id);
   }
 
-  async getAllByUserAndBank(userId: string, bankId: string): Promise<AccountModel[]> {
+  async getAllByUserAndBank(
+    userId: string,
+    bankId: string,
+  ): Promise<AccountModel[]> {
     return await this.repository.getAllByUserAndBank(userId, bankId);
   }
 }

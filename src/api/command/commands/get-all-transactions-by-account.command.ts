@@ -17,7 +17,9 @@ export class GetAllTransactionsByAccountCommand extends Command {
     };
   }
 
-  async executeMainLogic(model: GetAllTransactionsByAccountDto): Promise<TransactionModel[]> {
+  async executeMainLogic(
+    model: GetAllTransactionsByAccountDto,
+  ): Promise<TransactionModel[]> {
     return await this.transactionService.getAllByAccount(model.id);
   }
 

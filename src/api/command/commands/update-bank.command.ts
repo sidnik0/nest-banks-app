@@ -12,11 +12,11 @@ export class UpdateBankCommand extends Command {
     this.paramsDefinition = {
       id: {
         type: 'string',
-        required: true
+        required: true,
       },
       name: {
         type: 'string',
-        required: false
+        required: false,
       },
       commissionForEntity: {
         type: 'number',

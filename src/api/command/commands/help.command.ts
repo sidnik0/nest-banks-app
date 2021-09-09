@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { Command } from './command';
 import { CommandResult } from '../interface/command-result';
 
-
 @Injectable()
 export class HelpCommand extends Command {
   async execute(): Promise<CommandResult> {
@@ -10,7 +9,7 @@ export class HelpCommand extends Command {
   }
 
   async executeMainLogic(): Promise<never> {
-    throw new Error('Prohibited operation')
+    throw new Error('Prohibited operation');
   }
 
   getCommandDescription(): string {

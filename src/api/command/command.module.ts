@@ -12,9 +12,9 @@ import { commands } from './commands';
     {
       provide: ICommandExecutor,
       useClass: CliCommandExecutor,
-    }, 
+    },
     CommandFactory,
-    ...commands
+    ...commands,
   ],
   exports: [ICommandExecutor],
 })
