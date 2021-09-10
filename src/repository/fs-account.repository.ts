@@ -4,10 +4,7 @@ import { IAccountRepository } from './interface/account.repository';
 import { AccountModel } from '../model/interface/account.model';
 
 @Injectable()
-export class FsAccountRepository
-  extends FsBaseRepository<AccountModel>
-  implements IAccountRepository
-{
+export class FsAccountRepository extends FsBaseRepository<AccountModel> implements IAccountRepository {
   constructor() {
     super();
 
@@ -19,9 +16,7 @@ export class FsAccountRepository
   getLoggingModelId(model: AccountModel | string): string {
     if (typeof model === 'string') return model;
 
-    return model.id
-      ? `id=${model.id}`
-      : `userId=${model.userId}, bankId=${model.bankId}`;
+    return model.id ? `id=${model.id}` : `userId=${model.userId}, bankId=${model.bankId}`;
   }
 
   async getAllByUser(id: string): Promise<AccountModel[]> {
@@ -48,10 +43,7 @@ export class FsAccountRepository
     return result;
   }
 
-  async getAllByUserAndBank(
-    userId: string,
-    bankId: string,
-  ): Promise<AccountModel[]> {
+  async getAllByUserAndBank(userId: string, bankId: string): Promise<AccountModel[]> {
     const result: AccountModel[] = [];
 
     for (const obj of Object.values(this.data)) {

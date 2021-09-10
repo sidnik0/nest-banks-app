@@ -1,25 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { Command } from './command';
+import { BaseCommand } from './base.command';
 import { IAccountService } from '../../../service/interface/account.service';
-import { DeleteAccountDto } from '../../rest-dto/delete-account.dto';
+import { ParamsDefinition } from '../values-object/params-definition';
+import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
+import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class DeleteAccountCommand extends Command {
+export class DeleteAccountCommand extends BaseCommand {
   constructor(private readonly accountService: IAccountService) {
     super();
-
-    this.paramsDefinition = {
-      id: {
-        type: 'string',
-        required: true,
-      },
-    };
   }
 
-  async executeMainLogic(model: DeleteAccountDto): Promise<string> {
-    await this.accountService.delete(model.id);
+  async execute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
+    await this.accountService.delete(params.id);
 
-    return `Account with id=${model.id} deleted`;
+    return { result: `Account with id=${params.id} deleted` };
   }
 
   getCommandDescription(): string {
@@ -30,5 +25,14 @@ export class DeleteAccountCommand extends Command {
       
       help                              Display help for command
     `;
+  }
+
+  initParamsDefinition(): ParamsDefinition {
+    return {
+      id: {
+        type: 'string',
+        required: true,
+      },
+    };
   }
 }

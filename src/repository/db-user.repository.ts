@@ -6,10 +6,7 @@ import { IUserRepository } from './interface/user.repository';
 import { UserEntity } from '../model/user.entity';
 
 @Injectable()
-export class DbUserRepository
-  extends DbBaseRepository<UserEntity>
-  implements IUserRepository
-{
+export class DbUserRepository extends DbBaseRepository<UserEntity> implements IUserRepository {
   constructor(
     @InjectRepository(UserEntity)
     protected readonly repository: Repository<UserEntity>,

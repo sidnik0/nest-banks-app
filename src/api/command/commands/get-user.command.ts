@@ -1,24 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { Command } from './command';
+import { BaseCommand } from './base.command';
 import { IUserService } from '../../../service/interface/user.service';
-import { UserModel } from '../../../model/interface/user.model';
-import { GetUserDto } from '../../rest-dto/get-user.dto';
+import { ParamsDefinition } from '../values-object/params-definition';
+import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
+import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class GetUserCommand extends Command {
+export class GetUserCommand extends BaseCommand {
   constructor(private readonly userService: IUserService) {
     super();
-
-    this.paramsDefinition = {
-      id: {
-        type: 'string',
-        required: true,
-      },
-    };
   }
 
-  async executeMainLogic(model: GetUserDto): Promise<UserModel> {
-    return await this.userService.get(model.id);
+  async execute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
+    const result = await this.userService.get(params.id);
+
+    return { result };
   }
 
   getCommandDescription(): string {
@@ -29,5 +25,14 @@ export class GetUserCommand extends Command {
       
       help                              Display help for command
     `;
+  }
+
+  initParamsDefinition(): ParamsDefinition {
+    return {
+      id: {
+        type: 'string',
+        required: true,
+      },
+    };
   }
 }

@@ -5,15 +5,12 @@ import { IAccountRepository } from '../repository/interface/account.repository';
 import { IUserRepository } from '../repository/interface/user.repository';
 import { IBankRepository } from '../repository/interface/bank.repository';
 import { AccountModel } from '../model/interface/account.model';
-import { CreateAccountDto } from '../api/rest-dto/create-account.dto';
-import { UpdateAccountDto } from '../api/rest-dto/update-account.dto';
+import { CreateAccountDto } from '../api/rest/rest-dto/create-account.dto';
+import { UpdateAccountDto } from '../api/rest/rest-dto/update-account.dto';
 import { AccountCreatorException } from '../common/exseption/account-creator-exception';
 
 @Injectable()
-export class AccountService
-  extends BaseService<AccountModel>
-  implements IAccountService
-{
+export class AccountService extends BaseService<AccountModel> implements IAccountService {
   constructor(
     protected readonly repository: IAccountRepository,
     private readonly userRepository: IUserRepository,
@@ -28,10 +25,7 @@ export class AccountService
 
     const [user, bank] = await Promise.all([userPromise, bankPromise]);
 
-    if (!user || !bank)
-      throw new AccountCreatorException(
-        `Not found user:${model.userId} or bank:${model.bankId}`,
-      );
+    if (!user || !bank) throw new AccountCreatorException(`Not found user:${model.userId} or bank:${model.bankId}`);
 
     const data = model.balance ? model : { ...model, balance: 0 };
 
@@ -42,18 +36,11 @@ export class AccountService
     throw Error('Prohibited operation');
   }
 
-  async updateBalance(
-    id: string,
-    obj: Omit<UpdateAccountDto, 'id'>,
-  ): Promise<AccountModel> {
+  async updateBalance(id: string, obj: Omit<UpdateAccountDto, 'id'>): Promise<AccountModel> {
     const data = await this.repository.get(id);
 
     data.balance =
-      Math.floor(
-        (data.balance +
-          (obj.operation === 'replenishment' ? obj.amount : -obj.amount)) *
-          100,
-      ) / 100;
+      Math.floor((data.balance + (obj.operation === 'replenishment' ? obj.amount : -obj.amount)) * 100) / 100;
 
     return await this.repository.update(data);
   }
@@ -66,10 +53,7 @@ export class AccountService
     return this.repository.getAllByBank(id);
   }
 
-  async getAllByUserAndBank(
-    userId: string,
-    bankId: string,
-  ): Promise<AccountModel[]> {
+  async getAllByUserAndBank(userId: string, bankId: string): Promise<AccountModel[]> {
     return await this.repository.getAllByUserAndBank(userId, bankId);
   }
 }

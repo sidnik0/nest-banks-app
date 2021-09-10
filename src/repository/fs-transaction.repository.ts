@@ -4,10 +4,7 @@ import { ITransactionRepository } from './interface/transaction.repository';
 import { TransactionModel } from '../model/interface/transaction.model';
 
 @Injectable()
-export class FsTransactionRepository
-  extends FsBaseRepository<TransactionModel>
-  implements ITransactionRepository
-{
+export class FsTransactionRepository extends FsBaseRepository<TransactionModel> implements ITransactionRepository {
   constructor() {
     super();
 
@@ -32,10 +29,7 @@ export class FsTransactionRepository
     throw Error('Prohibited operation');
   }
 
-  async getAllByAccount(
-    id: string,
-    period?: { from: Date; to: Date },
-  ): Promise<TransactionModel[]> {
+  async getAllByAccount(id: string, period?: { from: Date; to: Date }): Promise<TransactionModel[]> {
     const result: TransactionModel[] = [];
 
     for (const obj of Object.values(this.data)) {

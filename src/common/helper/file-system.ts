@@ -18,10 +18,7 @@ export class FileSystem {
       } else {
         if (!fs.existsSync(this.path)) fs.mkdirSync(this.path);
 
-        fs.writeFileSync(
-          `${this.path}/${file}.json`,
-          JSON.stringify({}, null, 2),
-        );
+        fs.writeFileSync(`${this.path}/${file}.json`, JSON.stringify({}, null, 2));
 
         return {};
       }
@@ -34,10 +31,7 @@ export class FileSystem {
 
   writeFile(file: string, json: { [index: string]: any }): void {
     try {
-      fs.writeFileSync(
-        `${this.path}/${file}.json`,
-        JSON.stringify(json, null, 2),
-      );
+      fs.writeFileSync(`${this.path}/${file}.json`, JSON.stringify(json, null, 2));
     } catch (e) {
       this.logger.error(`File ${file}.json write error`, e.stack);
 

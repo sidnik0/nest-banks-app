@@ -1,7 +1,9 @@
-import { CommandDescriptor } from '../interface/command-descriptor';
-import { CommandResult } from '../interface/command-result';
+import { CommandDescriptor } from '../values-object/command-descriptor';
+import { CommandResult } from '../values-object/command-result';
+import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
 
 export interface ICommand {
-  execute(commandDescriptor: CommandDescriptor): Promise<CommandResult>;
-  executeMainLogic(model: Record<string, any>): Promise<any>;
+  getDescription(commandDescriptor: CommandDescriptor): CommandResult;
+  validate(commandDescriptor: CommandDescriptor): TypedCommandDescriptor;
+  execute(typedCommandDescriptor: TypedCommandDescriptor): Promise<CommandResult>;
 }

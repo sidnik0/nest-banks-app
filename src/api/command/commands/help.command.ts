@@ -1,15 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Command } from './command';
-import { CommandResult } from '../interface/command-result';
+import { BaseCommand } from './base.command';
+import { CommandResult } from '../values-object/command-result';
+import { ParamsDefinition } from '../values-object/params-definition';
 
 @Injectable()
-export class HelpCommand extends Command {
+export class HelpCommand extends BaseCommand {
   async execute(): Promise<CommandResult> {
     return { result: this.getCommandDescription() };
-  }
-
-  async executeMainLogic(): Promise<never> {
-    throw new Error('Prohibited operation');
   }
 
   getCommandDescription(): string {
@@ -43,5 +40,9 @@ export class HelpCommand extends Command {
     update-user [options]                       Update user by id
     exit                                        Close app
   `;
+  }
+
+  initParamsDefinition(): ParamsDefinition {
+    return;
   }
 }

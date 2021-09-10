@@ -1,28 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { Command } from './command';
+import { BaseCommand } from './base.command';
 import { IUserService } from '../../../service/interface/user.service';
 import { UserModel } from '../../../model/interface/user.model';
-import { CreateUserDto } from '../../rest-dto/create-user.dto';
+import { ParamsDefinition } from '../values-object/params-definition';
+import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
+import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class CreateUserCommand extends Command {
+export class CreateUserCommand extends BaseCommand {
   constructor(private readonly userService: IUserService) {
     super();
-
-    this.paramsDefinition = {
-      name: {
-        type: 'string',
-        required: true,
-      },
-      face: {
-        type: 'FaceType',
-        required: true,
-      },
-    };
   }
 
-  async executeMainLogic(model: CreateUserDto): Promise<UserModel> {
-    return await this.userService.create(model);
+  async execute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
+    const result = await this.userService.create(params as UserModel);
+
+    return { result };
   }
 
   getCommandDescription(): string {
@@ -34,5 +27,18 @@ export class CreateUserCommand extends Command {
       
       help                              Display help for command
     `;
+  }
+
+  initParamsDefinition(): ParamsDefinition {
+    return {
+      name: {
+        type: 'string',
+        required: true,
+      },
+      face: {
+        type: 'FaceType',
+        required: true,
+      },
+    };
   }
 }

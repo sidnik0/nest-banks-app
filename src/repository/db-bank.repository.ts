@@ -6,10 +6,7 @@ import { IBankRepository } from './interface/bank.repository';
 import { BankEntity } from '../model/bank.entity';
 
 @Injectable()
-export class DbBankRepository
-  extends DbBaseRepository<BankEntity>
-  implements IBankRepository
-{
+export class DbBankRepository extends DbBaseRepository<BankEntity> implements IBankRepository {
   constructor(
     @InjectRepository(BankEntity)
     protected readonly repository: Repository<BankEntity>,

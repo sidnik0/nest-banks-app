@@ -1,15 +1,38 @@
 import { Injectable } from '@nestjs/common';
-import { Command } from './command';
+import { BaseCommand } from './base.command';
 import { IBankService } from '../../../service/interface/bank.service';
 import { BankModel } from '../../../model/interface/bank.model';
-import { UpdateBankDto } from '../../rest-dto/update-bank.dto';
+import { ParamsDefinition } from '../values-object/params-definition';
+import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
+import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class UpdateBankCommand extends Command {
+export class UpdateBankCommand extends BaseCommand {
   constructor(private readonly bankService: IBankService) {
     super();
+  }
 
-    this.paramsDefinition = {
+  async execute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
+    const result = await this.bankService.update(params as BankModel);
+
+    return { result };
+  }
+
+  getCommandDescription(): string {
+    return `Update bank by id
+
+    Options:
+      id=<id>                           Bank id
+      name=[name]                       Bank name
+      commissionForEntity=[comEnt]      Entity commission
+      commissionForIndividual=[comInd]  Individuals commission
+      
+      help                              Display help for command
+    `;
+  }
+
+  initParamsDefinition(): ParamsDefinition {
+    return {
       id: {
         type: 'string',
         required: true,
@@ -27,22 +50,5 @@ export class UpdateBankCommand extends Command {
         required: false,
       },
     };
-  }
-
-  async executeMainLogic(model: UpdateBankDto): Promise<BankModel> {
-    return await this.bankService.update(model as BankModel);
-  }
-
-  getCommandDescription(): string {
-    return `Update bank by id
-
-    Options:
-      id=<id>                           Bank id
-      name=[name]                       Bank name
-      commissionForEntity=[comEnt]      Entity commission
-      commissionForIndividual=[comInd]  Individuals commission
-      
-      help                              Display help for command
-    `;
   }
 }

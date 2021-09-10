@@ -1,33 +1,20 @@
 import { Injectable } from '@nestjs/common';
-import { Command } from './command';
+import { BaseCommand } from './base.command';
 import { IAccountService } from '../../../service/interface/account.service';
-import { AccountModel } from '../../../model/interface/account.model';
-import { GetAllAccountsByUserAndBankDto } from 'src/api/rest-dto/get-all-accounts-by-user-and-bank.dto';
+import { ParamsDefinition } from '../values-object/params-definition';
+import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
+import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class GetAllAccountsByUserAndBankCommand extends Command {
+export class GetAllAccountsByUserAndBankCommand extends BaseCommand {
   constructor(private readonly accountService: IAccountService) {
     super();
-
-    this.paramsDefinition = {
-      userId: {
-        type: 'string',
-        required: true,
-      },
-      bankId: {
-        type: 'string',
-        required: true,
-      },
-    };
   }
 
-  async executeMainLogic(
-    model: GetAllAccountsByUserAndBankDto,
-  ): Promise<AccountModel[]> {
-    return await this.accountService.getAllByUserAndBank(
-      model.userId,
-      model.bankId,
-    );
+  async execute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
+    const result = await this.accountService.getAllByUserAndBank(params.userId, params.bankId);
+
+    return { result };
   }
 
   getCommandDescription(): string {
@@ -39,5 +26,18 @@ export class GetAllAccountsByUserAndBankCommand extends Command {
     
       help                              Display help for command
     `;
+  }
+
+  initParamsDefinition(): ParamsDefinition {
+    return {
+      userId: {
+        type: 'string',
+        required: true,
+      },
+      bankId: {
+        type: 'string',
+        required: true,
+      },
+    };
   }
 }

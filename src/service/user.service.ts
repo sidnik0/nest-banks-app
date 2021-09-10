@@ -8,10 +8,7 @@ import { UserModel } from '../model/interface/user.model';
 import { BankModel } from '../model/interface/bank.model';
 
 @Injectable()
-export class UserService
-  extends BaseService<UserModel>
-  implements IUserService
-{
+export class UserService extends BaseService<UserModel> implements IUserService {
   constructor(
     protected readonly repository: IUserRepository,
     private readonly accountRepository: IAccountRepository,

@@ -4,10 +4,7 @@ import { IUserRepository } from './interface/user.repository';
 import { UserModel } from '../model/interface/user.model';
 
 @Injectable()
-export class FsUserRepository
-  extends FsBaseRepository<UserModel>
-  implements IUserRepository
-{
+export class FsUserRepository extends FsBaseRepository<UserModel> implements IUserRepository {
   constructor() {
     super();
 

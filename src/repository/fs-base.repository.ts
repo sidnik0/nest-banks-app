@@ -5,9 +5,7 @@ import { FileSystem } from '../common/helper/file-system';
 import { IdGenerator } from '../common/helper/id-generator';
 import { NotFountException } from '../common/exseption/not-fount-exception';
 
-export abstract class FsBaseRepository<T extends BaseModel>
-  implements IBaseRepository<T>
-{
+export abstract class FsBaseRepository<T extends BaseModel> implements IBaseRepository<T> {
   protected logger: Logger;
   protected fileName: string;
   protected data: Record<string, T>;
@@ -29,10 +27,7 @@ export abstract class FsBaseRepository<T extends BaseModel>
 
       return this.data[id];
     } catch (e) {
-      this.logger.error(
-        `Data ${this.getLoggingModelId(model)} not created`,
-        e.stack,
-      );
+      this.logger.error(`Data ${this.getLoggingModelId(model)} not created`, e.stack);
 
       throw e;
     }
@@ -44,9 +39,7 @@ export abstract class FsBaseRepository<T extends BaseModel>
     if (!data) {
       this.logger.error(`Data ${this.getLoggingModelId(id)} not found`);
 
-      throw new NotFountException(
-        `Data ${this.getLoggingModelId(id)} not found`,
-      );
+      throw new NotFountException(`Data ${this.getLoggingModelId(id)} not found`);
     }
 
     return data;
@@ -64,10 +57,7 @@ export abstract class FsBaseRepository<T extends BaseModel>
 
       return this.data[model.id];
     } catch (e) {
-      this.logger.error(
-        `Data ${this.getLoggingModelId(model)} not updated`,
-        e.stack,
-      );
+      this.logger.error(`Data ${this.getLoggingModelId(model)} not updated`, e.stack);
 
       throw e;
     }
@@ -81,10 +71,7 @@ export abstract class FsBaseRepository<T extends BaseModel>
 
       return true;
     } catch (e) {
-      this.logger.error(
-        `Data ${this.getLoggingModelId(id)} not deleted`,
-        e.stack,
-      );
+      this.logger.error(`Data ${this.getLoggingModelId(id)} not deleted`, e.stack);
 
       throw e;
     }

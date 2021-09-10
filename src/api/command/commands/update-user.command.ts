@@ -1,28 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { Command } from './command';
+import { BaseCommand } from './base.command';
 import { IUserService } from '../../../service/interface/user.service';
 import { UserModel } from '../../../model/interface/user.model';
-import { UpdateUserDto } from '../../rest-dto/update-user.dto';
+import { ParamsDefinition } from '../values-object/params-definition';
+import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
+import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class UpdateUserCommand extends Command {
+export class UpdateUserCommand extends BaseCommand {
   constructor(private readonly userService: IUserService) {
     super();
-
-    this.paramsDefinition = {
-      id: {
-        type: 'string',
-        required: true,
-      },
-      name: {
-        type: 'string',
-        required: false,
-      },
-    };
   }
 
-  async executeMainLogic(model: UpdateUserDto): Promise<UserModel> {
-    return await this.userService.update(model as UserModel);
+  async execute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
+    const result = await this.userService.update(params as UserModel);
+
+    return { result };
   }
 
   getCommandDescription(): string {
@@ -34,5 +27,18 @@ export class UpdateUserCommand extends Command {
       
       help                              Display help for command
     `;
+  }
+
+  initParamsDefinition(): ParamsDefinition {
+    return {
+      id: {
+        type: 'string',
+        required: true,
+      },
+      name: {
+        type: 'string',
+        required: false,
+      },
+    };
   }
 }

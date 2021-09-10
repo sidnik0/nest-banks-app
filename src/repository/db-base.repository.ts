@@ -2,9 +2,7 @@ import { Repository } from 'typeorm';
 import { IBaseRepository } from './interface/base.repository';
 import { BaseEntity } from '../model/base.entity';
 
-export abstract class DbBaseRepository<T extends BaseEntity>
-  implements IBaseRepository<T>
-{
+export abstract class DbBaseRepository<T extends BaseEntity> implements IBaseRepository<T> {
   protected constructor(protected readonly repository: Repository<T>) {}
 
   async create(model: T): Promise<T> {

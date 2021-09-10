@@ -1,16 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { Command } from './command';
+import { BaseCommand } from './base.command';
 import { ITransactionService } from '../../../service/interface/transaction.service';
-import { TransactionModel } from '../../../model/interface/transaction.model';
+import { ParamsDefinition } from '../values-object/params-definition';
+import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class GetTransactionsCommand extends Command {
+export class GetTransactionsCommand extends BaseCommand {
   constructor(private readonly transactionService: ITransactionService) {
     super();
   }
 
-  async executeMainLogic(): Promise<TransactionModel[]> {
-    return await this.transactionService.getAll();
+  async execute(): Promise<CommandResult> {
+    const result = await this.transactionService.getAll();
+
+    return { result };
   }
 
   getCommandDescription(): string {
@@ -19,5 +22,9 @@ export class GetTransactionsCommand extends Command {
     Options:
       help                              Display help for command
     `;
+  }
+
+  initParamsDefinition(): ParamsDefinition {
+    return;
   }
 }

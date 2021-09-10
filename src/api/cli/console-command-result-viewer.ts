@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CommandResult } from '../command/interface/command-result';
+import { CommandResult } from '../command/values-object/command-result';
 import { CommandLineParserException } from '../../common/exseption/command-line-parser-exception';
 import { ConvertorException } from '../../common/exseption/convertor-exception';
 import { ValidatorException } from '../../common/exseption/validator-exception';
@@ -16,15 +16,9 @@ export class ConsoleCommandResultViewer {
       return result;
     } else if (Array.isArray(result)) {
       return result.reduce((previous, current) => {
-        if (!previous)
-          return (
-            previous + ConsoleCommandResultViewer.parseObjToString(current)
-          );
+        if (!previous) return previous + ConsoleCommandResultViewer.parseObjToString(current);
 
-        return (
-          previous +
-          `\n\n${ConsoleCommandResultViewer.parseObjToString(current)}`
-        );
+        return previous + `\n\n${ConsoleCommandResultViewer.parseObjToString(current)}`;
       }, '');
     } else {
       return ConsoleCommandResultViewer.parseObjToString(result);

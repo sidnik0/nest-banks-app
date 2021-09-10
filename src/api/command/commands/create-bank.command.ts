@@ -1,15 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { Command } from './command';
+import { BaseCommand } from './base.command';
 import { IBankService } from '../../../service/interface/bank.service';
 import { BankModel } from '../../../model/interface/bank.model';
-import { CreateBankDto } from '../../rest-dto/create-bank.dto';
+import { ParamsDefinition } from '../values-object/params-definition';
+import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
+import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class CreateBankCommand extends Command {
+export class CreateBankCommand extends BaseCommand {
   constructor(private readonly bankService: IBankService) {
     super();
+  }
 
-    this.paramsDefinition = {
+  async execute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
+    const result = await this.bankService.create(params as BankModel);
+
+    return { result };
+  }
+
+  getCommandDescription(): string {
+    return `Create bank
+
+    Options:
+      name=<name>                       Bank name
+      commissionForEntity=<comEnt>      Entity commission
+      commissionForIndividual=<comInd>  Individuals commission
+      
+      help                              Display help for command
+    `;
+  }
+
+  initParamsDefinition(): ParamsDefinition {
+    return {
       name: {
         type: 'string',
         required: true,
@@ -23,21 +45,5 @@ export class CreateBankCommand extends Command {
         required: true,
       },
     };
-  }
-
-  async executeMainLogic(model: CreateBankDto): Promise<BankModel> {
-    return await this.bankService.create(model);
-  }
-
-  getCommandDescription(): string {
-    return `Create bank
-
-    Options:
-      name=<name>                       Bank name
-      commissionForEntity=<comEnt>      Entity commission
-      commissionForIndividual=<comInd>  Individuals commission
-      
-      help                              Display help for command
-    `;
   }
 }

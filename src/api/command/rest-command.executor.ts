@@ -1,25 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { ICommand } from './commands/command.interface';
-import { CommandDescriptor } from './interface/command-descriptor';
-import { ICommandExecutor } from './interface/command-executor';
-import { CommandResult } from './interface/command-result';
+import { CommandExecutor } from './command-executor';
+import { CommandResult } from './values-object/command-result';
+import { TypedCommandDescriptor } from './values-object/typed-command-descriptor';
 
 @Injectable()
-export class RestCommandExecutor extends ICommandExecutor {
-  async factoryMethod(
-    command: ICommand,
-    { params }: CommandDescriptor,
-  ): Promise<CommandResult> {
-    const model = this.convertMapToObject(params);
-
-    return await command.executeMainLogic(model);
-  }
-
-  private convertMapToObject(map: Map<string, any>): Record<string, any> {
-    const obj: Record<string, any> = {};
-
-    map.forEach((value, key) => (obj[key] = value));
-
-    return obj;
+export class RestCommandExecutor extends CommandExecutor {
+  async factoryMethod(command: ICommand, typedCommandDescriptor: TypedCommandDescriptor): Promise<CommandResult> {
+    return await command.execute(typedCommandDescriptor);
   }
 }

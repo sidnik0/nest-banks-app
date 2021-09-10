@@ -18,15 +18,7 @@ import { BankEntity } from '../model/bank.entity';
 import { TransactionEntity } from '../model/transaction.entity';
 import { UserEntity } from '../model/user.entity';
 @Module({
-  imports: [
-    HelperModule,
-    TypeOrmModule.forFeature([
-      AccountEntity,
-      BankEntity,
-      TransactionEntity,
-      UserEntity,
-    ]),
-  ],
+  imports: [HelperModule, TypeOrmModule.forFeature([AccountEntity, BankEntity, TransactionEntity, UserEntity])],
   providers: [
     {
       provide: IAccountRepository,
@@ -45,11 +37,6 @@ import { UserEntity } from '../model/user.entity';
       useClass: DbUserRepository,
     },
   ],
-  exports: [
-    IAccountRepository,
-    IBankRepository,
-    ITransactionRepository,
-    IUserRepository,
-  ],
+  exports: [IAccountRepository, IBankRepository, ITransactionRepository, IUserRepository],
 })
 export class RepositoryModule {}

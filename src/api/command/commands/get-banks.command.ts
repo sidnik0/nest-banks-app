@@ -1,16 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { Command } from './command';
+import { BaseCommand } from './base.command';
 import { IBankService } from '../../../service/interface/bank.service';
-import { BankModel } from '../../../model/interface/bank.model';
+import { ParamsDefinition } from '../values-object/params-definition';
+import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class GetBanksCommand extends Command {
+export class GetBanksCommand extends BaseCommand {
   constructor(private readonly bankService: IBankService) {
     super();
   }
 
-  async executeMainLogic(): Promise<BankModel[]> {
-    return await this.bankService.getAll();
+  async execute(): Promise<CommandResult> {
+    const result = await this.bankService.getAll();
+
+    return { result };
   }
 
   getCommandDescription(): string {
@@ -19,5 +22,9 @@ export class GetBanksCommand extends Command {
     Options:
       help                              Display help for command
     `;
+  }
+
+  initParamsDefinition(): ParamsDefinition {
+    return;
   }
 }

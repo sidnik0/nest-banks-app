@@ -1,18 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Command } from './command';
-import { CommandDescriptor } from '../interface/command-descriptor';
-import { CommandResult } from '../interface/command-result';
+import { BaseCommand } from './base.command';
+import { CommandResult } from '../values-object/command-result';
+import { ParamsDefinition } from '../values-object/params-definition';
 
 @Injectable()
-export class ExitCommand extends Command {
-  async execute({ params }: CommandDescriptor): Promise<CommandResult> {
-    if (params.has('help')) return { result: this.getCommandDescription() };
-
+export class ExitCommand extends BaseCommand {
+  async execute(): Promise<CommandResult> {
     return { result: 'EXIT', exit: true };
-  }
-
-  async executeMainLogic(model: any): Promise<never> {
-    throw new Error('Prohibited operation');
   }
 
   getCommandDescription(): string {
@@ -21,5 +15,9 @@ export class ExitCommand extends Command {
     Options:
       help                              Display help for command
     `;
+  }
+
+  initParamsDefinition(): ParamsDefinition {
+    return;
   }
 }

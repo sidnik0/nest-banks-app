@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { ServiceModule } from '../../service/service.module';
 import { HelperModule } from '../../common/helper/helper.module';
 import { CliCommandExecutor } from './cli-command-executor';
-import { ICommandExecutor } from './interface/command-executor';
+import { CommandExecutor } from './command-executor';
 import { CommandFactory } from './command-factory';
 import { commands } from './commands';
 
@@ -10,12 +10,12 @@ import { commands } from './commands';
   imports: [ServiceModule, HelperModule],
   providers: [
     {
-      provide: ICommandExecutor,
+      provide: CommandExecutor,
       useClass: CliCommandExecutor,
     },
     CommandFactory,
     ...commands,
   ],
-  exports: [ICommandExecutor],
+  exports: [CommandExecutor],
 })
 export class CommandModule {}

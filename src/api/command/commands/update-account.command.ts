@@ -1,14 +1,37 @@
 import { Injectable } from '@nestjs/common';
-import { Command } from './command';
+import { BaseCommand } from './base.command';
 import { IAccountService } from '../../../service/interface/account.service';
-import { UpdateAccountDto } from '../../rest-dto/update-account.dto';
+import { ParamsDefinition } from '../values-object/params-definition';
+import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
+import { CommandResult } from '../values-object/command-result';
+import { OperationType } from '../../../types/operation.type';
 
 @Injectable()
-export class UpdateAccountCommand extends Command {
+export class UpdateAccountCommand extends BaseCommand {
   constructor(private readonly accountService: IAccountService) {
     super();
+  }
 
-    this.paramsDefinition = {
+  async execute({ params: { id, ...balance } }: TypedCommandDescriptor): Promise<CommandResult> {
+    const result = await this.accountService.updateBalance(id, balance as { amount: number; operation: OperationType });
+
+    return { result };
+  }
+
+  getCommandDescription(): string {
+    return `Update account by id
+
+    Options:
+      id=<accountId>                    Account id
+      amount=<amount>                   Amount
+      operation=<boolean>               Operation ("replenishment" || "withdrawal")
+      
+      help                              Display help for command
+    `;
+  }
+
+  initParamsDefinition(): ParamsDefinition {
+    return {
       id: {
         type: 'string',
         required: true,
@@ -22,21 +45,5 @@ export class UpdateAccountCommand extends Command {
         required: true,
       },
     };
-  }
-
-  async executeMainLogic({ id, ...model }: UpdateAccountDto): Promise<any> {
-    return await this.accountService.updateBalance(id, model);
-  }
-
-  getCommandDescription(): string {
-    return `Update account by id
-
-    Options:
-      id=<accountId>                    Account id
-      amount=<amount>                   Amount
-      operation=<boolean>               Operation ("replenishment" || "withdrawal")
-      
-      help                              Display help for command
-    `;
   }
 }

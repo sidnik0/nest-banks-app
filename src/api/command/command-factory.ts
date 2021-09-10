@@ -2,7 +2,7 @@ import { Injectable, Type } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 
 import { ICommand } from '../command/commands/command.interface';
-import { CommandDescriptor } from '../command/interface/command-descriptor';
+import { CommandDescriptor } from './values-object/command-descriptor';
 import { CommandName } from '../../types/command-name.type';
 
 import { CreateAccountCommand } from './commands/create-account.command';
@@ -35,8 +35,7 @@ import { CommandFactoryException } from '../../common/exseption/command-factory-
 
 @Injectable()
 export class CommandFactory {
-  private static COMMAND_LIB: Map<string, Type<ICommand>> =
-    CommandFactory.getCommandLib();
+  private static COMMAND_LIB: Map<string, Type<ICommand>> = CommandFactory.getCommandLib();
 
   constructor(private readonly moduleRef: ModuleRef) {}
 
@@ -62,16 +61,10 @@ export class CommandFactory {
       [CommandName.GET_ACCOUNT, GetAccountCommand],
       [CommandName.GET_ACCOUNTS, GetAccountsCommand],
       [CommandName.GET_ALL_ACCOUNTS_BY_BANK, GetAllAccountsByBankCommand],
-      [
-        CommandName.GET_ALL_ACCOUNTS_BY_USER_AND_BANK,
-        GetAllAccountsByUserAndBankCommand,
-      ],
+      [CommandName.GET_ALL_ACCOUNTS_BY_USER_AND_BANK, GetAllAccountsByUserAndBankCommand],
       [CommandName.GET_ALL_ACCOUNTS_BY_USER, GetAllAccountsByUserCommand],
       [CommandName.GET_ALL_BANK_USERS, GetAllBankUsersCommand],
-      [
-        CommandName.GET_ALL_TRANSACTIONS_BY_ACCOUNT,
-        GetAllTransactionsByAccountCommand,
-      ],
+      [CommandName.GET_ALL_TRANSACTIONS_BY_ACCOUNT, GetAllTransactionsByAccountCommand],
       [CommandName.GET_ALL_USER_BANKS, GetAllUserBanksCommand],
       [CommandName.GET_BANK, GetBankCommand],
       [CommandName.GET_BANKS, GetBanksCommand],

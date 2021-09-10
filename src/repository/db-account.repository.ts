@@ -6,10 +6,7 @@ import { IAccountRepository } from './interface/account.repository';
 import { AccountEntity } from '../model/account.entity';
 
 @Injectable()
-export class DbAccountRepository
-  extends DbBaseRepository<AccountEntity>
-  implements IAccountRepository
-{
+export class DbAccountRepository extends DbBaseRepository<AccountEntity> implements IAccountRepository {
   constructor(
     @InjectRepository(AccountEntity)
     protected readonly repository: Repository<AccountEntity>,
@@ -25,10 +22,7 @@ export class DbAccountRepository
     return this.repository.find({ bankId: id });
   }
 
-  getAllByUserAndBank(
-    userId: string,
-    bankId: string,
-  ): Promise<AccountEntity[]> {
+  getAllByUserAndBank(userId: string, bankId: string): Promise<AccountEntity[]> {
     return this.repository.find({ userId, bankId });
   }
 }

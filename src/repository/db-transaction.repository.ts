@@ -6,10 +6,7 @@ import { ITransactionRepository } from './interface/transaction.repository';
 import { TransactionEntity } from '../model/transaction.entity';
 
 @Injectable()
-export class DbTransactionRepository
-  extends DbBaseRepository<TransactionEntity>
-  implements ITransactionRepository
-{
+export class DbTransactionRepository extends DbBaseRepository<TransactionEntity> implements ITransactionRepository {
   constructor(
     @InjectRepository(TransactionEntity)
     protected readonly repository: Repository<TransactionEntity>,
@@ -25,10 +22,7 @@ export class DbTransactionRepository
     throw Error('Prohibited operation');
   }
 
-  async getAllByAccount(
-    id: string,
-    period?: { from: Date; to: Date },
-  ): Promise<TransactionEntity[]> {
+  async getAllByAccount(id: string, period?: { from: Date; to: Date }): Promise<TransactionEntity[]> {
     return await this.repository.find({
       where: [{ toAccountId: id }, { fromAccountId: id }],
     });

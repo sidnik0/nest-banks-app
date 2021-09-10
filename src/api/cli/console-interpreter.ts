@@ -1,6 +1,6 @@
 import * as readline from 'readline';
 import { Injectable, Logger } from '@nestjs/common';
-import { ICommandExecutor } from '../command/interface/command-executor';
+import { CommandExecutor } from '../command/command-executor';
 import { ConsoleLineParser } from './console-line-parser';
 import { ConsoleCommandResultViewer } from './console-command-result-viewer';
 
@@ -13,7 +13,7 @@ export class ConsoleInterpreter {
   private readonly logger = new Logger('ConsoleInterpreter');
 
   constructor(
-    private readonly commandExecutor: ICommandExecutor,
+    private readonly commandExecutor: CommandExecutor,
     private readonly consoleLineParser: ConsoleLineParser,
     private readonly consoleCommandResultViewer: ConsoleCommandResultViewer,
   ) {}
@@ -30,14 +30,11 @@ export class ConsoleInterpreter {
     try {
       const commandDescriptor = this.consoleLineParser.parseInput(input);
 
-      const commandResult = await this.commandExecutor.executeCommand(
-        commandDescriptor,
-      );
+      const commandResult = await this.commandExecutor.executeCommand(commandDescriptor);
 
       if (commandResult.exit) this.rl.close();
 
-      const resultString =
-        this.consoleCommandResultViewer.parseCommandResult(commandResult);
+      const resultString = this.consoleCommandResultViewer.parseCommandResult(commandResult);
 
       console.log(resultString);
 

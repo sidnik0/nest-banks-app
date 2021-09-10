@@ -50,11 +50,7 @@ export class PropertyParser {
   }
 
   private static parseCurrencyType(value: any): CurrencyType {
-    if (
-      value !== CurrencyType.RUB &&
-      value !== CurrencyType.USD &&
-      value !== CurrencyType.EUR
-    ) {
+    if (value !== CurrencyType.RUB && value !== CurrencyType.USD && value !== CurrencyType.EUR) {
       throw new ConvertorException('Currency Type parser error');
     }
 
@@ -70,10 +66,7 @@ export class PropertyParser {
   }
 
   private static parseOperationType(value: any): FaceType {
-    if (
-      value !== OperationType.REPLENISHMENT &&
-      value !== OperationType.WITHDRAWAL
-    ) {
+    if (value !== OperationType.REPLENISHMENT && value !== OperationType.WITHDRAWAL) {
       throw new ConvertorException('Operation type parser error');
     }
 

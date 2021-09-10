@@ -1,16 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { Command } from './command';
+import { BaseCommand } from './base.command';
 import { IUserService } from '../../../service/interface/user.service';
-import { UserModel } from '../../../model/interface/user.model';
+import { ParamsDefinition } from '../values-object/params-definition';
+import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class GetUsersCommand extends Command {
+export class GetUsersCommand extends BaseCommand {
   constructor(private readonly userService: IUserService) {
     super();
   }
 
-  async executeMainLogic(): Promise<UserModel[]> {
-    return await this.userService.getAll();
+  async execute(): Promise<CommandResult> {
+    const result = await this.userService.getAll();
+
+    return { result };
   }
 
   getCommandDescription(): string {
@@ -19,5 +22,9 @@ export class GetUsersCommand extends Command {
     Options:
       help                              Display help for command
     `;
+  }
+
+  initParamsDefinition(): ParamsDefinition {
+    return;
   }
 }
