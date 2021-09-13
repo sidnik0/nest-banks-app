@@ -74,17 +74,19 @@ export class TransactionService extends BaseService<TransactionModel> implements
   }
 
   private static checkCurrency(from: AccountModel, to: AccountModel): void {
-    if (from.currency !== to.currency)
+    if (from.currency !== to.currency) {
       throw new TransactionCurrencyException(
         `Currency do not match. From Account: ${from.id}-${from.currency} To Account: ${to.id}-${to.currency}`,
       );
+    }
   }
 
   private static checkBalance(from: AccountModel, value: number): void {
-    if (from.balance < value)
+    if (from.balance < value) {
       throw new TransactionBalanceException(
         `Insufficient funds in the account: ${from.id} balance: ${from.balance} amount: ${value}`,
       );
+    }
   }
 
   private static getRecalculatedBalance(a: number, b: number): number {
@@ -92,7 +94,9 @@ export class TransactionService extends BaseService<TransactionModel> implements
   }
 
   private async getCurrenCommission(from: AccountModel, to: AccountModel): Promise<number> {
-    if (from.bankId === to.bankId) return 1;
+    if (from.bankId === to.bankId) {
+      return 1;
+    }
 
     const bankPromise = this.bankRepository.get(from.bankId);
     const userPromise = this.userRepository.get(from.userId);

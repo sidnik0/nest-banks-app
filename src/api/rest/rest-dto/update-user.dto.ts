@@ -1,5 +1,3 @@
-import { IdDto } from './base/id.dto';
-
-export class UpdateUserDto extends IdDto {
+export class UpdateUserDto {
   readonly name?: string;
 }

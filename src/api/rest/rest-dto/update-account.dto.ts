@@ -1,7 +1,6 @@
-import { IdDto } from './base/id.dto';
 import { OperationType } from 'src/types/operation.type';
 
-export class UpdateAccountDto extends IdDto {
+export class UpdateAccountDto {
   readonly amount: number;
   readonly operation: OperationType;
 }

@@ -22,7 +22,9 @@ export abstract class BaseCommand implements ICommand {
   }
 
   validate({ name, params }: CommandDescriptor): TypedCommandDescriptor {
-    if (!this.paramsDefinition) return null;
+    if (!this.paramsDefinition) {
+      return null;
+    }
 
     const obj: Record<string, any> = {};
 

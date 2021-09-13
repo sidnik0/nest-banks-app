@@ -33,6 +33,14 @@ export class GetAllTransactionsByAccountCommand extends BaseCommand {
         type: 'string',
         required: true,
       },
+      from: {
+        type: 'Date',
+        required: false,
+      },
+      to: {
+        type: 'Date',
+        required: false,
+      },
     };
   }
 }

@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
-export class FileSystem {
+export class FileSystemHelper {
   private readonly dir: string = process.cwd();
   private readonly path: string = `${this.dir}/database`;
   private readonly logger = new Logger('FsHelper');

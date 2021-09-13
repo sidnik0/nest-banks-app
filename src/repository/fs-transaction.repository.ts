@@ -2,11 +2,13 @@ import { Injectable, Logger } from '@nestjs/common';
 import { FsBaseRepository } from './fs-base.repository';
 import { ITransactionRepository } from './interface/transaction.repository';
 import { TransactionModel } from '../model/interface/transaction.model';
+import { FileSystemHelper } from 'src/common/helper/file-system';
+import { IdGenerator } from 'src/common/helper/id-generator';
 
 @Injectable()
 export class FsTransactionRepository extends FsBaseRepository<TransactionModel> implements ITransactionRepository {
-  constructor() {
-    super();
+  constructor(protected readonly fileSystem: FileSystemHelper, protected readonly idGenerator: IdGenerator) {
+    super(fileSystem, idGenerator);
 
     this.logger = new Logger('FsTransactionRepository');
     this.fileName = 'transactions';
@@ -14,7 +16,9 @@ export class FsTransactionRepository extends FsBaseRepository<TransactionModel> 
   }
 
   getLoggingModelId(model: string | TransactionModel): string {
-    if (typeof model === 'string') return model;
+    if (typeof model === 'string') {
+      return model;
+    }
 
     return model.id
       ? `id=${model.id}`

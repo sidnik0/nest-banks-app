@@ -32,6 +32,7 @@ import { UpdateUserCommand } from './commands/update-user.command';
 import { ExitCommand } from './commands/exit.command';
 import { HelpCommand } from './commands/help.command';
 import { CommandFactoryException } from '../../common/exseption/command-factory-exception';
+import { TypedCommandDescriptor } from './values-object/typed-command-descriptor';
 
 @Injectable()
 export class CommandFactory {
@@ -39,7 +40,7 @@ export class CommandFactory {
 
   constructor(private readonly moduleRef: ModuleRef) {}
 
-  getCommand({ name }: CommandDescriptor): ICommand {
+  getCommand({ name }: CommandDescriptor | TypedCommandDescriptor): ICommand {
     if (!CommandFactory.COMMAND_LIB.has(name)) {
       throw new CommandFactoryException(`Unknown command: ${name}`);
     }

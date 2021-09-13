@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ServiceModule } from '../../service/service.module';
 import { HelperModule } from '../../common/helper/helper.module';
 import { CliCommandExecutor } from './cli-command-executor';
+import { RestCommandExecutor } from './rest-command-executor';
 import { CommandExecutor } from './command-executor';
 import { CommandFactory } from './command-factory';
 import { commands } from './commands';

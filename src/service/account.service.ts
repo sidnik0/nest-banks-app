@@ -25,7 +25,9 @@ export class AccountService extends BaseService<AccountModel> implements IAccoun
 
     const [user, bank] = await Promise.all([userPromise, bankPromise]);
 
-    if (!user || !bank) throw new AccountCreatorException(`Not found user:${model.userId} or bank:${model.bankId}`);
+    if (!user || !bank) {
+      throw new AccountCreatorException(`Not found user:${model.userId} or bank:${model.bankId}`);
+    }
 
     const data = model.balance ? model : { ...model, balance: 0 };
 

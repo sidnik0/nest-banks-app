@@ -32,7 +32,9 @@ export class ConsoleInterpreter {
 
       const commandResult = await this.commandExecutor.executeCommand(commandDescriptor);
 
-      if (commandResult.exit) this.rl.close();
+      if (commandResult.exit) {
+        this.rl.close();
+      }
 
       const resultString = this.consoleCommandResultViewer.parseCommandResult(commandResult);
 
