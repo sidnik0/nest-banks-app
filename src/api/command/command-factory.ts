@@ -2,7 +2,7 @@ import { Injectable, Type } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 
 import { ICommand } from '../command/commands/command.interface';
-import { CommandDescriptor } from './values-object/command-descriptor';
+import { BaseCommandDescriptor } from './values-object/base-command-descriptor';
 import { CommandName } from '../../types/command-name.type';
 
 import { CreateAccountCommand } from './commands/create-account.command';
@@ -32,7 +32,6 @@ import { UpdateUserCommand } from './commands/update-user.command';
 import { ExitCommand } from './commands/exit.command';
 import { HelpCommand } from './commands/help.command';
 import { CommandFactoryException } from '../../common/exception/command-factory.exception';
-import { TypedCommandDescriptor } from './values-object/typed-command-descriptor';
 
 @Injectable()
 export class CommandFactory {
@@ -40,7 +39,7 @@ export class CommandFactory {
 
   constructor(private readonly moduleRef: ModuleRef) {}
 
-  getCommand({ name }: CommandDescriptor | TypedCommandDescriptor): ICommand {
+  getCommand({ name }: BaseCommandDescriptor): ICommand {
     if (!CommandFactory.COMMAND_LIB.has(name)) {
       throw new CommandFactoryException(`Unknown command: ${name}`);
     }
