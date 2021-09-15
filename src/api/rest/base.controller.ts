@@ -1,7 +1,12 @@
-import { Inject } from '@nestjs/common';
+import { Inject, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
+import { AllExceptionFilter } from '../../common/filter/all-exception.filter';
+import { HttpExceptionFilter } from '../../common/filter/http-exception.filter';
 import { CommandExecutor } from '../command/command-executor';
 import { TypedCommandDescriptor } from '../command/values-object/typed-command-descriptor';
 
+@UseFilters(HttpExceptionFilter)
+@UseFilters(AllExceptionFilter)
+@UsePipes(new ValidationPipe({ transform: true }))
 export abstract class BaseController {
   @Inject(CommandExecutor)
   protected readonly commandExecutor: CommandExecutor;

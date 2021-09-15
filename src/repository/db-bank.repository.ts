@@ -13,4 +13,12 @@ export class DbBankRepository extends DbBaseRepository<BankEntity> implements IB
   ) {
     super(repository);
   }
+
+  getLoggingModelId(model: string | BankEntity): string {
+    if (typeof model === 'string') {
+      return model;
+    }
+
+    return model.id ? `id=${model.id}` : `name=${model.name}`;
+  }
 }

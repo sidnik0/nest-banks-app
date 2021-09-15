@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CommandModule } from '../command/command.module';
 import { AccountController } from './account.controller';
@@ -9,12 +8,12 @@ import { UserController } from './user.controller';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: 'postgres://user:password@localhost:5432/db',
       autoLoadEntities: true,
       synchronize: true,
+      retryAttempts: 2,
     }),
     CommandModule,
   ],

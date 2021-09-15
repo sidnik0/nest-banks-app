@@ -5,6 +5,7 @@ import { CommandName } from '../../types/command-name.type';
 import { CreateAccountDto } from './rest-dto/create-account.dto';
 import { GetAllAccountsByQueryDto } from './rest-dto/get-all-accounts-by-query.dto';
 import { UpdateAccountDto } from './rest-dto/update-account.dto';
+import { IdDto } from './rest-dto/id.dto';
 
 @Controller('accounts')
 export class AccountController extends BaseController {
@@ -14,8 +15,8 @@ export class AccountController extends BaseController {
   }
 
   @Get(':id')
-  async get(@Param('id') id: string): Promise<AccountModel> {
-    return await this.executeCommand({ name: CommandName.GET_ACCOUNT, params: { id } });
+  async get(@Param() idDto: IdDto): Promise<AccountModel> {
+    return await this.executeCommand({ name: CommandName.GET_ACCOUNT, params: { id: idDto.id } });
   }
 
   @Get()
@@ -46,12 +47,12 @@ export class AccountController extends BaseController {
   }
 
   @Put(':id')
-  async updateBalance(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto): Promise<void> {
-    await this.executeCommand({ name: CommandName.UPDATE_ACCOUNT, params: { id, ...updateAccountDto } });
+  async updateBalance(@Param() idDto: IdDto, @Body() updateAccountDto: UpdateAccountDto): Promise<void> {
+    await this.executeCommand({ name: CommandName.UPDATE_ACCOUNT, params: { id: idDto.id, ...updateAccountDto } });
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string): Promise<void> {
-    await this.executeCommand({ name: CommandName.DELETE_ACCOUNT, params: { id } });
+  async delete(@Param() idDto: IdDto): Promise<void> {
+    await this.executeCommand({ name: CommandName.DELETE_ACCOUNT, params: { id: idDto.id } });
   }
 }

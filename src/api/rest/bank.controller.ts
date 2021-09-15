@@ -5,6 +5,7 @@ import { UserModel } from '../../model/interface/user.model';
 import { CommandName } from '../../types/command-name.type';
 import { CreateBankDto } from './rest-dto/create-bank.dto';
 import { UpdateBankDto } from './rest-dto/update-bank.dto';
+import { IdDto } from './rest-dto/id.dto';
 
 @Controller('banks')
 export class BankController extends BaseController {
@@ -14,13 +15,13 @@ export class BankController extends BaseController {
   }
 
   @Get(':id/users')
-  async getAllUsers(@Param('id') id: string): Promise<UserModel[]> {
-    return await this.executeCommand({ name: CommandName.GET_ALL_BANK_USERS, params: { id } });
+  async getAllUsers(@Param() idDto: IdDto): Promise<UserModel[]> {
+    return await this.executeCommand({ name: CommandName.GET_ALL_BANK_USERS, params: { id: idDto.id } });
   }
 
   @Get(':id')
-  async get(@Param('id') id: string): Promise<BankModel> {
-    return await this.executeCommand({ name: CommandName.GET_BANK, params: { id } });
+  async get(@Param() idDto: IdDto): Promise<BankModel> {
+    return await this.executeCommand({ name: CommandName.GET_BANK, params: { id: idDto.id } });
   }
 
   @Get()
@@ -29,12 +30,12 @@ export class BankController extends BaseController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateBankDto: UpdateBankDto): Promise<void> {
-    await this.executeCommand({ name: CommandName.UPDATE_BANK, params: { id, ...updateBankDto } });
+  async update(@Param() idDto: IdDto, @Body() updateBankDto: UpdateBankDto): Promise<void> {
+    await this.executeCommand({ name: CommandName.UPDATE_BANK, params: { id: idDto.id, ...updateBankDto } });
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string): Promise<void> {
-    await this.executeCommand({ name: CommandName.DELETE_BANK, params: { id } });
+  async delete(@Param() idDto: IdDto): Promise<void> {
+    await this.executeCommand({ name: CommandName.DELETE_BANK, params: { id: idDto.id } });
   }
 }

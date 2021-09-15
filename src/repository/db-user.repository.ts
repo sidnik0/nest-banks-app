@@ -13,4 +13,12 @@ export class DbUserRepository extends DbBaseRepository<UserEntity> implements IU
   ) {
     super(repository);
   }
+
+  getLoggingModelId(model: string | UserEntity): string {
+    if (typeof model === 'string') {
+      return model;
+    }
+
+    return model.id ? `id=${model.id}` : `name=${model.name}`;
+  }
 }

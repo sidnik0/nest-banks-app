@@ -14,6 +14,16 @@ export class DbTransactionRepository extends DbBaseRepository<TransactionEntity>
     super(repository);
   }
 
+  getLoggingModelId(model: string | TransactionEntity): string {
+    if (typeof model === 'string') {
+      return model;
+    }
+
+    return model.id
+      ? `id=${model.id}`
+      : `fromAccountId=${model.fromAccountId}, toAccountId=${model.toAccountId}, createAt=${model.createAt}`;
+  }
+
   async update(): Promise<never> {
     throw Error('Prohibited operation');
   }

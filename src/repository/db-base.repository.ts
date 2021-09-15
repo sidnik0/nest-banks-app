@@ -1,16 +1,25 @@
 import { Repository } from 'typeorm';
 import { IBaseRepository } from './interface/base.repository';
 import { BaseEntity } from '../model/base.entity';
+import { NotFountException } from 'src/common/exception/not-fount.exception';
 
 export abstract class DbBaseRepository<T extends BaseEntity> implements IBaseRepository<T> {
   protected constructor(protected readonly repository: Repository<T>) {}
+
+  abstract getLoggingModelId(model: T | string): string;
 
   async create(model: T): Promise<T> {
     return await this.repository.save(model as any);
   }
 
   async get(id: string): Promise<T> {
-    return await this.repository.findOne(id);
+    const data = await this.repository.findOne(id);
+
+    if (!data) {
+      throw new NotFountException(`Data ${this.getLoggingModelId(id)} not found`);
+    }
+
+    return data;
   }
 
   async getAll(): Promise<T[]> {

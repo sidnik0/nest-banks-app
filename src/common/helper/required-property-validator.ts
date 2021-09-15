@@ -1,4 +1,4 @@
-import { ValidatorException } from '../exseption/validator-exception';
+import { ValidatorException } from '../exception/validator.exception';
 
 export class RequiredPropertyValidator {
   validate(value: string, required: Map<string, any>) {

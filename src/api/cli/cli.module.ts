@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
 import { CommandModule } from '../command/command.module';
 import { ConsoleInterpreter } from './console-interpreter';
 import { ConsoleCommandResultViewer } from './console-command-result-viewer';
@@ -8,7 +7,6 @@ import { ConsoleLineParser } from './console-line-parser';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       url: 'postgres://user:password@localhost:5432/db',

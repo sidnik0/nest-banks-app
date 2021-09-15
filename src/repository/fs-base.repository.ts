@@ -3,7 +3,7 @@ import { IBaseRepository } from './interface/base.repository';
 import { BaseModel } from '../model/interface/base.model';
 import { FileSystemHelper } from '../common/helper/file-system';
 import { IdGenerator } from '../common/helper/id-generator';
-import { NotFountException } from '../common/exseption/not-fount-exception';
+import { NotFountException } from '../common/exception/not-fount.exception';
 
 export abstract class FsBaseRepository<T extends BaseModel> implements IBaseRepository<T> {
   protected logger: Logger;

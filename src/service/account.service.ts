@@ -7,7 +7,7 @@ import { IBankRepository } from '../repository/interface/bank.repository';
 import { AccountModel } from '../model/interface/account.model';
 import { CreateAccountDto } from '../api/rest/rest-dto/create-account.dto';
 import { UpdateAccountDto } from '../api/rest/rest-dto/update-account.dto';
-import { AccountCreatorException } from '../common/exseption/account-creator-exception';
+import { AccountCreatorException } from '../common/exception/account-creator.exception';
 
 @Injectable()
 export class AccountService extends BaseService<AccountModel> implements IAccountService {

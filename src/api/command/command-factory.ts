@@ -31,7 +31,7 @@ import { UpdateBankCommand } from './commands/update-bank.command';
 import { UpdateUserCommand } from './commands/update-user.command';
 import { ExitCommand } from './commands/exit.command';
 import { HelpCommand } from './commands/help.command';
-import { CommandFactoryException } from '../../common/exseption/command-factory-exception';
+import { CommandFactoryException } from '../../common/exception/command-factory.exception';
 import { TypedCommandDescriptor } from './values-object/typed-command-descriptor';
 
 @Injectable()

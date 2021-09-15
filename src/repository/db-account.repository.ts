@@ -14,6 +14,14 @@ export class DbAccountRepository extends DbBaseRepository<AccountEntity> impleme
     super(repository);
   }
 
+  getLoggingModelId(model: string | AccountEntity): string {
+    if (typeof model === 'string') {
+      return model;
+    }
+
+    return model.id ? `id=${model.id}` : `userId=${model.userId}, bankId=${model.bankId}`;
+  }
+
   getAllByUser(id: string): Promise<AccountEntity[]> {
     return this.repository.find({ userId: id });
   }

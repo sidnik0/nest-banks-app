@@ -9,8 +9,8 @@ import { TransactionModel } from '../model/interface/transaction.model';
 import { AccountModel } from '../model/interface/account.model';
 import { CreateTransactionDto } from '../api/rest/rest-dto/create-transaction.dto';
 import { FaceType } from '../types/face.type';
-import { TransactionCurrencyException } from '../common/exseption/transaction-currency-exception';
-import { TransactionBalanceException } from '../common/exseption/transaction-balance-exception';
+import { TransactionCurrencyException } from '../common/exception/transaction-currency.exception';
+import { TransactionBalanceException } from '../common/exception/transaction-balance.exception';
 
 @Injectable()
 export class TransactionService extends BaseService<TransactionModel> implements ITransactionService {

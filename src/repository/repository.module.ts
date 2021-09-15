@@ -17,24 +17,25 @@ import { AccountEntity } from '../model/account.entity';
 import { BankEntity } from '../model/bank.entity';
 import { TransactionEntity } from '../model/transaction.entity';
 import { UserEntity } from '../model/user.entity';
+
 @Module({
   imports: [HelperModule, TypeOrmModule.forFeature([AccountEntity, BankEntity, TransactionEntity, UserEntity])],
   providers: [
     {
       provide: IAccountRepository,
-      useClass: DbAccountRepository,
+      useClass: process.env.DB === 'sql' ? DbAccountRepository : FsAccountRepository,
     },
     {
       provide: IBankRepository,
-      useClass: DbBankRepository,
+      useClass: process.env.DB === 'sql' ? DbBankRepository : FsBankRepository,
     },
     {
       provide: ITransactionRepository,
-      useClass: DbTransactionRepository,
+      useClass: process.env.DB === 'sql' ? DbTransactionRepository : FsTransactionRepository,
     },
     {
       provide: IUserRepository,
-      useClass: DbUserRepository,
+      useClass: process.env.DB === 'sql' ? DbUserRepository : FsUserRepository,
     },
   ],
   exports: [IAccountRepository, IBankRepository, ITransactionRepository, IUserRepository],

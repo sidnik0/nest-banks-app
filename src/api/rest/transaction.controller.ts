@@ -4,6 +4,7 @@ import { CommandName } from '../../types/command-name.type';
 import { TransactionModel } from '../../model/interface/transaction.model';
 import { CreateTransactionDto } from './rest-dto/create-transaction.dto';
 import { GetAllTransactionsByAccountDto } from './rest-dto/get-all-transactions-by-account.dto';
+import { IdDto } from './rest-dto/id.dto';
 
 @Controller('transactions')
 export class TransactionController extends BaseController {
@@ -14,18 +15,18 @@ export class TransactionController extends BaseController {
 
   @Get('account/:id')
   async getAllByAccount(
-    @Param('id') id: string,
+    @Param() idDto: IdDto,
     @Query() getAllTransactionsByAccountDto: GetAllTransactionsByAccountDto,
   ): Promise<TransactionModel[]> {
     return await this.executeCommand({
       name: CommandName.GET_ALL_TRANSACTIONS_BY_ACCOUNT,
-      params: { id, ...getAllTransactionsByAccountDto },
+      params: { id: idDto.id, ...getAllTransactionsByAccountDto },
     });
   }
 
   @Get(':id')
-  async get(@Param('id') id: string): Promise<TransactionModel> {
-    return await this.executeCommand({ name: CommandName.GET_TRANSACTION, params: { id } });
+  async get(@Param() idDto: IdDto): Promise<TransactionModel> {
+    return await this.executeCommand({ name: CommandName.GET_TRANSACTION, params: { id: idDto } });
   }
 
   @Get()

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CurrencyType } from '../../types/currency.type';
 import { FaceType } from '../../types/face.type';
-import { ConvertorException } from '../exseption/convertor-exception';
+import { ConvertorException } from '../exception/convertor.exception';
 import { OperationType } from '../../types/operation.type';
 
 @Injectable()
