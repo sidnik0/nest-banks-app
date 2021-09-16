@@ -20,6 +20,8 @@ export class PropertyParser {
         return PropertyParser.parseFaceType(value);
       case 'OperationType':
         return PropertyParser.parseOperationType(value);
+      case 'never':
+        return true;
       default:
         throw new ConvertorException('unknown type');
     }

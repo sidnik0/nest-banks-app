@@ -9,16 +9,19 @@ import { CommandResult } from '../values-object/command-result';
 export class GetTransactionCommand extends BaseCommand {
   constructor(private readonly transactionService: ITransactionService) {
     super();
-
-    this.paramsDefinition = {
-      id: {
-        type: 'string',
-        required: true,
-      },
-    };
   }
 
-  async execute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
+  async execute(typedCommandDescriptor: TypedCommandDescriptor): Promise<CommandResult> {
+    const { params } = typedCommandDescriptor;
+
+    const helpResult = await super.execute(typedCommandDescriptor);
+
+    if (helpResult) {
+      return helpResult;
+    }
+
+    delete params['help'];
+
     const result = await this.transactionService.get(params.id);
 
     return { result };

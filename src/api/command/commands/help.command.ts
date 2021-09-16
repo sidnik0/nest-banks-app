@@ -43,6 +43,6 @@ export class HelpCommand extends BaseCommand {
   }
 
   initParamsDefinition(): ParamsDefinition {
-    return;
+    return {};
   }
 }

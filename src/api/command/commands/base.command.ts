@@ -6,42 +6,57 @@ import { CommandDescriptor } from '../values-object/command-descriptor';
 import { CommandResult } from '../values-object/command-result';
 import { ParamsDefinition } from '../values-object/params-definition';
 import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
+import { ValidatorException } from 'src/common/exception/validator.exception';
 
 export abstract class BaseCommand implements ICommand {
-  protected paramsDefinition: ParamsDefinition = this.initParamsDefinition();
+  private paramsDefinition: ParamsDefinition = this.getParamsDefinition();
+  private errorsMessages: string[] = [];
 
   @Inject(RequiredPropertyValidator)
   protected readonly requiredPropertiesValidator: RequiredPropertyValidator;
   @Inject(PropertyParser)
   protected readonly propertyParser: PropertyParser;
 
-  getDescription(commandDescriptor: CommandDescriptor): CommandResult {
-    if (commandDescriptor.params.has('help')) {
-      return { result: this.getCommandDescription() };
-    }
+  private getParamsDefinition(): ParamsDefinition {
+    const paramsDefinition = this.initParamsDefinition();
+    paramsDefinition.help = { type: 'never', required: false };
+
+    return paramsDefinition;
   }
 
   validate({ name, params }: CommandDescriptor): TypedCommandDescriptor {
-    if (!this.paramsDefinition) {
-      return null;
-    }
-
-    const obj: Record<string, any> = {};
+    const typedParams: Record<string, any> = {};
+    const errorsMessages: string[] = [];
 
     for (const prop of Object.keys(this.paramsDefinition)) {
       if (this.paramsDefinition[prop].required) {
-        this.requiredPropertiesValidator.validate(prop, params);
+        const message = this.requiredPropertiesValidator.validate(prop, params);
+
+        message && errorsMessages.push(message);
       }
 
       if (params.has(prop)) {
-        obj[prop] = this.propertyParser.parse(params.get(prop), this.paramsDefinition[prop].type);
+        typedParams[prop] = this.propertyParser.parse(params.get(prop), this.paramsDefinition[prop].type);
       }
     }
 
-    return { name, params: obj };
+    this.errorsMessages = errorsMessages;
+
+    return { name, params: typedParams };
   }
 
-  abstract execute(typedCommandDescriptor: TypedCommandDescriptor): Promise<CommandResult>;
+  async execute(typedCommandDescriptor: TypedCommandDescriptor): Promise<CommandResult> {
+    if (typedCommandDescriptor.params.help) {
+      return { result: this.getCommandDescription() };
+    }
+
+    if (this.errorsMessages.length) {
+      const errorString = this.errorsMessages.reduce((previous, current) => previous + ` ${current}`, '');
+
+      throw new ValidatorException(errorString);
+    }
+  }
+
   abstract getCommandDescription(): string;
   abstract initParamsDefinition(): ParamsDefinition;
 }

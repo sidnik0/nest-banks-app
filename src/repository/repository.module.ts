@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HelperModule } from '../common/helper/helper.module';
 import { IAccountRepository } from './interface/account.repository';
@@ -18,26 +18,38 @@ import { BankEntity } from '../model/bank.entity';
 import { TransactionEntity } from '../model/transaction.entity';
 import { UserEntity } from '../model/user.entity';
 
-@Module({
-  imports: [HelperModule, TypeOrmModule.forFeature([AccountEntity, BankEntity, TransactionEntity, UserEntity])],
-  providers: [
-    {
-      provide: IAccountRepository,
-      useClass: process.env.DB === 'sql' ? DbAccountRepository : FsAccountRepository,
-    },
-    {
-      provide: IBankRepository,
-      useClass: process.env.DB === 'sql' ? DbBankRepository : FsBankRepository,
-    },
-    {
-      provide: ITransactionRepository,
-      useClass: process.env.DB === 'sql' ? DbTransactionRepository : FsTransactionRepository,
-    },
-    {
-      provide: IUserRepository,
-      useClass: process.env.DB === 'sql' ? DbUserRepository : FsUserRepository,
-    },
-  ],
-  exports: [IAccountRepository, IBankRepository, ITransactionRepository, IUserRepository],
-})
-export class RepositoryModule {}
+@Module({})
+export class RepositoryModule {
+  static init(): DynamicModule {
+    return {
+      module: RepositoryModule,
+      imports:
+        process.env.DB === 'sql'
+          ? [
+              TypeOrmModule.forRoot({
+                type: 'postgres',
+                url: 'postgres://user:password@localhost:5432/db',
+                autoLoadEntities: true,
+                synchronize: true,
+              }),
+              TypeOrmModule.forFeature([AccountEntity, BankEntity, TransactionEntity, UserEntity]),
+            ]
+          : [HelperModule],
+      providers:
+        process.env.DB === 'sql'
+          ? [
+              { provide: IAccountRepository, useClass: DbAccountRepository },
+              { provide: IBankRepository, useClass: DbBankRepository },
+              { provide: ITransactionRepository, useClass: DbTransactionRepository },
+              { provide: IUserRepository, useClass: DbUserRepository },
+            ]
+          : [
+              { provide: IAccountRepository, useClass: FsAccountRepository },
+              { provide: IBankRepository, useClass: FsBankRepository },
+              { provide: ITransactionRepository, useClass: FsTransactionRepository },
+              { provide: IUserRepository, useClass: FsUserRepository },
+            ],
+      exports: [IAccountRepository, IBankRepository, ITransactionRepository, IUserRepository],
+    };
+  }
+}

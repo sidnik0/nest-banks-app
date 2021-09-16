@@ -12,8 +12,20 @@ export class UpdateAccountCommand extends BaseCommand {
     super();
   }
 
-  async execute({ params: { id, ...balance } }: TypedCommandDescriptor): Promise<CommandResult> {
-    const result = await this.accountService.updateBalance(id, balance as { amount: number; operation: OperationType });
+  async execute(typedCommandDescriptor: TypedCommandDescriptor): Promise<CommandResult> {
+    const {
+      params: { id, ...params },
+    } = typedCommandDescriptor;
+
+    const helpResult = await super.execute(typedCommandDescriptor);
+
+    if (helpResult) {
+      return helpResult;
+    }
+
+    delete params['help'];
+
+    const result = await this.accountService.updateBalance(id, params as { amount: number; operation: OperationType });
 
     return { result };
   }

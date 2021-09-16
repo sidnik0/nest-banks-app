@@ -11,7 +11,17 @@ export class GetAccountCommand extends BaseCommand {
     super();
   }
 
-  async execute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
+  async execute(typedCommandDescriptor: TypedCommandDescriptor): Promise<CommandResult> {
+    const { params } = typedCommandDescriptor;
+
+    const helpResult = await super.execute(typedCommandDescriptor);
+
+    if (helpResult) {
+      return helpResult;
+    }
+
+    delete params['help'];
+
     const result = await this.accountService.get(params.id);
 
     return { result };

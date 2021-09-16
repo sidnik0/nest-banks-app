@@ -38,11 +38,15 @@ export class AccountService extends BaseService<AccountModel> implements IAccoun
     throw Error('Prohibited operation');
   }
 
-  async updateBalance(id: string, obj: Omit<UpdateAccountDto, 'id'>): Promise<AccountModel> {
+  async updateBalance(id: string, updateAccountDto: UpdateAccountDto): Promise<AccountModel> {
     const data = await this.repository.get(id);
 
     data.balance =
-      Math.floor((data.balance + (obj.operation === 'replenishment' ? obj.amount : -obj.amount)) * 100) / 100;
+      Math.floor(
+        (data.balance +
+          (updateAccountDto.operation === 'replenishment' ? updateAccountDto.amount : -updateAccountDto.amount)) *
+          100,
+      ) / 100;
 
     return await this.repository.update(data);
   }

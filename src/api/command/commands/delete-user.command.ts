@@ -11,7 +11,17 @@ export class DeleteUserCommand extends BaseCommand {
     super();
   }
 
-  async execute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
+  async execute(typedCommandDescriptor: TypedCommandDescriptor): Promise<CommandResult> {
+    const { params } = typedCommandDescriptor;
+
+    const helpResult = await super.execute(typedCommandDescriptor);
+
+    if (helpResult) {
+      return helpResult;
+    }
+
+    delete params['help'];
+
     await this.userService.delete(params.id);
 
     return { result: `User with id=${params.id} deleted` };

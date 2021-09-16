@@ -1,9 +1,7 @@
-import { ValidatorException } from '../exception/validator.exception';
-
 export class RequiredPropertyValidator {
-  validate(value: string, required: Map<string, any>) {
+  validate(value: string, required: Map<string, any>): string | undefined {
     if (!required.has(value)) {
-      throw new ValidatorException(`${value}=value not specified`);
+      return `Params ${value} not specified`;
     }
   }
 }

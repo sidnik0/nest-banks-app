@@ -3,6 +3,7 @@ import { BaseCommand } from './base.command';
 import { IUserService } from '../../../service/interface/user.service';
 import { ParamsDefinition } from '../values-object/params-definition';
 import { CommandResult } from '../values-object/command-result';
+import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
 
 @Injectable()
 export class GetUsersCommand extends BaseCommand {
@@ -10,7 +11,13 @@ export class GetUsersCommand extends BaseCommand {
     super();
   }
 
-  async execute(): Promise<CommandResult> {
+  async execute(typedCommandDescriptor: TypedCommandDescriptor): Promise<CommandResult> {
+    const helpResult = await super.execute(typedCommandDescriptor);
+
+    if (helpResult) {
+      return helpResult;
+    }
+
     const result = await this.userService.getAll();
 
     return { result };
@@ -25,6 +32,6 @@ export class GetUsersCommand extends BaseCommand {
   }
 
   initParamsDefinition(): ParamsDefinition {
-    return;
+    return {};
   }
 }

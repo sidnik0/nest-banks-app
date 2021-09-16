@@ -10,7 +10,7 @@ import { TransactionService } from './transaction.service';
 import { UserService } from './user.service';
 
 @Module({
-  imports: [RepositoryModule],
+  imports: [RepositoryModule.init()],
   providers: [
     {
       provide: IAccountService,
