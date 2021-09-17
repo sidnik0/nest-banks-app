@@ -14,30 +14,34 @@ export class HelpCommand extends BaseCommand {
     help                                        Display help for command
   
   Commands:
-    create-account [options]                    Create account
-    create-bank [options]                       Create bank
-    create-transaction [options]                Create transaction
-    create-user [options]                       Create user
-    delete-account [options]                    Delete account by id
-    delete-bank [options]                       Delete bank by id
-    delete-user [options]                       Delete user by id
-    get-account [options]                       Get account by id
-    get-accounts [options]                      Get all accounts
-    get-all-accounts-by-bank [options]          Get all bank accounts
-    get-all-accounts-by-user-and-bank [options] Get all user accounts in the bank
-    get-all-accounts-by-user [options]          Get all user accounts
-    get-all-bank-users [options]                Get all users in the bank
-    get-all-transactions-by-account [options]   Get all account transactions
-    get-all-user-banks [options]                Get all user banks
-    get-bank [options]                          Get bank by id
-    get-banks                                   Get all banks
-    get-transaction [options]                   Get transaction by id
-    get-transactions                            Get all transactions
-    get-user [options]                          Get user by id
-    get-users                                   Get all users
-    update-account [options]                    Update account by id
-    update-bank [options]                       Update bank by id
-    update-user [options]                       Update user by id
+    account-create [options]                    Create account
+    account-get [options]                       Get account by id
+    account-get-all [options]                   Get all accounts
+    account-get-all-by-bank [options]           Get all bank accounts
+    account-get-all-by-user-and-bank [options]  Get all user accounts in the bank
+    account-get-all-by-user [options]           Get all user accounts
+    account-update [options]                    Update account by id
+    account-delete [options]                    Delete account by id
+
+    bank-create [options]                       Create bank
+    bank-get [options]                          Get bank by id
+    bank-get-all [options]                      Get all banks
+    bank-get-all-users [options]                Get all users in the bank
+    bank-update [options]                       Update bank by id
+    bank-delete [options]                       Delete bank by id
+    
+    transaction-create [options]                Create transaction
+    transaction-get [options]                   Get transaction by id
+    transaction-get-all [options]               Get all transactions
+    transaction-get-all-by-account [options]    Get all account transactions
+    
+    user-create [options]                       Create user
+    user-get [options]                          Get user by id
+    user-get-all [options]                      Get all users
+    user-get-all-banks [options]                Get all user banks
+    user-update [options]                       Update user by id
+    user-delete [options]                       Delete user by id
+    
     exit                                        Close app
   `;
   }
