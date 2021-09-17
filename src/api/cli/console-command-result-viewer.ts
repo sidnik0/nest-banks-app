@@ -8,6 +8,7 @@ import { TransactionCurrencyException } from '../../common/exception/transaction
 import { TransactionBalanceException } from '../../common/exception/transaction-balance.exception';
 import { NotFountException } from '../../common/exception/not-fount.exception';
 import { AccountCreatorException } from '../../common/exception/account-creator.exception';
+import { ExistsException } from '../../common/exception/exists.exception';
 
 @Injectable()
 export class ConsoleCommandResultViewer {
@@ -39,7 +40,8 @@ export class ConsoleCommandResultViewer {
       e instanceof TransactionCurrencyException ||
       e instanceof TransactionBalanceException ||
       e instanceof AccountCreatorException ||
-      e instanceof NotFountException
+      e instanceof NotFountException ||
+      e instanceof ExistsException
     ) {
       return e.message;
     } else {

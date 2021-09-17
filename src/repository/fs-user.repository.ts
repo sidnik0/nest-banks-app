@@ -22,4 +22,18 @@ export class FsUserRepository extends FsBaseRepository<UserModel> implements IUs
 
     return model.id ? `id=${model.id}` : `name=${model.name}`;
   }
+
+  async checkName(name: string): Promise<boolean> {
+    let user = null;
+
+    for (const userId of Object.keys(this.data)) {
+      if (this.data[userId].name === name) {
+        user = this.data[userId];
+
+        break;
+      }
+    }
+
+    return !!user;
+  }
 }

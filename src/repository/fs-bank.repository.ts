@@ -22,4 +22,18 @@ export class FsBankRepository extends FsBaseRepository<BankModel> implements IBa
 
     return model.id ? `id=${model.id}` : `name=${model.name}`;
   }
+
+  async checkName(name: string): Promise<boolean> {
+    let bank = null;
+
+    for (const bankId of Object.keys(this.data)) {
+      if (this.data[bankId].name === name) {
+        bank = this.data[bankId];
+
+        break;
+      }
+    }
+
+    return !!bank;
+  }
 }

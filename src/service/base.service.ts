@@ -5,9 +5,7 @@ import { BaseModel } from '../model/interface/base.model';
 export abstract class BaseService<T extends BaseModel> implements IBaseService<T> {
   protected constructor(protected readonly repository: IBaseRepository<T>) {}
 
-  async create(model: T): Promise<T> {
-    return await this.repository.create(model);
-  }
+  abstract create(model: T): Promise<T>;
 
   async get(id: string): Promise<T> {
     return await this.repository.get(id);

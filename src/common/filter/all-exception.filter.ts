@@ -1,6 +1,7 @@
 import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
 import { AccountCreatorException } from '../exception/account-creator.exception';
 import { CommandFactoryException } from '../exception/command-factory.exception';
+import { ExistsException } from '../exception/exists.exception';
 import { NotFountException } from '../exception/not-fount.exception';
 import { TransactionBalanceException } from '../exception/transaction-balance.exception';
 import { TransactionCurrencyException } from '../exception/transaction-currency.exception';
@@ -19,6 +20,7 @@ export class AllExceptionFilter implements ExceptionFilter {
       case TransactionCurrencyException:
       case TransactionBalanceException:
       case AccountCreatorException:
+      case ExistsException:
         status = HttpStatus.BAD_REQUEST;
         message = exception.message;
         break;

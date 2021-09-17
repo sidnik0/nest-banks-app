@@ -21,4 +21,10 @@ export class DbUserRepository extends DbBaseRepository<UserEntity> implements IU
 
     return model.id ? `id=${model.id}` : `name=${model.name}`;
   }
+
+  async checkName(name: string): Promise<boolean> {
+    const user = await this.repository.find({ where: { name } });
+
+    return !!user.length;
+  }
 }
