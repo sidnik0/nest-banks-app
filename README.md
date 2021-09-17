@@ -60,3 +60,13 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Application usage description
+
+If application uses CLI type **help** in command line. 
+You will get a description of all commands
+
+```bash
+$ help
+```
+
+If application uses REST go to the **/api** path to see all available endpoints
