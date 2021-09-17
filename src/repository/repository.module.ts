@@ -21,6 +21,10 @@ import { UserEntity } from '../model/user.entity';
 @Module({})
 export class RepositoryModule {
   static init(): DynamicModule {
+    const user = process.env.DATABASE_NAME;
+    const password = process.env.DATABASE_PASSWORD;
+    const port = process.env.DATABASE_PORT;
+
     return {
       module: RepositoryModule,
       imports:
@@ -28,7 +32,7 @@ export class RepositoryModule {
           ? [
               TypeOrmModule.forRoot({
                 type: 'postgres',
-                url: 'postgres://user:password@localhost:5432/db',
+                url: `postgres://${user}:${password}@localhost:${port}/banks_app`,
                 autoLoadEntities: true,
                 synchronize: true,
               }),

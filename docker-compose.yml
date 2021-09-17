@@ -11,6 +11,6 @@ services:
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: db
+      POSTGRES_DB: banks_app
 volumes: 
   postgre-data:
