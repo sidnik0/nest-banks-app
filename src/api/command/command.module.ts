@@ -6,7 +6,6 @@ import { RestCommandExecutor } from './rest-command-executor';
 import { CommandExecutor } from './command-executor';
 import { CommandFactory } from './command-factory';
 import { commands } from './commands';
-import { CommandName } from 'src/types/command-name.type';
 
 @Module({
   imports: [ServiceModule, HelperModule],
