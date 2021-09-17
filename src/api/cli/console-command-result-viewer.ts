@@ -11,19 +11,22 @@ import { AccountCreatorException } from '../../common/exception/account-creator.
 
 @Injectable()
 export class ConsoleCommandResultViewer {
-  parseCommandResult({ result }: CommandResult): string {
+  parseCommandResult({ result, initStringResult }: CommandResult): string {
     if (typeof result === 'string') {
       return result;
     } else if (Array.isArray(result)) {
-      return result.reduce((previous, current) => {
-        if (!previous) {
-          return previous + ConsoleCommandResultViewer.parseObjToString(current);
-        }
+      return result.reduce(
+        (previous, current) => {
+          if (!previous) {
+            return previous + ConsoleCommandResultViewer.parseObjToString(current);
+          }
 
-        return previous + `\n\n${ConsoleCommandResultViewer.parseObjToString(current)}`;
-      }, '');
+          return previous + `\n\n${ConsoleCommandResultViewer.parseObjToString(current)}`;
+        },
+        initStringResult ? `${initStringResult}: ` : '',
+      );
     } else {
-      return ConsoleCommandResultViewer.parseObjToString(result);
+      return ConsoleCommandResultViewer.parseObjToString(result, initStringResult);
     }
   }
 
@@ -44,13 +47,16 @@ export class ConsoleCommandResultViewer {
     }
   }
 
-  private static parseObjToString(result: Record<string, any>): string {
-    return Object.keys(result).reduce((previous, current) => {
-      if (!previous) {
-        return previous + `${current}: ${result[current]}`;
-      }
+  private static parseObjToString(result: Record<string, any>, initStringResult?: string): string {
+    return Object.keys(result).reduce(
+      (previous, current) => {
+        if (!previous) {
+          return previous + `${current}: ${result[current]}`;
+        }
 
-      return previous + `\n${current}: ${result[current]}`;
-    }, '');
+        return previous + `\n${current}: ${result[current]}`;
+      },
+      initStringResult ? `${initStringResult}: ` : '',
+    );
   }
 }

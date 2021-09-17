@@ -11,20 +11,10 @@ export class DeleteAccountCommand extends BaseCommand {
     super();
   }
 
-  async execute(typedCommandDescriptor: TypedCommandDescriptor, errorMessages?: string[]): Promise<CommandResult> {
-    const { params } = typedCommandDescriptor;
-
-    const helpResult = await super.execute(typedCommandDescriptor, errorMessages);
-
-    if (helpResult) {
-      return helpResult;
-    }
-
-    delete params['help'];
-
+  async doExecute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
     await this.accountService.delete(params.id);
 
-    return { result: `Account with id=${params.id} deleted` };
+    return { result: `Account with id=${params.id} deleted`, initStringResult: 'Account' };
   }
 
   getCommandDescription(): string {

@@ -6,7 +6,9 @@ import { CommandDescriptor } from '../values-object/command-descriptor';
 import { CommandResult } from '../values-object/command-result';
 import { ParamsDefinition } from '../values-object/params-definition';
 import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
-import { ValidatorException } from 'src/common/exception/validator.exception';
+import { ValidatorException } from '../../../common/exception/validator.exception';
+import { ConvertorException } from '../../../common/exception/convertor.exception';
+import { InitParamsDefinitionException } from '../../../common/exception/init-params-definition.exception';
 
 export abstract class BaseCommand implements ICommand {
   private paramsDefinition: ParamsDefinition = this.getParamsDefinition();
@@ -18,42 +20,73 @@ export abstract class BaseCommand implements ICommand {
 
   private getParamsDefinition(): ParamsDefinition {
     const paramsDefinition = this.initParamsDefinition();
-    paramsDefinition.help = { type: 'never', required: false };
+
+    if (!paramsDefinition) {
+      throw new InitParamsDefinitionException('initParamsDefinition method should return an object');
+    }
+
+    paramsDefinition.help = { type: 'help', required: false };
 
     return paramsDefinition;
   }
 
-  validate({ name, params }: CommandDescriptor): [TypedCommandDescriptor, string[]] {
+  validate({ name, params }: CommandDescriptor): TypedCommandDescriptor {
     const typedParams: Record<string, any> = {};
-    const errorMessages: string[] = [];
+    const errorValidationMessages: string[] = [];
+    const errorParserMessages: string[] = [];
 
     for (const prop of Object.keys(this.paramsDefinition)) {
       if (this.paramsDefinition[prop].required) {
         const message = this.requiredPropertiesValidator.validate(prop, params);
 
-        message && errorMessages.push(message);
+        message && errorValidationMessages.push(message);
       }
 
       if (params.has(prop)) {
-        typedParams[prop] = this.propertyParser.parse(params.get(prop), this.paramsDefinition[prop].type);
+        const parseData = this.propertyParser.parse(params.get(prop), this.paramsDefinition[prop].type);
+
+        if (parseData.error) {
+          errorParserMessages.push(`${prop}: ${parseData.error}`);
+        } else {
+          typedParams[prop] = parseData.value;
+        }
       }
     }
 
-    return [{ name, params: typedParams }, errorMessages];
+    if (typedParams.help && Object.keys(typedParams).length === 1) {
+      return { name, params: typedParams };
+    }
+
+    this.errorChecking(errorValidationMessages, errorParserMessages);
+
+    return { name, params: typedParams };
   }
 
-  async execute(typedCommandDescriptor: TypedCommandDescriptor, errorMessages?: string[]): Promise<CommandResult> {
+  private errorChecking(errorValidationMessages: string[], errorParserMessages: string[]): void {
+    if (errorValidationMessages.length) {
+      const errorString = errorValidationMessages.reduce((previous, current) => previous + `\n -${current}`, '');
+
+      throw new ValidatorException(errorString);
+    }
+
+    if (errorParserMessages.length) {
+      const errorString = errorParserMessages.reduce((previous, current) => previous + `\n -${current}`, '');
+
+      throw new ConvertorException(errorString);
+    }
+  }
+
+  async execute(typedCommandDescriptor: TypedCommandDescriptor): Promise<CommandResult> {
     if (typedCommandDescriptor.params.help) {
       return { result: this.getCommandDescription() };
     }
 
-    if (errorMessages && errorMessages.length) {
-      const errorString = errorMessages.reduce((previous, current) => previous + ` ${current}`, '');
+    delete typedCommandDescriptor.params['help'];
 
-      throw new ValidatorException(errorString);
-    }
+    return this.doExecute(typedCommandDescriptor);
   }
 
+  abstract doExecute(typedCommandDescriptor: TypedCommandDescriptor): Promise<CommandResult>;
   abstract getCommandDescription(): string;
   abstract initParamsDefinition(): ParamsDefinition;
 }

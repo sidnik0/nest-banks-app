@@ -11,20 +11,10 @@ export class GetAllTransactionsByAccountCommand extends BaseCommand {
     super();
   }
 
-  async execute(typedCommandDescriptor: TypedCommandDescriptor, errorMessages?: string[]): Promise<CommandResult> {
-    const { params } = typedCommandDescriptor;
-
-    const helpResult = await super.execute(typedCommandDescriptor, errorMessages);
-
-    if (helpResult) {
-      return helpResult;
-    }
-
-    delete params['help'];
-
+  async doExecute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
     const result = await this.transactionService.getAllByAccount(params.id);
 
-    return { result };
+    return { result, initStringResult: 'List transactions' };
   }
 
   getCommandDescription(): string {

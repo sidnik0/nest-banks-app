@@ -12,22 +12,10 @@ export class UpdateAccountCommand extends BaseCommand {
     super();
   }
 
-  async execute(typedCommandDescriptor: TypedCommandDescriptor, errorMessages?: string[]): Promise<CommandResult> {
-    const {
-      params: { id, ...params },
-    } = typedCommandDescriptor;
-
-    const helpResult = await super.execute(typedCommandDescriptor, errorMessages);
-
-    if (helpResult) {
-      return helpResult;
-    }
-
-    delete params['help'];
-
+  async doExecute({ params: { id, ...params } }: TypedCommandDescriptor): Promise<CommandResult> {
     const result = await this.accountService.updateBalance(id, params as { amount: number; operation: OperationType });
 
-    return { result };
+    return { result, initStringResult: 'Account' };
   }
 
   getCommandDescription(): string {

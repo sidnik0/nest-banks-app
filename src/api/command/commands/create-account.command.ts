@@ -12,20 +12,10 @@ export class CreateAccountCommand extends BaseCommand {
     super();
   }
 
-  async execute(typedCommandDescriptor: TypedCommandDescriptor, errorMessages?: string[]): Promise<CommandResult> {
-    const { params } = typedCommandDescriptor;
-
-    const helpResult = await super.execute(typedCommandDescriptor, errorMessages);
-
-    if (helpResult) {
-      return helpResult;
-    }
-
-    delete params['help'];
-
+  async doExecute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
     const result = await this.accountService.create(params as AccountModel);
 
-    return { result };
+    return { result, initStringResult: 'Account' };
   }
 
   getCommandDescription(): string {
@@ -34,7 +24,7 @@ export class CreateAccountCommand extends BaseCommand {
     Options:
       userId=<userId>                   User id
       bankId=<bankId>                   Bank id
-      balance=<balance>                 Starting balance
+      balance=[balance]                 Starting balance
       currency=<currency>               Currency ("RUB" || "USD" || "EUR")
       
       help                              Display help for command

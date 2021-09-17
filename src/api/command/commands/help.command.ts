@@ -5,7 +5,7 @@ import { ParamsDefinition } from '../values-object/params-definition';
 
 @Injectable()
 export class HelpCommand extends BaseCommand {
-  async execute(): Promise<CommandResult> {
+  async doExecute(): Promise<CommandResult> {
     return { result: this.getCommandDescription() };
   }
 

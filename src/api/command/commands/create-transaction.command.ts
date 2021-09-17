@@ -12,20 +12,10 @@ export class CreateTransactionCommand extends BaseCommand {
     super();
   }
 
-  async execute(typedCommandDescriptor: TypedCommandDescriptor, errorMessages?: string[]): Promise<CommandResult> {
-    const { params } = typedCommandDescriptor;
-
-    const helpResult = await super.execute(typedCommandDescriptor, errorMessages);
-
-    if (helpResult) {
-      return helpResult;
-    }
-
-    delete params['help'];
-
+  async doExecute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
     const result = await this.transactionService.createTransaction(params as TransactionModel);
 
-    return { result };
+    return { result, initStringResult: 'Transaction' };
   }
 
   getCommandDescription(): string {

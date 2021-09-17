@@ -4,74 +4,88 @@ import { FaceType } from '../../types/face.type';
 import { ConvertorException } from '../exception/convertor.exception';
 import { OperationType } from '../../types/operation.type';
 
+type PropertyParserType = { value?: any; error?: string };
+
 @Injectable()
 export class PropertyParser {
-  parse(value: any, type: string) {
+  parse(value: any, type: string, returnsAnErrorMessage?: boolean): PropertyParserType {
     switch (type) {
       case 'string':
-        return PropertyParser.parseString(value);
+        return PropertyParser.returnProperty(value, returnsAnErrorMessage, PropertyParser.parseString);
       case 'number':
-        return PropertyParser.parseNumber(value);
+        return PropertyParser.returnProperty(value, returnsAnErrorMessage, PropertyParser.parseNumber);
       case 'boolean':
-        return PropertyParser.parseBoolean(value);
+        return PropertyParser.returnProperty(value, returnsAnErrorMessage, PropertyParser.parseBoolean);
       case 'CurrencyType':
-        return PropertyParser.parseCurrencyType(value);
+        return PropertyParser.returnProperty(value, returnsAnErrorMessage, PropertyParser.parseCurrencyType);
       case 'FaceType':
-        return PropertyParser.parseFaceType(value);
+        return PropertyParser.returnProperty(value, returnsAnErrorMessage, PropertyParser.parseFaceType);
       case 'OperationType':
-        return PropertyParser.parseOperationType(value);
-      case 'never':
-        return true;
+        return PropertyParser.returnProperty(value, returnsAnErrorMessage, PropertyParser.parseOperationType);
+      case 'help':
+        return { value: true };
       default:
         throw new ConvertorException('unknown type');
     }
   }
 
-  private static parseString(value: any): string {
-    const string = String(value);
+  private static returnProperty(
+    value: any,
+    returnsAnErrorMessage: boolean,
+    callback: (value: any) => PropertyParserType,
+  ): PropertyParserType {
+    const parseDate = callback(value);
 
-    if (!string && string !== '') {
-      throw new ConvertorException('String parser error');
+    if (returnsAnErrorMessage && parseDate.error) {
+      throw new ConvertorException(parseDate.error);
     }
 
-    return string;
+    return parseDate;
   }
 
-  private static parseNumber(value: any): number {
+  private static parseString(value: any): { value?: string; error?: string } {
+    if (!value && value !== '') {
+      return { error: 'String parser error' };
+    }
+
+    return { value: String(value) };
+  }
+
+  private static parseNumber(value: any): { value?: number; error?: string } {
     const number = Number(value);
 
     if (!number && number !== 0) {
-      throw new ConvertorException('Number parser error');
+      return { error: 'Number parser error' };
     }
 
-    return number;
+    return { value: number };
   }
 
-  private static parseBoolean(value: any): boolean {
-    return Boolean(value);
+  private static parseBoolean(value: any): { value?: boolean; error?: string } {
+    return { value: Boolean(value) };
   }
 
-  private static parseCurrencyType(value: any): CurrencyType {
+  private static parseCurrencyType(value: any): { value?: CurrencyType; error?: string } {
     if (value !== CurrencyType.RUB && value !== CurrencyType.USD && value !== CurrencyType.EUR) {
-      throw new ConvertorException('Currency Type parser error');
+      return { error: 'Currency Type parser error' };
     }
 
-    return value;
+    return { value };
   }
 
-  private static parseFaceType(value: any): FaceType {
+  private static parseFaceType(value: any): { value?: FaceType; error?: string } {
     if (value !== FaceType.INDIVIDUAL && value !== FaceType.ENTITY) {
-      throw new ConvertorException('Face Type parser error');
+      return { error: 'Face Type parser error' };
     }
 
-    return value;
+    return { value };
   }
 
-  private static parseOperationType(value: any): FaceType {
+  private static parseOperationType(value: any): { value?: OperationType; error?: string } {
     if (value !== OperationType.REPLENISHMENT && value !== OperationType.WITHDRAWAL) {
-      throw new ConvertorException('Operation type parser error');
+      return { error: 'Operation type parser error' };
     }
 
-    return value;
+    return { value };
   }
 }
