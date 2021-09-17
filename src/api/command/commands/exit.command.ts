@@ -6,8 +6,8 @@ import { TypedCommandDescriptor } from '../values-object/typed-command-descripto
 
 @Injectable()
 export class ExitCommand extends BaseCommand {
-  async execute(typedCommandDescriptor: TypedCommandDescriptor): Promise<CommandResult> {
-    const helpResult = await super.execute(typedCommandDescriptor);
+  async execute(typedCommandDescriptor: TypedCommandDescriptor, errorMessages?: string[]): Promise<CommandResult> {
+    const helpResult = await super.execute(typedCommandDescriptor, errorMessages);
 
     if (helpResult) {
       return helpResult;

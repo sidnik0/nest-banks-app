@@ -6,9 +6,9 @@ import { CommandResult } from './values-object/command-result';
 
 @Injectable()
 export class CliCommandExecutor extends CommandExecutor {
-  async factoryMethod(command: ICommand, commandDescriptor: CommandDescriptor): Promise<CommandResult> {
-    const typedCommandDescriptor = command.validate(commandDescriptor);
+  async doExecute(command: ICommand, commandDescriptor: CommandDescriptor): Promise<CommandResult> {
+    const [typedCommandDescriptor, errorMessages] = command.validate(commandDescriptor);
 
-    return await command.execute(typedCommandDescriptor);
+    return await command.execute(typedCommandDescriptor, errorMessages);
   }
 }

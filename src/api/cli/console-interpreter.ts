@@ -45,11 +45,11 @@ export class ConsoleInterpreter {
       const resultError = this.consoleCommandResultViewer.parseError(e);
 
       if (typeof resultError === 'string') {
-        this.logger.error(resultError);
+        console.error(`Errors: ${resultError}`);
 
         this.rl.prompt();
       } else {
-        this.logger.error(resultError.message, resultError.stack);
+        console.error(`Unknown error: ${resultError.message}`, resultError.stack);
 
         this.rl.close();
       }

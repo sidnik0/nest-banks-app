@@ -6,7 +6,7 @@ import { TypedCommandDescriptor } from './values-object/typed-command-descriptor
 
 @Injectable()
 export class RestCommandExecutor extends CommandExecutor {
-  async factoryMethod(command: ICommand, typedCommandDescriptor: TypedCommandDescriptor): Promise<CommandResult> {
+  async doExecute(command: ICommand, typedCommandDescriptor: TypedCommandDescriptor): Promise<CommandResult> {
     return await command.execute(typedCommandDescriptor);
   }
 }

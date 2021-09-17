@@ -12,10 +12,10 @@ export class UpdateBankCommand extends BaseCommand {
     super();
   }
 
-  async execute(typedCommandDescriptor: TypedCommandDescriptor): Promise<CommandResult> {
+  async execute(typedCommandDescriptor: TypedCommandDescriptor, errorMessages?: string[]): Promise<CommandResult> {
     const { params } = typedCommandDescriptor;
 
-    const helpResult = await super.execute(typedCommandDescriptor);
+    const helpResult = await super.execute(typedCommandDescriptor, errorMessages);
 
     if (helpResult) {
       return helpResult;

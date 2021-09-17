@@ -10,7 +10,6 @@ import { ValidatorException } from 'src/common/exception/validator.exception';
 
 export abstract class BaseCommand implements ICommand {
   private paramsDefinition: ParamsDefinition = this.getParamsDefinition();
-  private errorsMessages: string[] = [];
 
   @Inject(RequiredPropertyValidator)
   protected readonly requiredPropertiesValidator: RequiredPropertyValidator;
@@ -24,15 +23,15 @@ export abstract class BaseCommand implements ICommand {
     return paramsDefinition;
   }
 
-  validate({ name, params }: CommandDescriptor): TypedCommandDescriptor {
+  validate({ name, params }: CommandDescriptor): [TypedCommandDescriptor, string[]] {
     const typedParams: Record<string, any> = {};
-    const errorsMessages: string[] = [];
+    const errorMessages: string[] = [];
 
     for (const prop of Object.keys(this.paramsDefinition)) {
       if (this.paramsDefinition[prop].required) {
         const message = this.requiredPropertiesValidator.validate(prop, params);
 
-        message && errorsMessages.push(message);
+        message && errorMessages.push(message);
       }
 
       if (params.has(prop)) {
@@ -40,18 +39,16 @@ export abstract class BaseCommand implements ICommand {
       }
     }
 
-    this.errorsMessages = errorsMessages;
-
-    return { name, params: typedParams };
+    return [{ name, params: typedParams }, errorMessages];
   }
 
-  async execute(typedCommandDescriptor: TypedCommandDescriptor): Promise<CommandResult> {
+  async execute(typedCommandDescriptor: TypedCommandDescriptor, errorMessages?: string[]): Promise<CommandResult> {
     if (typedCommandDescriptor.params.help) {
       return { result: this.getCommandDescription() };
     }
 
-    if (this.errorsMessages.length) {
-      const errorString = this.errorsMessages.reduce((previous, current) => previous + ` ${current}`, '');
+    if (errorMessages && errorMessages.length) {
+      const errorString = errorMessages.reduce((previous, current) => previous + ` ${current}`, '');
 
       throw new ValidatorException(errorString);
     }

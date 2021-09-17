@@ -11,8 +11,8 @@ export abstract class CommandExecutor {
   async executeCommand(commandDescriptor: BaseCommandDescriptor): Promise<CommandResult> {
     const command = this.commandFactory.getCommand(commandDescriptor);
 
-    return await this.factoryMethod(command, commandDescriptor);
+    return await this.doExecute(command, commandDescriptor);
   }
 
-  abstract factoryMethod(command: ICommand, commandDescriptor: BaseCommandDescriptor): Promise<CommandResult>;
+  abstract doExecute(command: ICommand, commandDescriptor: BaseCommandDescriptor): Promise<CommandResult>;
 }
