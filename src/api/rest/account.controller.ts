@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, Query } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse } from '@nestjs/swagger';
+import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { BaseController } from './base.controller';
 import { AccountModel } from '../../model/interface/account.model';
 import { CommandName } from '../../types/command-name.type';
@@ -8,6 +8,7 @@ import { GetAllAccountsByQueryDto } from './rest-dto/get-all-accounts-by-query.d
 import { UpdateAccountDto } from './rest-dto/update-account.dto';
 import { IdDto } from './rest-dto/id.dto';
 
+@ApiTags('accounts')
 @Controller('accounts')
 export class AccountController extends BaseController {
   @Post()
@@ -19,7 +20,7 @@ export class AccountController extends BaseController {
 
   @Get(':id')
   @ApiOperation({ summary: 'Get account by id', description: 'Get account by id' })
-  @ApiParam({ name: 'Account id' })
+  @ApiParam({ name: 'id' })
   @ApiResponse({ type: AccountModel, status: 200 })
   async get(@Param() idDto: IdDto): Promise<AccountModel> {
     return await this.executeCommand({ name: CommandName.ACCOUNT_GET, params: { id: idDto.id } });
@@ -57,7 +58,7 @@ export class AccountController extends BaseController {
 
   @Put(':id')
   @ApiOperation({ summary: 'Update account by id', description: 'Update account by id' })
-  @ApiParam({ name: 'Account id' })
+  @ApiParam({ name: 'id' })
   @ApiBody({ type: UpdateAccountDto })
   async updateBalance(@Param() idDto: IdDto, @Body() updateAccountDto: UpdateAccountDto): Promise<void> {
     await this.executeCommand({ name: CommandName.ACCOUNT_UPDATE, params: { id: idDto.id, ...updateAccountDto } });
@@ -65,7 +66,7 @@ export class AccountController extends BaseController {
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete account by id', description: 'Delete account by id' })
-  @ApiParam({ name: 'Account id' })
+  @ApiParam({ name: 'id' })
   async delete(@Param() idDto: IdDto): Promise<void> {
     await this.executeCommand({ name: CommandName.ACCOUNT_DELETE, params: { id: idDto.id } });
   }
