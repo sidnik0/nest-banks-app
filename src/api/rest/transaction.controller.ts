@@ -43,6 +43,6 @@ export class TransactionController extends BaseController {
   @ApiOperation({ summary: 'Get all transactions', description: 'Get all transactions' })
   @ApiResponse({ type: [TransactionModel], status: 200 })
   async getAll(): Promise<TransactionModel[]> {
-    return await this.executeCommand({ name: CommandName.TRANSACTION_GET - ALL, params: {} });
+    return await this.executeCommand({ name: CommandName.TRANSACTION_GET_ALL, params: {} });
   }
 }
