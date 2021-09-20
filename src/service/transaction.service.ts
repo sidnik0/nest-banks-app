@@ -5,11 +5,11 @@ import { ITransactionRepository } from '../repository/interface/transaction.repo
 import { IAccountRepository } from '../repository/interface/account.repository';
 import { IBankRepository } from '../repository/interface/bank.repository';
 import { IUserRepository } from '../repository/interface/user.repository';
+import { IRateRepository } from '../repository/interface/rate.repository';
 import { TransactionModel } from '../model/interface/transaction.model';
 import { AccountModel } from '../model/interface/account.model';
 import { CreateTransactionDto } from '../api/rest/rest-dto/create-transaction.dto';
 import { FaceType } from '../types/face.type';
-import { TransactionCurrencyException } from '../common/exception/transaction-currency.exception';
 import { TransactionBalanceException } from '../common/exception/transaction-balance.exception';
 
 @Injectable()
@@ -19,6 +19,7 @@ export class TransactionService extends BaseService<TransactionModel> implements
     private readonly accountRepository: IAccountRepository,
     private readonly bankRepository: IBankRepository,
     private readonly userRepository: IUserRepository,
+    private readonly rateRepository: IRateRepository,
   ) {
     super(repository);
   }
@@ -29,20 +30,23 @@ export class TransactionService extends BaseService<TransactionModel> implements
 
     const [fromAccount, toAccount] = await Promise.all([fromAccountPromise, toAccountPromise]);
 
-    TransactionService.checkCurrency(fromAccount, toAccount);
+    const commissionPromise = this.getCurrenCommission(fromAccount, toAccount);
+    const ratePromise = this.getCurrenRate(fromAccount, toAccount);
 
-    const commission = await this.getCurrenCommission(fromAccount, toAccount);
-    const value = amount * commission;
+    const [commission, rate] = await Promise.all([commissionPromise, ratePromise]);
 
-    TransactionService.checkBalance(fromAccount, value);
+    const fromAmount = amount * commission;
+    const toAmount = amount * rate;
+
+    TransactionService.checkBalance(fromAccount, fromAmount);
 
     const updateFromAccountPromise = this.accountRepository.update({
       ...fromAccount,
-      balance: TransactionService.getRecalculatedBalance(fromAccount.balance, -value),
+      balance: TransactionService.getRecalculatedBalance(fromAccount.balance, -fromAmount),
     });
     const updateToAccountPromise = this.accountRepository.update({
       ...toAccount,
-      balance: TransactionService.getRecalculatedBalance(toAccount.balance, value),
+      balance: TransactionService.getRecalculatedBalance(toAccount.balance, toAmount),
     });
 
     await Promise.all([updateFromAccountPromise, updateToAccountPromise]);
@@ -73,14 +77,6 @@ export class TransactionService extends BaseService<TransactionModel> implements
     return await this.repository.getAllByAccount(id);
   }
 
-  private static checkCurrency(from: AccountModel, to: AccountModel): void {
-    if (from.currency !== to.currency) {
-      throw new TransactionCurrencyException(
-        `Currency do not match. From Account: ${from.id}-${from.currency} To Account: ${to.id}-${to.currency}`,
-      );
-    }
-  }
-
   private static checkBalance(from: AccountModel, value: number): void {
     if (from.balance < value) {
       throw new TransactionBalanceException(
@@ -106,5 +102,17 @@ export class TransactionService extends BaseService<TransactionModel> implements
     const commission = user.face === FaceType.INDIVIDUAL ? bank.commissionForIndividual : bank.commissionForEntity;
 
     return 1 + commission / 100;
+  }
+
+  private async getCurrenRate(from: AccountModel, to: AccountModel): Promise<number> {
+    if (from.currency !== to.currency) {
+      return 1;
+    }
+
+    const rate = await this.rateRepository.get(from.bankId);
+
+    const currentRate = rate[`${from.currency}_${to.currency}`];
+
+    return currentRate ? Math.floor((1 / currentRate) * 100) / 100 : rate[`${to.currency}_${from.currency}`];
   }
 }

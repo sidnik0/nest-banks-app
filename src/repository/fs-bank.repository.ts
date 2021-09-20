@@ -2,8 +2,8 @@ import { Injectable, Logger } from '@nestjs/common';
 import { FsBaseRepository } from './fs-base.repository';
 import { IBankRepository } from './interface/bank.repository';
 import { BankModel } from '../model/interface/bank.model';
-import { FileSystemHelper } from 'src/common/helper/file-system';
-import { IdGenerator } from 'src/common/helper/id-generator';
+import { FileSystemHelper } from '../common/helper/file-system';
+import { IdGenerator } from '../common/helper/id-generator';
 
 @Injectable()
 export class FsBankRepository extends FsBaseRepository<BankModel> implements IBankRepository {

@@ -5,6 +5,7 @@ import { BankModel } from '../../../model/interface/bank.model';
 import { ParamsDefinition } from '../values-object/params-definition';
 import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
 import { CommandResult } from '../values-object/command-result';
+import { RateModel } from 'src/model/interface/rate.model';
 
 @Injectable()
 export class CreateBankCommand extends BaseCommand {
@@ -13,7 +14,7 @@ export class CreateBankCommand extends BaseCommand {
   }
 
   async doExecute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
-    const result = await this.bankService.create(params as BankModel);
+    const result = await this.bankService.create(params as BankModel & RateModel);
 
     return { result, initStringResult: 'Bank' };
   }
@@ -25,6 +26,9 @@ export class CreateBankCommand extends BaseCommand {
       name=<name>                       Bank name
       commissionForEntity=<comEnt>      Entity commission
       commissionForIndividual=<comInd>  Individuals commission
+      RUB_USD=<RUB_USD>                 Rate RUB_USD
+      RUB_EUR=<RUB_EUR>                 Rate RUB_EUR
+      USD_EUR=<USD_EUR>                 Rate USD_EUR
       
       help                              Display help for command
     `;
@@ -41,6 +45,18 @@ export class CreateBankCommand extends BaseCommand {
         required: true,
       },
       commissionForIndividual: {
+        type: 'number',
+        required: true,
+      },
+      RUB_USD: {
+        type: 'number',
+        required: true,
+      },
+      RUB_EUR: {
+        type: 'number',
+        required: true,
+      },
+      USD_EUR: {
         type: 'number',
         required: true,
       },

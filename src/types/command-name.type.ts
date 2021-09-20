@@ -25,4 +25,7 @@ export enum CommandName {
   UPDATE_ACCOUNT = 'account-update',
   UPDATE_BANK = 'bank-update',
   UPDATE_USER = 'user-update',
+  GET_RATE = 'rate-get',
+  GET_RATES = 'rate-get-all',
+  UPDATE_RATE = 'rate-update',
 }

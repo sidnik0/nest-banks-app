@@ -15,12 +15,15 @@ import { GetAllTransactionsByAccountCommand } from './get-all-transactions-by-ac
 import { GetAllUserBanksCommand } from './get-all-user-banks.command';
 import { GetBankCommand } from './get-bank.command';
 import { GetBanksCommand } from './get-banks.command';
+import { GetRateCommand } from './get-rate.command';
+import { GetRatesCommand } from './get-rates.command';
 import { GetTransactionCommand } from './get-transaction.command';
 import { GetTransactionsCommand } from './get-transactions.command';
 import { GetUserCommand } from './get-user.command';
 import { GetUsersCommand } from './get-users.command';
 import { UpdateAccountCommand } from './update-account.command';
 import { UpdateBankCommand } from './update-bank.command';
+import { UpdateRateCommand } from './update-rate.command';
 import { UpdateUserCommand } from './update-user.command';
 import { ExitCommand } from './exit.command';
 import { HelpCommand } from './help.command';
@@ -43,12 +46,15 @@ export const commands = [
   GetAllUserBanksCommand,
   GetBankCommand,
   GetBanksCommand,
+  GetRateCommand,
+  GetRatesCommand,
   GetTransactionCommand,
   GetTransactionsCommand,
   GetUserCommand,
   GetUsersCommand,
   UpdateAccountCommand,
   UpdateBankCommand,
+  UpdateRateCommand,
   UpdateUserCommand,
   ExitCommand,
   HelpCommand,

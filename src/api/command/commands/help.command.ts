@@ -41,6 +41,10 @@ export class HelpCommand extends BaseCommand {
     user-get-all-banks [options]                Get all user banks
     user-update [options]                       Update user by id
     user-delete [options]                       Delete user by id
+
+    rate-get [options]                          Get rate by bank
+    rate-get-all [options]                      Get all rates
+    rate-update [options]                       Update rate by bank
     
     exit                                        Close app
   `;

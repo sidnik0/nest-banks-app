@@ -22,9 +22,9 @@ export class CreateTransactionCommand extends BaseCommand {
     return `Create transaction
 
     Options:
-      fromAccountId=<fromId>            From account
-      toAccountId=<toId>                To account
-      amount=<value>                    Amount
+      fromAccountId=<fromAccountId>     From account
+      toAccountId=<toAccountId>         To account
+      amount=<amount>                   Amount
       
       help                              Display help for command
     `;

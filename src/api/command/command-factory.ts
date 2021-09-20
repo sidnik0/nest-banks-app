@@ -22,12 +22,15 @@ import { GetAllTransactionsByAccountCommand } from './commands/get-all-transacti
 import { GetAllUserBanksCommand } from './commands/get-all-user-banks.command';
 import { GetBankCommand } from './commands/get-bank.command';
 import { GetBanksCommand } from './commands/get-banks.command';
+import { GetRateCommand } from './commands/get-rate.command';
+import { GetRatesCommand } from './commands/get-rates.command';
 import { GetTransactionCommand } from './commands/get-transaction.command';
 import { GetTransactionsCommand } from './commands/get-transactions.command';
 import { GetUserCommand } from './commands/get-user.command';
 import { GetUsersCommand } from './commands/get-users.command';
 import { UpdateAccountCommand } from './commands/update-account.command';
 import { UpdateBankCommand } from './commands/update-bank.command';
+import { UpdateRateCommand } from './commands/update-rate.command';
 import { UpdateUserCommand } from './commands/update-user.command';
 import { ExitCommand } from './commands/exit.command';
 import { HelpCommand } from './commands/help.command';
@@ -68,12 +71,15 @@ export class CommandFactory {
       [CommandName.GET_ALL_USER_BANKS, GetAllUserBanksCommand],
       [CommandName.GET_BANK, GetBankCommand],
       [CommandName.GET_BANKS, GetBanksCommand],
+      [CommandName.GET_RATE, GetRateCommand],
+      [CommandName.GET_RATES, GetRatesCommand],
       [CommandName.GET_TRANSACTION, GetTransactionCommand],
       [CommandName.GET_TRANSACTIONS, GetTransactionsCommand],
       [CommandName.GET_USER, GetUserCommand],
       [CommandName.GET_USERS, GetUsersCommand],
       [CommandName.UPDATE_ACCOUNT, UpdateAccountCommand],
       [CommandName.UPDATE_BANK, UpdateBankCommand],
+      [CommandName.UPDATE_RATE, UpdateRateCommand],
       [CommandName.UPDATE_USER, UpdateUserCommand],
       [CommandName.EXIT, ExitCommand],
       [CommandName.HELP, HelpCommand],

@@ -24,7 +24,7 @@ export class UpdateAccountCommand extends BaseCommand {
     Options:
       id=<accountId>                    Account id
       amount=<amount>                   Amount
-      operation=<boolean>               Operation ("replenishment" || "withdrawal")
+      operation=<operation>             Operation ("replenishment" || "withdrawal")
       
       help                              Display help for command
     `;

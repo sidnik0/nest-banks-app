@@ -4,7 +4,6 @@ import { CommandLineParserException } from '../../common/exception/command-line-
 import { ConvertorException } from '../../common/exception/convertor.exception';
 import { ValidatorException } from '../../common/exception/validator.exception';
 import { CommandFactoryException } from '../../common/exception/command-factory.exception';
-import { TransactionCurrencyException } from '../../common/exception/transaction-currency.exception';
 import { TransactionBalanceException } from '../../common/exception/transaction-balance.exception';
 import { NotFountException } from '../../common/exception/not-fount.exception';
 import { AccountCreatorException } from '../../common/exception/account-creator.exception';
@@ -37,7 +36,6 @@ export class ConsoleCommandResultViewer {
       e instanceof ConvertorException ||
       e instanceof ValidatorException ||
       e instanceof CommandFactoryException ||
-      e instanceof TransactionCurrencyException ||
       e instanceof TransactionBalanceException ||
       e instanceof AccountCreatorException ||
       e instanceof NotFountException ||

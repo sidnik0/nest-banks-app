@@ -5,7 +5,6 @@ import { ExistsException } from '../exception/exists.exception';
 import { InitParamsDefinitionException } from '../exception/init-params-definition.exception';
 import { NotFountException } from '../exception/not-fount.exception';
 import { TransactionBalanceException } from '../exception/transaction-balance.exception';
-import { TransactionCurrencyException } from '../exception/transaction-currency.exception';
 
 @Catch()
 export class AllExceptionFilter implements ExceptionFilter {
@@ -18,7 +17,6 @@ export class AllExceptionFilter implements ExceptionFilter {
     let message: string;
 
     switch (exception.constructor) {
-      case TransactionCurrencyException:
       case TransactionBalanceException:
       case AccountCreatorException:
       case ExistsException:
