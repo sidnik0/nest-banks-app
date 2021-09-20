@@ -16,7 +16,6 @@ async function bootstrap() {
         .setTitle('Bank app')
         .setDescription('The bank app API description')
         .setVersion('0.0.1')
-        .addTag('bank-app')
         .build();
       const document = SwaggerModule.createDocument(app, config);
       SwaggerModule.setup('api', app, document);
