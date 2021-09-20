@@ -31,6 +31,10 @@ export abstract class BaseCommand implements ICommand {
   }
 
   validate({ name, params }: CommandDescriptor): TypedCommandDescriptor {
+    if (params.has('help') && params.size === 1) {
+      return { name, params: { help: true } };
+    }
+
     const typedParams: Record<string, any> = {};
     const errorValidationMessages: string[] = [];
     const errorParserMessages: string[] = [];
@@ -53,16 +57,12 @@ export abstract class BaseCommand implements ICommand {
       }
     }
 
-    if (typedParams.help && Object.keys(typedParams).length === 1) {
-      return { name, params: typedParams };
-    }
-
-    this.errorChecking(errorValidationMessages, errorParserMessages);
+    this.throwErrorIfNecessary(errorValidationMessages, errorParserMessages);
 
     return { name, params: typedParams };
   }
 
-  private errorChecking(errorValidationMessages: string[], errorParserMessages: string[]): void {
+  private throwErrorIfNecessary(errorValidationMessages: string[], errorParserMessages: string[]): void {
     if (errorValidationMessages.length) {
       const errorString = errorValidationMessages.reduce((previous, current) => previous + `\n -${current}`, '');
 
