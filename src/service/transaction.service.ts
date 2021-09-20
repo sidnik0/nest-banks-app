@@ -35,8 +35,8 @@ export class TransactionService extends BaseService<TransactionModel> implements
 
     const [commission, rate] = await Promise.all([commissionPromise, ratePromise]);
 
-    const fromAmount = amount * commission;
-    const toAmount = amount * rate;
+    const fromAmount = Math.floor(amount * commission * 100) / 100;
+    const toAmount = Math.floor(amount * rate * 100) / 100;
 
     TransactionService.checkBalance(fromAccount, fromAmount);
 
