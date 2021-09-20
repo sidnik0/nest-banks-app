@@ -1,23 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { BaseCommand } from './base.command';
-import { IRateService } from '../../../service/interface/rate.service';
+import { IBankService } from '../../../service/interface/bank.service';
 import { ParamsDefinition } from '../values-object/params-definition';
 import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class GetRatesCommand extends BaseCommand {
-  constructor(private readonly rateService: IRateService) {
+export class BankGetAllCommand extends BaseCommand {
+  constructor(private readonly bankService: IBankService) {
     super();
   }
 
   async doExecute(): Promise<CommandResult> {
-    const result = await this.rateService.getAll();
+    const result = await this.bankService.getAll();
 
-    return { result, initStringResult: 'List rates' };
+    return { result, initStringResult: 'List banks' };
   }
 
   getCommandDescription(): string {
-    return `Get all rates
+    return `Get all banks
 
     Options:
       help                              Display help for command

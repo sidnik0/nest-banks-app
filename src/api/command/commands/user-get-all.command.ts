@@ -1,23 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { BaseCommand } from './base.command';
-import { IAccountService } from '../../../service/interface/account.service';
+import { IUserService } from '../../../service/interface/user.service';
 import { ParamsDefinition } from '../values-object/params-definition';
 import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class GetAccountsCommand extends BaseCommand {
-  constructor(private readonly accountService: IAccountService) {
+export class UserGetAllCommand extends BaseCommand {
+  constructor(private readonly userService: IUserService) {
     super();
   }
 
   async doExecute(): Promise<CommandResult> {
-    const result = await this.accountService.getAll();
+    const result = await this.userService.getAll();
 
-    return { result, initStringResult: 'List accounts' };
+    return { result, initStringResult: 'List users' };
   }
 
   getCommandDescription(): string {
-    return `Get all accounts
+    return `Get all users
 
     Options:
       help                              Display help for command

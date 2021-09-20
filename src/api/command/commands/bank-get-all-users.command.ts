@@ -1,28 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { BaseCommand } from './base.command';
-import { IAccountService } from '../../../service/interface/account.service';
+import { IBankService } from '../../../service/interface/bank.service';
 import { ParamsDefinition } from '../values-object/params-definition';
 import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
 import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class GetAllAccountsByUserAndBankCommand extends BaseCommand {
-  constructor(private readonly accountService: IAccountService) {
+export class BankGetAllUsersCommand extends BaseCommand {
+  constructor(private readonly bankService: IBankService) {
     super();
   }
 
   async doExecute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
-    const result = await this.accountService.getAllByUserAndBank(params.userId, params.bankId);
+    const result = await this.bankService.getAllUsers(params.id);
 
-    return { result, initStringResult: 'List accounts' };
+    return { result, initStringResult: 'List users' };
   }
 
   getCommandDescription(): string {
-    return `Get all user accounts in the bank
+    return `Get all users in the bank
 
     Options:
-      userId=<userId>                       User id
-      bankId=<bankId>                       Bank id
+      id=<bankId>                       Bank id
     
       help                              Display help for command
     `;
@@ -30,11 +29,7 @@ export class GetAllAccountsByUserAndBankCommand extends BaseCommand {
 
   initParamsDefinition(): ParamsDefinition {
     return {
-      userId: {
-        type: 'string',
-        required: true,
-      },
-      bankId: {
+      id: {
         type: 'string',
         required: true,
       },

@@ -14,7 +14,7 @@ export class BankController extends BaseController {
   @ApiOperation({ summary: 'Create bank', description: 'Create bank' })
   @ApiBody({ type: CreateBankDto })
   async create(@Body() createBankDto: CreateBankDto): Promise<void> {
-    await this.executeCommand({ name: CommandName.CREATE_BANK, params: createBankDto });
+    await this.executeCommand({ name: CommandName.BANK_CREATE, params: createBankDto });
   }
 
   @Get(':id/users')
@@ -22,7 +22,7 @@ export class BankController extends BaseController {
   @ApiParam({ name: 'Bank id' })
   @ApiResponse({ type: [UserModel], status: 200 })
   async getAllUsers(@Param() idDto: IdDto): Promise<UserModel[]> {
-    return await this.executeCommand({ name: CommandName.GET_ALL_BANK_USERS, params: { id: idDto.id } });
+    return await this.executeCommand({ name: CommandName.BANK_GET_ALL_USERS, params: { id: idDto.id } });
   }
 
   @Get(':id')
@@ -30,14 +30,14 @@ export class BankController extends BaseController {
   @ApiParam({ name: 'Bank id' })
   @ApiResponse({ type: BankModel, status: 200 })
   async get(@Param() idDto: IdDto): Promise<BankModel> {
-    return await this.executeCommand({ name: CommandName.GET_BANK, params: { id: idDto.id } });
+    return await this.executeCommand({ name: CommandName.BANK_GET, params: { id: idDto.id } });
   }
 
   @Get()
   @ApiOperation({ summary: 'Get all banks', description: 'Get all banks' })
   @ApiResponse({ type: [BankModel], status: 200 })
   async getAll(): Promise<BankModel[]> {
-    return await this.executeCommand({ name: CommandName.GET_BANKS, params: {} });
+    return await this.executeCommand({ name: CommandName.BANK_GET_ALL, params: {} });
   }
 
   @Put(':id')
@@ -45,13 +45,13 @@ export class BankController extends BaseController {
   @ApiParam({ name: 'Bank id' })
   @ApiBody({ type: UpdateBankDto })
   async update(@Param() idDto: IdDto, @Body() updateBankDto: UpdateBankDto): Promise<void> {
-    await this.executeCommand({ name: CommandName.UPDATE_BANK, params: { id: idDto.id, ...updateBankDto } });
+    await this.executeCommand({ name: CommandName.BANK_UPDATE, params: { id: idDto.id, ...updateBankDto } });
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete bank by id', description: 'Delete bank by id' })
   @ApiParam({ name: 'Bank id' })
   async delete(@Param() idDto: IdDto): Promise<void> {
-    await this.executeCommand({ name: CommandName.DELETE_BANK, params: { id: idDto.id } });
+    await this.executeCommand({ name: CommandName.BANK_DELETE, params: { id: idDto.id } });
   }
 }

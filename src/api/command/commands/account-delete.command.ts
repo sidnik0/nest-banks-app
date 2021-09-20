@@ -1,28 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { BaseCommand } from './base.command';
-import { IBankService } from '../../../service/interface/bank.service';
+import { IAccountService } from '../../../service/interface/account.service';
 import { ParamsDefinition } from '../values-object/params-definition';
 import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
 import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class GetAllBankUsersCommand extends BaseCommand {
-  constructor(private readonly bankService: IBankService) {
+export class AccountDeleteCommand extends BaseCommand {
+  constructor(private readonly accountService: IAccountService) {
     super();
   }
 
   async doExecute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
-    const result = await this.bankService.getAllUsers(params.id);
+    await this.accountService.delete(params.id);
 
-    return { result, initStringResult: 'List users' };
+    return { result: `Account with id=${params.id} deleted`, initStringResult: 'Account' };
   }
 
   getCommandDescription(): string {
-    return `Get all users in the bank
+    return `Delete account by id
 
     Options:
-      id=<bankId>                       Bank id
-    
+      id=<AccountId>                    Account id
+      
       help                              Display help for command
     `;
   }

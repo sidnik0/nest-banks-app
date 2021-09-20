@@ -1,48 +1,45 @@
 import { Injectable } from '@nestjs/common';
 import { BaseCommand } from './base.command';
 import { ITransactionService } from '../../../service/interface/transaction.service';
-import { TransactionModel } from '../../../model/interface/transaction.model';
 import { ParamsDefinition } from '../values-object/params-definition';
 import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
 import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class CreateTransactionCommand extends BaseCommand {
+export class TransactionGetAllByAccountCommand extends BaseCommand {
   constructor(private readonly transactionService: ITransactionService) {
     super();
   }
 
   async doExecute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
-    const result = await this.transactionService.createTransaction(params as TransactionModel);
+    const result = await this.transactionService.getAllByAccount(params.id);
 
-    return { result, initStringResult: 'Transaction' };
+    return { result, initStringResult: 'List transactions' };
   }
 
   getCommandDescription(): string {
-    return `Create transaction
+    return `Get all account transactions
 
     Options:
-      fromAccountId=<fromAccountId>     From account
-      toAccountId=<toAccountId>         To account
-      amount=<amount>                   Amount
-      
+      id=<bankId>                       Bank id
+    
       help                              Display help for command
     `;
   }
 
   initParamsDefinition(): ParamsDefinition {
     return {
-      fromAccountId: {
+      id: {
         type: 'string',
         required: true,
       },
-      toAccountId: {
-        type: 'string',
-        required: true,
+      from: {
+        type: 'Date',
+        required: false,
       },
-      amount: {
-        type: 'number',
-        required: true,
+      to: {
+        type: 'Date',
+        required: false,
       },
     };
   }

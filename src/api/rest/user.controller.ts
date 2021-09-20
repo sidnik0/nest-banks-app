@@ -14,7 +14,7 @@ export class UserController extends BaseController {
   @ApiOperation({ summary: 'Create user', description: 'Create user' })
   @ApiBody({ type: CreateUserDto })
   async create(@Body() createUserDto: CreateUserDto): Promise<void> {
-    await this.executeCommand({ name: CommandName.CREATE_USER, params: createUserDto });
+    await this.executeCommand({ name: CommandName.USER_CREATE, params: createUserDto });
   }
 
   @Get(':id/banks')
@@ -22,7 +22,7 @@ export class UserController extends BaseController {
   @ApiParam({ name: 'User id' })
   @ApiResponse({ type: [BankModel], status: 200 })
   async getAllBanks(@Param() idDto: IdDto): Promise<BankModel[]> {
-    return await this.executeCommand({ name: CommandName.GET_ALL_USER_BANKS, params: { id: idDto.id } });
+    return await this.executeCommand({ name: CommandName.USER_GET_ALL_BANKS, params: { id: idDto.id } });
   }
 
   @Get(':id')
@@ -30,14 +30,14 @@ export class UserController extends BaseController {
   @ApiParam({ name: 'User id' })
   @ApiResponse({ type: UserModel, status: 200 })
   async get(@Param() idDto: IdDto): Promise<UserModel> {
-    return await this.executeCommand({ name: CommandName.GET_USER, params: { id: idDto.id } });
+    return await this.executeCommand({ name: CommandName.USER_GET, params: { id: idDto.id } });
   }
 
   @Get()
   @ApiOperation({ summary: 'Get all users', description: 'Get all users' })
   @ApiResponse({ type: [UserModel], status: 200 })
   async getAll(): Promise<UserModel[]> {
-    return await this.executeCommand({ name: CommandName.GET_USERS, params: {} });
+    return await this.executeCommand({ name: CommandName.USER_GET_ALL, params: {} });
   }
 
   @Put(':id')
@@ -52,6 +52,6 @@ export class UserController extends BaseController {
   @ApiOperation({ summary: 'Delete user by id', description: 'Delete user by id' })
   @ApiParam({ name: 'User id' })
   async delete(@Param() idDto: IdDto): Promise<void> {
-    await this.executeCommand({ name: CommandName.DELETE_USER, params: { id: idDto.id } });
+    await this.executeCommand({ name: CommandName.USER_DELETE, params: { id: idDto.id } });
   }
 }

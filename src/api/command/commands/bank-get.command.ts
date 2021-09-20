@@ -6,7 +6,7 @@ import { TypedCommandDescriptor } from '../values-object/typed-command-descripto
 import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class GetBankCommand extends BaseCommand {
+export class BankGetCommand extends BaseCommand {
   constructor(private readonly bankService: IBankService) {
     super();
   }

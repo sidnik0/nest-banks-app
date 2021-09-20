@@ -13,14 +13,14 @@ export class RateController extends BaseController {
   @ApiParam({ name: 'Bank id' })
   @ApiResponse({ type: RateModel, status: 200 })
   async get(@Param() idDto: IdDto): Promise<RateModel> {
-    return await this.executeCommand({ name: CommandName.GET_RATE, params: { id: idDto.id } });
+    return await this.executeCommand({ name: CommandName.RATE_GET, params: { id: idDto.id } });
   }
 
   @Get()
   @ApiOperation({ summary: 'Get all rates', description: 'Get all rates' })
   @ApiResponse({ type: [RateModel], status: 200 })
   async getAll(): Promise<RateModel[]> {
-    return await this.executeCommand({ name: CommandName.GET_RATES, params: {} });
+    return await this.executeCommand({ name: CommandName.RATE_GET_ALL, params: {} });
   }
 
   @Put(':id')
@@ -28,6 +28,6 @@ export class RateController extends BaseController {
   @ApiParam({ name: 'Bank id' })
   @ApiBody({ type: UpdateRateDto })
   async update(@Param() idDto: IdDto, @Body() updateRateDto: UpdateRateDto): Promise<void> {
-    await this.executeCommand({ name: CommandName.UPDATE_RATE, params: { id: idDto.id, ...updateRateDto } });
+    await this.executeCommand({ name: CommandName.RATE_UPDATE, params: { id: idDto.id, ...updateRateDto } });
   }
 }

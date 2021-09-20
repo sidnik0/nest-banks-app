@@ -1,28 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { BaseCommand } from './base.command';
-import { ITransactionService } from '../../../service/interface/transaction.service';
+import { IUserService } from '../../../service/interface/user.service';
 import { ParamsDefinition } from '../values-object/params-definition';
 import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
 import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class GetTransactionCommand extends BaseCommand {
-  constructor(private readonly transactionService: ITransactionService) {
+export class UserGetAllBanksCommand extends BaseCommand {
+  constructor(private readonly userService: IUserService) {
     super();
   }
 
   async doExecute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
-    const result = await this.transactionService.get(params.id);
+    const result = await this.userService.getAllBanks(params.id);
 
-    return { result, initStringResult: 'Transaction' };
+    return { result, initStringResult: 'List banks' };
   }
 
   getCommandDescription(): string {
-    return `Get transaction by id
+    return `Get all user banks
 
     Options:
-      id=<transactionId>                Transaction id
-      
+      id=<userId>                       User id
+    
       help                              Display help for command
     `;
   }

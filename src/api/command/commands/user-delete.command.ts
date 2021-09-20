@@ -1,29 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { BaseCommand } from './base.command';
 import { IUserService } from '../../../service/interface/user.service';
-import { UserModel } from '../../../model/interface/user.model';
 import { ParamsDefinition } from '../values-object/params-definition';
 import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
 import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class CreateUserCommand extends BaseCommand {
+export class UserDeleteCommand extends BaseCommand {
   constructor(private readonly userService: IUserService) {
     super();
   }
 
   async doExecute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
-    const result = await this.userService.create(params as UserModel);
+    await this.userService.delete(params.id);
 
-    return { result, initStringResult: 'User' };
+    return { result: `User with id=${params.id} deleted`, initStringResult: 'User' };
   }
 
   getCommandDescription(): string {
-    return `Create user
+    return `Delete user by id
 
     Options:
-      name=<name>                       User name
-      face=<face>                       User face ("entity" || "individual")
+      id=<userId>                       User id
       
       help                              Display help for command
     `;
@@ -31,12 +29,8 @@ export class CreateUserCommand extends BaseCommand {
 
   initParamsDefinition(): ParamsDefinition {
     return {
-      name: {
+      id: {
         type: 'string',
-        required: true,
-      },
-      face: {
-        type: 'FaceType',
         required: true,
       },
     };

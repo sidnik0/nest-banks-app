@@ -14,7 +14,7 @@ export class AccountController extends BaseController {
   @ApiOperation({ summary: 'Create account', description: 'Create account' })
   @ApiBody({ type: CreateAccountDto })
   async create(@Body() createAccountDto: CreateAccountDto): Promise<void> {
-    await this.executeCommand({ name: CommandName.CREATE_ACCOUNT, params: createAccountDto });
+    await this.executeCommand({ name: CommandName.ACCOUNT_CREATE, params: createAccountDto });
   }
 
   @Get(':id')
@@ -22,7 +22,7 @@ export class AccountController extends BaseController {
   @ApiParam({ name: 'Account id' })
   @ApiResponse({ type: AccountModel, status: 200 })
   async get(@Param() idDto: IdDto): Promise<AccountModel> {
-    return await this.executeCommand({ name: CommandName.GET_ACCOUNT, params: { id: idDto.id } });
+    return await this.executeCommand({ name: CommandName.ACCOUNT_GET, params: { id: idDto.id } });
   }
 
   @Get()
@@ -34,22 +34,22 @@ export class AccountController extends BaseController {
 
     if (bankId && userId) {
       return await this.executeCommand({
-        name: CommandName.GET_ALL_ACCOUNTS_BY_USER_AND_BANK,
+        name: CommandName.ACCOUNT_GET_ALL_BY_USER_AND_BANK,
         params: { bankId, userId },
       });
     } else if (bankId && !userId) {
       return await this.executeCommand({
-        name: CommandName.GET_ALL_ACCOUNTS_BY_BANK,
+        name: CommandName.ACCOUNT_GET_ALL_BY_BANK,
         params: { id: bankId },
       });
     } else if (!bankId && userId) {
       return await this.executeCommand({
-        name: CommandName.GET_ALL_ACCOUNTS_BY_USER,
+        name: CommandName.ACCOUNT_GET_ALL_BY_USER,
         params: { id: userId },
       });
     } else {
       return await this.executeCommand({
-        name: CommandName.GET_ACCOUNTS,
+        name: CommandName.ACCOUNT_GET_ALL,
         params: {},
       });
     }
@@ -60,13 +60,13 @@ export class AccountController extends BaseController {
   @ApiParam({ name: 'Account id' })
   @ApiBody({ type: UpdateAccountDto })
   async updateBalance(@Param() idDto: IdDto, @Body() updateAccountDto: UpdateAccountDto): Promise<void> {
-    await this.executeCommand({ name: CommandName.UPDATE_ACCOUNT, params: { id: idDto.id, ...updateAccountDto } });
+    await this.executeCommand({ name: CommandName.ACCOUNT_UPDATE, params: { id: idDto.id, ...updateAccountDto } });
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete account by id', description: 'Delete account by id' })
   @ApiParam({ name: 'Account id' })
   async delete(@Param() idDto: IdDto): Promise<void> {
-    await this.executeCommand({ name: CommandName.DELETE_ACCOUNT, params: { id: idDto.id } });
+    await this.executeCommand({ name: CommandName.ACCOUNT_DELETE, params: { id: idDto.id } });
   }
 }

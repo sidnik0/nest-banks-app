@@ -1,24 +1,24 @@
 import { Injectable } from '@nestjs/common';
 import { BaseCommand } from './base.command';
-import { IRateService } from '../../../service/interface/rate.service';
+import { IBankService } from '../../../service/interface/bank.service';
 import { ParamsDefinition } from '../values-object/params-definition';
 import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
 import { CommandResult } from '../values-object/command-result';
 
 @Injectable()
-export class GetRateCommand extends BaseCommand {
-  constructor(private readonly rateService: IRateService) {
+export class BankDeleteCommand extends BaseCommand {
+  constructor(private readonly bankService: IBankService) {
     super();
   }
 
   async doExecute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
-    const result = await this.rateService.get(params.id);
+    await this.bankService.delete(params.id);
 
-    return { result, initStringResult: 'Rate' };
+    return { result: `Bank with id=${params.id} deleted`, initStringResult: 'Bank' };
   }
 
   getCommandDescription(): string {
-    return `Get rate by bank
+    return `Delete bank by id
 
     Options:
       id=<bankId>                       Bank id

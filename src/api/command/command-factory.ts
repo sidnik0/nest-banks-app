@@ -5,33 +5,33 @@ import { ICommand } from '../command/commands/command.interface';
 import { BaseCommandDescriptor } from './values-object/base-command-descriptor';
 import { CommandName } from '../../types/command-name.type';
 
-import { CreateAccountCommand } from './commands/create-account.command';
-import { CreateBankCommand } from './commands/create-bank.command';
-import { CreateTransactionCommand } from './commands/create-transaction.command';
-import { CreateUserCommand } from './commands/create-user.command';
-import { DeleteAccountCommand } from './commands/delete-account.command';
-import { DeleteBankCommand } from './commands/delete-bank.command';
-import { DeleteUserCommand } from './commands/delete-user.command';
-import { GetAccountCommand } from './commands/get-account.command';
-import { GetAccountsCommand } from './commands/get-accounts.command';
-import { GetAllAccountsByBankCommand } from './commands/get-all-accounts-by-bank.command';
-import { GetAllAccountsByUserAndBankCommand } from './commands/get-all-accounts-by-user-and-bank.command';
-import { GetAllAccountsByUserCommand } from './commands/get-all-accounts-by-user.command';
-import { GetAllBankUsersCommand } from './commands/get-all-bank-users.command';
-import { GetAllTransactionsByAccountCommand } from './commands/get-all-transactions-by-account.command';
-import { GetAllUserBanksCommand } from './commands/get-all-user-banks.command';
-import { GetBankCommand } from './commands/get-bank.command';
-import { GetBanksCommand } from './commands/get-banks.command';
-import { GetRateCommand } from './commands/get-rate.command';
-import { GetRatesCommand } from './commands/get-rates.command';
-import { GetTransactionCommand } from './commands/get-transaction.command';
-import { GetTransactionsCommand } from './commands/get-transactions.command';
-import { GetUserCommand } from './commands/get-user.command';
-import { GetUsersCommand } from './commands/get-users.command';
-import { UpdateAccountCommand } from './commands/update-account.command';
-import { UpdateBankCommand } from './commands/update-bank.command';
-import { UpdateRateCommand } from './commands/update-rate.command';
-import { UpdateUserCommand } from './commands/update-user.command';
+import { AccountCreateCommand } from './commands/account-create.command';
+import { BankCreateCommand } from './commands/bank-create.command';
+import { TransactionCreateCommand } from './commands/transaction-create.command';
+import { UserCreateCommand } from './commands/user-create.command';
+import { AccountDeleteCommand } from './commands/account-delete.command';
+import { BankDeleteCommand } from './commands/bank-delete.command';
+import { UserDeleteCommand } from './commands/user-delete.command';
+import { AccountGetCommand } from './commands/account-get.command';
+import { AccountGetAllCommand } from './commands/account-get-all.command';
+import { AccountGetAllByBankCommand } from './commands/account-get-all-by-bank.command';
+import { AccountGetAllByUserAndBankCommand } from './commands/account-get-all-by-user-and-bank.command';
+import { AccountGetAllByUserCommand } from './commands/account-get-all-by-user.command';
+import { BankGetAllUsersCommand } from './commands/bank-get-all-users.command';
+import { TransactionGetAllByAccountCommand } from './commands/transaction-get-all-by-account.command';
+import { UserGetAllBanksCommand } from './commands/user-get-all-banks.command';
+import { BankGetCommand } from './commands/bank-get.command';
+import { BankGetAllCommand } from './commands/bank-get-all.command';
+import { RateGetCommand } from './commands/rate-get.command';
+import { RateGetAllCommand } from './commands/rate-get-all.command';
+import { TransactionGetCommand } from './commands/transaction-get.command';
+import { TransactionGetAllCommand } from './commands/transaction-get-all.command';
+import { UserGetCommand } from './commands/user-get.command';
+import { UserGetAllCommand } from './commands/user-get-all.command';
+import { AccountUpdateCommand } from './commands/account-update.command';
+import { BankUpdateCommand } from './commands/bank-update.command';
+import { RateUpdateCommand } from './commands/rate-update.command';
+import { UserUpdateCommand } from './commands/user-update.command';
 import { ExitCommand } from './commands/exit.command';
 import { HelpCommand } from './commands/help.command';
 import { CommandFactoryException } from '../../common/exception/command-factory.exception';
@@ -54,33 +54,33 @@ export class CommandFactory {
 
   private static getCommandLib(): Map<string, Type<ICommand>> {
     return new Map<string, Type<ICommand>>([
-      [CommandName.CREATE_ACCOUNT, CreateAccountCommand],
-      [CommandName.CREATE_BANK, CreateBankCommand],
-      [CommandName.CREATE_TRANSACTION, CreateTransactionCommand],
-      [CommandName.CREATE_USER, CreateUserCommand],
-      [CommandName.DELETE_ACCOUNT, DeleteAccountCommand],
-      [CommandName.DELETE_BANK, DeleteBankCommand],
-      [CommandName.DELETE_USER, DeleteUserCommand],
-      [CommandName.GET_ACCOUNT, GetAccountCommand],
-      [CommandName.GET_ACCOUNTS, GetAccountsCommand],
-      [CommandName.GET_ALL_ACCOUNTS_BY_BANK, GetAllAccountsByBankCommand],
-      [CommandName.GET_ALL_ACCOUNTS_BY_USER_AND_BANK, GetAllAccountsByUserAndBankCommand],
-      [CommandName.GET_ALL_ACCOUNTS_BY_USER, GetAllAccountsByUserCommand],
-      [CommandName.GET_ALL_BANK_USERS, GetAllBankUsersCommand],
-      [CommandName.GET_ALL_TRANSACTIONS_BY_ACCOUNT, GetAllTransactionsByAccountCommand],
-      [CommandName.GET_ALL_USER_BANKS, GetAllUserBanksCommand],
-      [CommandName.GET_BANK, GetBankCommand],
-      [CommandName.GET_BANKS, GetBanksCommand],
-      [CommandName.GET_RATE, GetRateCommand],
-      [CommandName.GET_RATES, GetRatesCommand],
-      [CommandName.GET_TRANSACTION, GetTransactionCommand],
-      [CommandName.GET_TRANSACTIONS, GetTransactionsCommand],
-      [CommandName.GET_USER, GetUserCommand],
-      [CommandName.GET_USERS, GetUsersCommand],
-      [CommandName.UPDATE_ACCOUNT, UpdateAccountCommand],
-      [CommandName.UPDATE_BANK, UpdateBankCommand],
-      [CommandName.UPDATE_RATE, UpdateRateCommand],
-      [CommandName.UPDATE_USER, UpdateUserCommand],
+      [CommandName.ACCOUNT_CREATE, AccountCreateCommand],
+      [CommandName.BANK_CREATE, BankCreateCommand],
+      [CommandName.TRANSACTION_CREATE, TransactionCreateCommand],
+      [CommandName.USER_CREATE, UserCreateCommand],
+      [CommandName.ACCOUNT_DELETE, AccountDeleteCommand],
+      [CommandName.BANK_DELETE, BankDeleteCommand],
+      [CommandName.USER_DELETE, UserDeleteCommand],
+      [CommandName.ACCOUNT_GET, AccountGetCommand],
+      [CommandName.ACCOUNT_GET_ALL, AccountGetAllCommand],
+      [CommandName.ACCOUNT_GET_ALL_BY_BANK, AccountGetAllByBankCommand],
+      [CommandName.ACCOUNT_GET_ALL_BY_USER_AND_BANK, AccountGetAllByUserAndBankCommand],
+      [CommandName.ACCOUNT_GET_ALL_BY_USER, AccountGetAllByUserCommand],
+      [CommandName.BANK_GET_ALL_USERS, BankGetAllUsersCommand],
+      [CommandName.TRANSACTION_GET_ALL_BY_ACCOUNT, TransactionGetAllByAccountCommand],
+      [CommandName.USER_GET_ALL_BANKS, UserGetAllBanksCommand],
+      [CommandName.BANK_GET, BankGetCommand],
+      [CommandName.BANK_GET_ALL, BankGetAllCommand],
+      [CommandName.RATE_GET, RateGetCommand],
+      [CommandName.RATE_GET_ALL, RateGetAllCommand],
+      [CommandName.TRANSACTION_GET, TransactionGetCommand],
+      [CommandName.TRANSACTION_GET_ALL, TransactionGetAllCommand],
+      [CommandName.USER_GET, UserGetCommand],
+      [CommandName.USER_GET_ALL, UserGetAllCommand],
+      [CommandName.ACCOUNT_UPDATE, AccountUpdateCommand],
+      [CommandName.BANK_UPDATE, BankUpdateCommand],
+      [CommandName.RATE_UPDATE, RateUpdateCommand],
+      [CommandName.UPDATE_USER, UserUpdateCommand],
       [CommandName.EXIT, ExitCommand],
       [CommandName.HELP, HelpCommand],
     ]);

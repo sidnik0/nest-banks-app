@@ -7,7 +7,7 @@ import { CommandResult } from '../values-object/command-result';
 import { OperationType } from '../../../types/operation.type';
 
 @Injectable()
-export class UpdateAccountCommand extends BaseCommand {
+export class AccountUpdateCommand extends BaseCommand {
   constructor(private readonly accountService: IAccountService) {
     super();
   }

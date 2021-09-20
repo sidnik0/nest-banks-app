@@ -8,7 +8,7 @@ import { CommandResult } from '../values-object/command-result';
 import { RateModel } from 'src/model/interface/rate.model';
 
 @Injectable()
-export class CreateBankCommand extends BaseCommand {
+export class BankCreateCommand extends BaseCommand {
   constructor(private readonly bankService: IBankService) {
     super();
   }
