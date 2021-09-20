@@ -1,7 +1,13 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { BaseModel } from './base.model';
 
-export interface RateModel extends BaseModel {
+export class RateModel extends BaseModel {
+  @ApiProperty()
   RUB_USD: number;
+
+  @ApiProperty()
   RUB_EUR: number;
+
+  @ApiProperty()
   USD_EUR: number;
 }

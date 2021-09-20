@@ -1,7 +1,13 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { BaseModel } from './base.model';
 
-export interface BankModel extends BaseModel {
+export class BankModel extends BaseModel {
+  @ApiProperty()
   name: string;
+
+  @ApiProperty()
   commissionForEntity: number;
+
+  @ApiProperty()
   commissionForIndividual: number;
 }
