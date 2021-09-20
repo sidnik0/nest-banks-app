@@ -16,7 +16,7 @@ export class TransactionController extends BaseController {
     await this.executeCommand({ name: CommandName.TRANSACTION_CREATE, params: createTransactionDto });
   }
 
-  @Get('account/:id')
+  @Get('accounts/:id')
   @ApiOperation({ summary: 'Get transactions by account id', description: 'Get transactions by account id' })
   @ApiParam({ name: 'Account id' })
   @ApiQuery({ type: GetAllTransactionsByAccountDto })
