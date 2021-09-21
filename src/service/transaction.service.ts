@@ -105,7 +105,7 @@ export class TransactionService extends BaseService<TransactionModel> implements
   }
 
   private async getCurrenRate(from: AccountModel, to: AccountModel): Promise<number> {
-    if (from.currency !== to.currency) {
+    if (from.currency === to.currency) {
       return 1;
     }
 
