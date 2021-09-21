@@ -4,6 +4,7 @@ import { IRateRepository } from './interface/rate.repository';
 import { RateModel } from '../model/interface/rate.model';
 import { FileSystemHelper } from '../common/helper/file-system';
 import { IdGenerator } from '../common/helper/id-generator';
+import { NotFountException } from '../common/exception/not-fount.exception';
 
 @Injectable()
 export class FsRateRepository extends FsBaseRepository<RateModel> implements IRateRepository {
@@ -21,5 +22,27 @@ export class FsRateRepository extends FsBaseRepository<RateModel> implements IRa
     }
 
     return model.id ? `id=${model.id}` : `${model}`;
+  }
+
+  async get(): Promise<never> {
+    throw Error('Prohibited operation');
+  }
+
+  async getByBank(id: string): Promise<RateModel> {
+    let data = null;
+
+    for (const obj of Object.values(this.data)) {
+      if (obj.bankId === id) {
+        data = { ...obj };
+
+        break;
+      }
+    }
+
+    if (!data) {
+      throw new NotFountException(`Data ${this.getLoggingModelId(id)} not found`);
+    }
+
+    return data;
   }
 }

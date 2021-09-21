@@ -10,11 +10,19 @@ export class RateService extends BaseService<RateModel> implements IRateService 
     super(repository);
   }
 
-  async create(): Promise<RateModel> {
+  async create(): Promise<never> {
     throw Error('Prohibited operation');
   }
 
-  async delete(): Promise<boolean> {
+  async get(): Promise<never> {
     throw Error('Prohibited operation');
+  }
+
+  async delete(): Promise<never> {
+    throw Error('Prohibited operation');
+  }
+
+  async getByBank(id: string): Promise<RateModel> {
+    return await this.repository.getByBank(id);
   }
 }

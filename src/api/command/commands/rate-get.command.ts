@@ -12,7 +12,7 @@ export class RateGetCommand extends BaseCommand {
   }
 
   async doExecute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
-    const result = await this.rateService.get(params.id);
+    const result = await this.rateService.getByBank(params.id);
 
     return { result, initStringResult: 'Rate' };
   }

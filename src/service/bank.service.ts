@@ -32,7 +32,7 @@ export class BankService extends BaseService<BankModel> implements IBankService 
 
     const bank = await this.repository.create({ name, commissionForEntity, commissionForIndividual });
 
-    await this.rateRepository.create({ id: bank.id, RUB_EUR, RUB_USD, USD_EUR });
+    await this.rateRepository.create({ bankId: bank.id, RUB_EUR, RUB_USD, USD_EUR });
 
     return bank;
   }

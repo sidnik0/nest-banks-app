@@ -1,15 +1,19 @@
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, OneToOne } from 'typeorm';
+import { BankEntity } from './bank.entity';
 import { BaseEntity } from './base.entity';
 import { RateModel } from './interface/rate.model';
 
 @Entity()
 export class RateEntity extends BaseEntity implements RateModel {
-  @Column('number', { default: 1 })
+  @OneToOne(() => BankEntity)
+  bankId: string;
+
+  @Column()
   RUB_USD: number;
 
-  @Column('number', { default: 1 })
+  @Column()
   RUB_EUR: number;
 
-  @Column('number', { default: 1 })
+  @Column()
   USD_EUR: number;
 }

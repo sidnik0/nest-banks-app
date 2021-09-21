@@ -20,6 +20,7 @@ import { AccountEntity } from '../model/account.entity';
 import { BankEntity } from '../model/bank.entity';
 import { TransactionEntity } from '../model/transaction.entity';
 import { UserEntity } from '../model/user.entity';
+import { RateEntity } from '../model/rate.entity';
 
 @Module({})
 export class RepositoryModule {
@@ -39,7 +40,7 @@ export class RepositoryModule {
                 autoLoadEntities: true,
                 synchronize: true,
               }),
-              TypeOrmModule.forFeature([AccountEntity, BankEntity, TransactionEntity, UserEntity]),
+              TypeOrmModule.forFeature([AccountEntity, BankEntity, RateEntity, TransactionEntity, UserEntity]),
             ]
           : [HelperModule],
       providers:
