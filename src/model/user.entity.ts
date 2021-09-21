@@ -5,13 +5,18 @@ import { FaceType } from '../types/face.type';
 
 @Entity()
 export class UserEntity extends BaseEntity implements UserModel {
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: 255,
+    nullable: false,
+  })
   name: string;
 
   @Column({
     type: 'enum',
     enum: FaceType,
-    default: FaceType.INDIVIDUAL,
+    nullable: false,
+    update: false,
   })
   face: FaceType;
 }

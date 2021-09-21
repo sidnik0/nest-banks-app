@@ -5,15 +5,33 @@ import { RateModel } from './interface/rate.model';
 
 @Entity()
 export class RateEntity extends BaseEntity implements RateModel {
-  @OneToOne(() => BankEntity)
+  @OneToOne(() => BankEntity, {
+    nullable: false,
+    orphanedRowAction: 'delete',
+  })
   bankId: string;
 
-  @Column()
+  @Column({
+    type: 'float',
+    default: 0,
+    nullable: false,
+    scale: 2,
+  })
   RUB_USD: number;
 
-  @Column()
+  @Column({
+    type: 'float',
+    default: 0,
+    nullable: false,
+    scale: 2,
+  })
   RUB_EUR: number;
 
-  @Column()
+  @Column({
+    type: 'float',
+    default: 0,
+    nullable: false,
+    scale: 2,
+  })
   USD_EUR: number;
 }

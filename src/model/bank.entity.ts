@@ -4,12 +4,24 @@ import { BankModel } from './interface/bank.model';
 
 @Entity()
 export class BankEntity extends BaseEntity implements BankModel {
-  @Column()
+  @Column({
+    type: 'smallint',
+    nullable: false,
+    default: 0,
+  })
   commissionForEntity: number;
 
-  @Column()
+  @Column({
+    type: 'smallint',
+    nullable: false,
+    default: 0,
+  })
   commissionForIndividual: number;
 
-  @Column()
+  @Column({
+    type: 'varchar',
+    length: 50,
+    nullable: false,
+  })
   name: string;
 }

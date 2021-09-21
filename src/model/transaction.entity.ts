@@ -5,15 +5,25 @@ import { AccountEntity } from './account.entity';
 
 @Entity()
 export class TransactionEntity extends BaseEntity implements TransactionModel {
-  @Column()
+  @Column({
+    type: 'float',
+    default: 0,
+    nullable: false,
+    scale: 2,
+    update: false,
+  })
   amount: number;
 
-  @Column()
+  @Column({
+    type: 'timestamp',
+    nullable: false,
+    update: false,
+  })
   createAt: Date;
 
-  @ManyToOne(() => AccountEntity)
+  @ManyToOne(() => AccountEntity, { nullable: false })
   fromAccountId: string;
 
-  @ManyToOne(() => AccountEntity)
+  @ManyToOne(() => AccountEntity, { nullable: false })
   toAccountId: string;
 }
