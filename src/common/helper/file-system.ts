@@ -16,7 +16,9 @@ export class FileSystemHelper {
 
         return JSON.parse(json);
       } else {
-        if (!fs.existsSync(this.path)) fs.mkdirSync(this.path);
+        if (!fs.existsSync(this.path)) {
+          fs.mkdirSync(this.path);
+        }
 
         fs.writeFileSync(`${this.path}/${file}.json`, JSON.stringify({}, null, 2));
 
