@@ -109,7 +109,7 @@ export class TransactionService extends BaseService<TransactionModel> implements
       return 1;
     }
 
-    const rate = await this.rateRepository.get(from.bankId);
+    const rate = await this.rateRepository.getByBank(from.bankId);
 
     const currentRate = rate[`${from.currency}_${to.currency}`];
 
