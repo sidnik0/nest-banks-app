@@ -23,7 +23,9 @@ export class ConsoleInterpreter {
 
     this.rl.on('line', this.lineHandler.bind(this));
 
-    this.rl.on('close', () => console.log('app close'));
+    this.rl.on('close', function () {
+      process.exit(0);
+    });
   }
 
   private async lineHandler(input: string) {
