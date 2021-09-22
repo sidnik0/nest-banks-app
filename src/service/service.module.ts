@@ -12,7 +12,7 @@ import { TransactionService } from './transaction.service';
 import { UserService } from './user.service';
 
 @Module({
-  imports: [RepositoryModule.init()],
+  imports: [RepositoryModule.forRoot()],
   providers: [
     {
       provide: IAccountService,

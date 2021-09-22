@@ -24,7 +24,7 @@ import { RateEntity } from '../model/rate.entity';
 
 @Module({})
 export class RepositoryModule {
-  static init(): DynamicModule {
+  static forRoot(): DynamicModule {
     const user = process.env.DATABASE_NAME;
     const password = process.env.DATABASE_PASSWORD;
     const port = process.env.DATABASE_PORT;
