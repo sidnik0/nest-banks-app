@@ -12,7 +12,7 @@ export class TransactionGetAllByAccountCommand extends BaseCommand {
   }
 
   async doExecute({ params }: TypedCommandDescriptor): Promise<CommandResult> {
-    const result = await this.transactionService.getAllByAccount(params.id);
+    const result = await this.transactionService.getAllByAccount(params.id, { from: params.from, to: params.to });
 
     return { result, initStringResult: 'List transactions' };
   }
@@ -22,6 +22,8 @@ export class TransactionGetAllByAccountCommand extends BaseCommand {
 
     Options:
       id=<bankId>                       Bank id
+      from=[from]                       From time(yy-mm-dd)
+      to=[to]                           To time(yy-mm-dd)
     
       help                              Display help for command
     `;

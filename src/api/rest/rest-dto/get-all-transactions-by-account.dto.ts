@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDateString, IsOptional } from 'class-validator';
+import { IsDataURI, IsDateString, IsOptional } from 'class-validator';
 
 export class GetAllTransactionsByAccountDto {
   @ApiPropertyOptional({
@@ -7,12 +7,12 @@ export class GetAllTransactionsByAccountDto {
   })
   @IsOptional()
   @IsDateString()
-  from?: Date;
+  from?: string;
 
   @ApiPropertyOptional({
     description: 'To date',
   })
   @IsOptional()
   @IsDateString()
-  to?: Date;
+  to?: string;
 }

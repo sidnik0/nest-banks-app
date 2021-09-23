@@ -22,6 +22,8 @@ export class PropertyParser {
         return PropertyParser.returnProperty(value, returnsAnErrorMessage, PropertyParser.parseFaceType);
       case 'OperationType':
         return PropertyParser.returnProperty(value, returnsAnErrorMessage, PropertyParser.parseOperationType);
+      case 'Date':
+        return PropertyParser.returnProperty(value, returnsAnErrorMessage, PropertyParser.parseDate);
       case 'help':
         return { value: true };
       default:
@@ -87,5 +89,15 @@ export class PropertyParser {
     }
 
     return { value };
+  }
+
+  private static parseDate(value: any): { value?: Date; error?: string } {
+    const date = new Date(value);
+
+    if (date.toString() === 'Invalid Date') {
+      return { error: 'Date parser error: Invalid Date' };
+    }
+
+    return { value: date };
   }
 }

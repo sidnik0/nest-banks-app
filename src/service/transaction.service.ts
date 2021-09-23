@@ -73,8 +73,15 @@ export class TransactionService extends BaseService<TransactionModel> implements
     throw Error('Prohibited operation');
   }
 
-  async getAllByAccount(id: string): Promise<TransactionModel[]> {
-    return await this.repository.getAllByAccount(id);
+  async getAllByAccount(id: string, period?: { from?: Date; to?: Date }): Promise<TransactionModel[]> {
+    if (!period.from && !period.to) {
+      return await this.repository.getAllByAccount(id);
+    }
+
+    const from = period.from ? new Date(period.from) : new Date(0);
+    const to = period.to ? new Date(period.to) : new Date();
+
+    return await this.repository.getAllByAccount(id, { from, to });
   }
 
   private static checkBalance(from: AccountModel, value: number): void {

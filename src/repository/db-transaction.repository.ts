@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Between, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { DbBaseRepository } from './db-base.repository';
 import { ITransactionRepository } from './interface/transaction.repository';
 import { TransactionEntity } from '../model/transaction.entity';
@@ -24,17 +24,28 @@ export class DbTransactionRepository extends DbBaseRepository<TransactionEntity>
       : `fromAccountId=${model.fromAccountId}, toAccountId=${model.toAccountId}, createAt=${model.createAt}`;
   }
 
-  async update(): Promise<never> {
+  update(): never {
     throw Error('Prohibited operation');
   }
 
-  async delete(): Promise<never> {
+  delete(): never {
     throw Error('Prohibited operation');
   }
 
   async getAllByAccount(id: string, period?: { from: Date; to: Date }): Promise<TransactionEntity[]> {
+    if (!period) {
+      return await this.repository.find({
+        where: [{ toAccountId: id }, { fromAccountId: id }],
+      });
+    }
+    const fromTime = period.from.toISOString();
+    const toTime = period.to.toISOString();
+
     return await this.repository.find({
-      where: [{ toAccountId: id }, { fromAccountId: id }],
+      where: [
+        { toAccountId: id, createAt: Between(fromTime, toTime) },
+        { fromAccountId: id, createAt: Between(fromTime, toTime) },
+      ],
     });
   }
 }

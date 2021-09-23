@@ -19,8 +19,8 @@ export class TransactionController extends BaseController {
 
   @Get('accounts/:id')
   @ApiOperation({ summary: 'Get transactions by account id', description: 'Get transactions by account id' })
-  @ApiParam({ name: 'id' })
   @ApiQuery({ type: GetAllTransactionsByAccountDto })
+  @ApiParam({ name: 'id' })
   @ApiResponse({ type: [TransactionModel], status: 200 })
   async getAllByAccount(
     @Param() idDto: IdDto,

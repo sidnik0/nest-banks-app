@@ -25,23 +25,33 @@ export class FsTransactionRepository extends FsBaseRepository<TransactionModel> 
       : `fromAccountId=${model.fromAccountId}, toAccountId=${model.toAccountId}, createAt=${model.createAt}`;
   }
 
-  async update(): Promise<never> {
+  update(): never {
     throw Error('Prohibited operation');
   }
 
-  async delete(): Promise<never> {
+  delete(): never {
     throw Error('Prohibited operation');
   }
 
   async getAllByAccount(id: string, period?: { from: Date; to: Date }): Promise<TransactionModel[]> {
-    const result: TransactionModel[] = [];
-
-    for (const obj of Object.values(this.data)) {
-      if (obj.fromAccountId === id || obj.toAccountId === id) {
-        result.push(obj);
-      }
+    if (!period) {
+      return Object.values(this.data).map((model) => {
+        if (model.fromAccountId === id || model.toAccountId === id) {
+          return model;
+        }
+      });
     }
 
-    return result;
+    return Object.values(this.data).map((model) => {
+      if (model.fromAccountId === id || model.toAccountId === id) {
+        const createTime = new Date(model.createAt).getTime();
+        const fromTime = period.from.getTime();
+        const toTime = period.to.getTime();
+
+        if (fromTime <= createTime && createTime <= toTime) {
+          return model;
+        }
+      }
+    });
   }
 }

@@ -83,7 +83,7 @@ export abstract class BaseCommand implements ICommand {
 
     delete typedCommandDescriptor.params['help'];
 
-    return this.doExecute(typedCommandDescriptor);
+    return await this.doExecute(typedCommandDescriptor);
   }
 
   abstract doExecute(typedCommandDescriptor: TypedCommandDescriptor): Promise<CommandResult>;
