@@ -7,10 +7,10 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - postgre-data:/var/lib/postgresql/data
+      - postgre-database:/var/lib/postgresql/data
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: banks_app
 volumes: 
-  postgre-data:
+  postgre-database:
