@@ -25,9 +25,11 @@ import { RateEntity } from '../model/rate.entity';
 @Module({})
 export class RepositoryModule {
   static forRoot(): DynamicModule {
-    const user = process.env.DATABASE_NAME;
-    const password = process.env.DATABASE_PASSWORD;
+    const user = process.env.DATABASE_USER_NAME;
+    const password = process.env.DATABASE_USER_PASSWORD;
     const port = process.env.DATABASE_PORT;
+    const host = process.env.DATABASE_HOST;
+    const nameDB = process.env.DATABASE_NAME;
 
     return {
       module: RepositoryModule,
@@ -36,7 +38,7 @@ export class RepositoryModule {
           ? [
               TypeOrmModule.forRoot({
                 type: 'postgres',
-                url: `postgres://${user}:${password}@localhost:${port}/banks_app`,
+                url: `postgres://${user}:${password}@${host}:${port}/${nameDB}`,
                 autoLoadEntities: true,
                 synchronize: true,
               }),

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Between, LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { DbBaseRepository } from './db-base.repository';
 import { ITransactionRepository } from './interface/transaction.repository';
 import { TransactionEntity } from '../model/transaction.entity';
@@ -33,19 +33,13 @@ export class DbTransactionRepository extends DbBaseRepository<TransactionEntity>
   }
 
   async getAllByAccount(id: string, period?: { from: Date; to: Date }): Promise<TransactionEntity[]> {
-    if (!period) {
-      return await this.repository.find({
-        where: [{ toAccountId: id }, { fromAccountId: id }],
-      });
-    }
-    const fromTime = period.from.toISOString();
-    const toTime = period.to.toISOString();
+    const whereOptions = !period
+      ? [{ toAccountId: id }, { fromAccountId: id }]
+      : [
+          { toAccountId: id, createAt: Between(period.from.toISOString(), period.to.toISOString()) },
+          { fromAccountId: id, createAt: Between(period.from.toISOString(), period.to.toISOString()) },
+        ];
 
-    return await this.repository.find({
-      where: [
-        { toAccountId: id, createAt: Between(fromTime, toTime) },
-        { fromAccountId: id, createAt: Between(fromTime, toTime) },
-      ],
-    });
+    return await this.repository.find({ where: whereOptions });
   }
 }

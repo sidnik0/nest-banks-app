@@ -20,7 +20,7 @@ export class BankEntity extends BaseEntity implements BankModel {
 
   @Column({
     type: 'varchar',
-    length: 50,
+    length: 255,
     nullable: false,
   })
   name: string;

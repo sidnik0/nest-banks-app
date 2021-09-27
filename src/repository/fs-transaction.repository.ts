@@ -34,24 +34,28 @@ export class FsTransactionRepository extends FsBaseRepository<TransactionModel> 
   }
 
   async getAllByAccount(id: string, period?: { from: Date; to: Date }): Promise<TransactionModel[]> {
-    if (!period) {
-      return Object.values(this.data).map((model) => {
-        if (model.fromAccountId === id || model.toAccountId === id) {
-          return model;
-        }
-      });
-    }
+    const periodExest = !!period;
 
-    return Object.values(this.data).map((model) => {
+    const data: TransactionModel[] = [];
+
+    for (const model of Object.values(this.data)) {
       if (model.fromAccountId === id || model.toAccountId === id) {
+        if (!periodExest) {
+          data.push(model);
+
+          continue;
+        }
+
         const createTime = new Date(model.createAt).getTime();
         const fromTime = period.from.getTime();
         const toTime = period.to.getTime();
 
         if (fromTime <= createTime && createTime <= toTime) {
-          return model;
+          data.push(model);
         }
       }
-    });
+    }
+
+    return data;
   }
 }

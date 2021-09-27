@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  postgre:
+  postgres-bank-app:
     image: postgres:12
-    container_name: postgre
+    container_name: postgres-bank-app
     ports:
       - 5432:5432
     volumes:
