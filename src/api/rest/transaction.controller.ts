@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Param, Body, Query } from '@nestjs/common';
+import { Controller, Get, Post, Param, Body, Query, Res } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { BaseController } from './base.controller';
 import { CommandName } from '../../types/command-name.type';
 import { TransactionModel } from '../../model/interface/transaction.model';
@@ -13,8 +14,14 @@ export class TransactionController extends BaseController {
   @Post()
   @ApiOperation({ summary: 'Create transaction', description: 'Create transaction' })
   @ApiBody({ type: CreateTransactionDto })
-  async create(@Body() createTransactionDto: CreateTransactionDto): Promise<void> {
-    await this.executeCommand({ name: CommandName.TRANSACTION_CREATE, params: createTransactionDto });
+  async create(@Body() createTransactionDto: CreateTransactionDto, @Res() res: Response): Promise<void> {
+    const transaction = await this.executeCommand({
+      name: CommandName.TRANSACTION_CREATE,
+      params: createTransactionDto,
+    });
+
+    res.set('Location', transaction.id);
+    res.end();
   }
 
   @Get('accounts/:id')

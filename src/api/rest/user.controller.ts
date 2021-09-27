@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, Res } from '@nestjs/common';
 import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 import { BaseController } from './base.controller';
 import { UserModel } from '../../model/interface/user.model';
 import { BankModel } from '../../model/interface/bank.model';
@@ -14,8 +15,11 @@ export class UserController extends BaseController {
   @Post()
   @ApiOperation({ summary: 'Create user', description: 'Create user' })
   @ApiBody({ type: CreateUserDto })
-  async create(@Body() createUserDto: CreateUserDto): Promise<void> {
-    await this.executeCommand({ name: CommandName.USER_CREATE, params: createUserDto });
+  async create(@Body() createUserDto: CreateUserDto, @Res() res: Response): Promise<void> {
+    const user = await this.executeCommand({ name: CommandName.USER_CREATE, params: createUserDto });
+
+    res.set('Location', user.id);
+    res.end();
   }
 
   @Get(':id/banks')
