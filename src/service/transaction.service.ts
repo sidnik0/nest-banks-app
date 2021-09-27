@@ -58,6 +58,8 @@ export class TransactionService extends BaseService<TransactionModel> implements
       toAccountId,
       amount,
       createAt,
+      fromAccount,
+      toAccount,
     });
   }
 
@@ -118,8 +120,11 @@ export class TransactionService extends BaseService<TransactionModel> implements
 
     const rate = await this.rateRepository.getByBank(from.bankId);
 
-    const currentRate = rate[`${from.currency}_${to.currency}`];
+    const currentRate =
+      rate[`${from.currency.toLocaleLowerCase()}${to.currency[0] + to.currency.slice(1).toLowerCase}`];
 
-    return currentRate ? Math.floor((1 / currentRate) * 100) / 100 : rate[`${to.currency}_${from.currency}`];
+    return currentRate
+      ? Math.floor((1 / currentRate) * 100) / 100
+      : rate[`${to.currency.toLocaleLowerCase()}${from.currency[0] + from.currency.slice(1).toLowerCase}`];
   }
 }

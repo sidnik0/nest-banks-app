@@ -7,19 +7,19 @@ export class UpdateRateDto {
   })
   @IsOptional()
   @IsNumber()
-  readonly RUB_USD?: number;
+  readonly rubUsd?: number;
 
   @ApiPropertyOptional({
     description: 'Rate RUB-EUR',
   })
   @IsOptional()
   @IsNumber()
-  readonly RUB_EUR?: number;
+  readonly rubEur?: number;
 
   @ApiPropertyOptional({
     description: 'Rate USD-EUR',
   })
   @IsOptional()
   @IsNumber()
-  readonly USD_EUR?: number;
+  readonly usdEur?: number;
 }

@@ -23,6 +23,12 @@ export class DbRateRepository extends DbBaseRepository<RateEntity> implements IR
     return model.id ? `id=${model.id}` : `${model}`;
   }
 
+  async create(model: RateEntity): Promise<RateEntity> {
+    delete model.bankId;
+
+    return await super.create(model);
+  }
+
   async get(): Promise<never> {
     throw Error('Prohibited operation');
   }

@@ -24,6 +24,13 @@ export class DbTransactionRepository extends DbBaseRepository<TransactionEntity>
       : `fromAccountId=${model.fromAccountId}, toAccountId=${model.toAccountId}, createAt=${model.createAt}`;
   }
 
+  async create(model: TransactionEntity): Promise<TransactionEntity> {
+    delete model.fromAccountId;
+    delete model.toAccountId;
+
+    return await super.create(model);
+  }
+
   update(): never {
     throw Error('Prohibited operation');
   }

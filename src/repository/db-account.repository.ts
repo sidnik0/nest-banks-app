@@ -22,6 +22,13 @@ export class DbAccountRepository extends DbBaseRepository<AccountEntity> impleme
     return model.id ? `id=${model.id}` : `userId=${model.userId}, bankId=${model.bankId}`;
   }
 
+  async create(model: AccountEntity): Promise<AccountEntity> {
+    delete model.bankId;
+    delete model.userId;
+
+    return await super.create(model);
+  }
+
   getAllByUser(id: string): Promise<AccountEntity[]> {
     return this.repository.find({ userId: id });
   }

@@ -23,6 +23,13 @@ export class FsAccountRepository extends FsBaseRepository<AccountModel> implemen
     return model.id ? `id=${model.id}` : `userId=${model.userId}, bankId=${model.bankId}`;
   }
 
+  async create(model: AccountModel): Promise<AccountModel> {
+    delete model.bank;
+    delete model.user;
+
+    return await super.create(model);
+  }
+
   async getAllByUser(id: string): Promise<AccountModel[]> {
     const result: AccountModel[] = [];
 

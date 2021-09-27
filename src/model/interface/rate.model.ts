@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { BankModel } from './bank.model';
 import { BaseModel } from './base.model';
 
 export class RateModel extends BaseModel {
@@ -6,11 +7,13 @@ export class RateModel extends BaseModel {
   bankId: string;
 
   @ApiProperty()
-  RUB_USD: number;
+  rubUsd: number;
 
   @ApiProperty()
-  RUB_EUR: number;
+  rubEur: number;
 
   @ApiProperty()
-  USD_EUR: number;
+  usdEur: number;
+
+  bank?: BankModel;
 }

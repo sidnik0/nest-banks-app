@@ -23,9 +23,9 @@ export class RateUpdateCommand extends BaseCommand {
 
     Options:
       id=<bankId>                       Bank id
-      RUB_USD=[RUB_USD]                 Rate RUB_USD
-      RUB_EUR=[RUB_EUR]                 Rate RUB_EUR
-      USD_EUR=[USD_EUR]                 Rate USD_EUR
+      rubUsd=[rubUsd]                   Rate RUB_USD
+      rubEur=[rubEur]                   Rate RUB_EUR
+      usdEur=[usdEur]                   Rate USD_EUR
       
       help                              Display help for command
     `;
@@ -37,15 +37,15 @@ export class RateUpdateCommand extends BaseCommand {
         type: 'string',
         required: true,
       },
-      RUB_USD: {
+      rubUsd: {
         type: 'number',
         required: false,
       },
-      RUB_EUR: {
+      rubEur: {
         type: 'number',
         required: false,
       },
-      USD_EUR: {
+      usdEur: {
         type: 'number',
         required: false,
       },

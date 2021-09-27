@@ -23,9 +23,21 @@ export class AccountEntity extends BaseEntity implements AccountModel {
   })
   currency: CurrencyType;
 
-  @ManyToOne(() => UserEntity, { nullable: false })
+  @Column({
+    type: 'uuid',
+    nullable: false,
+  })
   userId: string;
 
-  @ManyToOne(() => BankEntity, { nullable: false })
+  @Column({
+    type: 'uuid',
+    nullable: false,
+  })
   bankId: string;
+
+  @ManyToOne(() => UserEntity, { nullable: false })
+  user: UserEntity;
+
+  @ManyToOne(() => BankEntity, { nullable: false })
+  bank: BankEntity;
 }

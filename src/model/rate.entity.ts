@@ -11,7 +11,7 @@ export class RateEntity extends BaseEntity implements RateModel {
     nullable: false,
     scale: 2,
   })
-  RUB_USD: number;
+  rubUsd: number;
 
   @Column({
     type: 'float',
@@ -19,7 +19,7 @@ export class RateEntity extends BaseEntity implements RateModel {
     nullable: false,
     scale: 2,
   })
-  RUB_EUR: number;
+  rubEur: number;
 
   @Column({
     type: 'float',
@@ -27,7 +27,7 @@ export class RateEntity extends BaseEntity implements RateModel {
     nullable: false,
     scale: 2,
   })
-  USD_EUR: number;
+  usdEur: number;
 
   @Column({
     type: 'uuid',

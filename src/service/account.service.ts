@@ -31,7 +31,7 @@ export class AccountService extends BaseService<AccountModel> implements IAccoun
 
     const data = model.balance ? model : { ...model, balance: 0 };
 
-    return await this.repository.create(data as AccountModel);
+    return await this.repository.create({ ...data, user, bank } as AccountModel);
   }
 
   async update(): Promise<never> {

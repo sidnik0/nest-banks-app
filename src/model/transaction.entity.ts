@@ -26,4 +26,10 @@ export class TransactionEntity extends BaseEntity implements TransactionModel {
 
   @ManyToOne(() => AccountEntity, { nullable: false })
   toAccountId: string;
+
+  @ManyToOne(() => AccountEntity, { nullable: false })
+  fromAccount: AccountEntity;
+
+  @ManyToOne(() => AccountEntity, { nullable: false })
+  toAccount: AccountEntity;
 }

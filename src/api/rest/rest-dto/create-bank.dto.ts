@@ -24,17 +24,17 @@ export class CreateBankDto {
     description: 'Rate RUB-USD',
   })
   @IsNumber()
-  readonly RUB_USD?: number;
+  readonly rubUsd?: number;
 
   @ApiProperty({
     description: 'Rate RUB-EUR',
   })
   @IsNumber()
-  readonly RUB_EUR?: number;
+  readonly rubEur?: number;
 
   @ApiProperty({
     description: 'Rate USD-EUR',
   })
   @IsNumber()
-  readonly USD_EUR?: number;
+  readonly usdEur?: number;
 }

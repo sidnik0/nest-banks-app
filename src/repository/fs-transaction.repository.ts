@@ -15,6 +15,13 @@ export class FsTransactionRepository extends FsBaseRepository<TransactionModel> 
     this.data = this.fileSystem.readFile<TransactionModel>(this.fileName);
   }
 
+  async create(model: TransactionModel): Promise<TransactionModel> {
+    delete model.fromAccount;
+    delete model.toAccount;
+
+    return await super.create(model);
+  }
+
   getLoggingModelId(model: string | TransactionModel): string {
     if (typeof model === 'string') {
       return model;

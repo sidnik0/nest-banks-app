@@ -24,6 +24,12 @@ export class FsRateRepository extends FsBaseRepository<RateModel> implements IRa
     return model.id ? `id=${model.id}` : `${model}`;
   }
 
+  async create(model: RateModel): Promise<RateModel> {
+    delete model.bank;
+
+    return await super.create(model);
+  }
+
   async get(): Promise<never> {
     throw Error('Prohibited operation');
   }
