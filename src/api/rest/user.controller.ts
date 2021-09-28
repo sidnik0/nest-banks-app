@@ -15,11 +15,10 @@ export class UserController extends BaseController {
   @Post()
   @ApiOperation({ summary: 'Create user', description: 'Create user' })
   @ApiBody({ type: CreateUserDto })
-  async create(@Body() createUserDto: CreateUserDto, @Res() res: Response): Promise<void> {
+  async create(@Body() createUserDto: CreateUserDto, @Res({ passthrough: true }) res: Response): Promise<void> {
     const user = await this.executeCommand({ name: CommandName.USER_CREATE, params: createUserDto });
 
     res.set('Location', user.id);
-    res.end();
   }
 
   @Get(':id/banks')

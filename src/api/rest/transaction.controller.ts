@@ -14,14 +14,16 @@ export class TransactionController extends BaseController {
   @Post()
   @ApiOperation({ summary: 'Create transaction', description: 'Create transaction' })
   @ApiBody({ type: CreateTransactionDto })
-  async create(@Body() createTransactionDto: CreateTransactionDto, @Res() res: Response): Promise<void> {
+  async create(
+    @Body() createTransactionDto: CreateTransactionDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<void> {
     const transaction = await this.executeCommand({
       name: CommandName.TRANSACTION_CREATE,
       params: createTransactionDto,
     });
 
     res.set('Location', transaction.id);
-    res.end();
   }
 
   @Get('accounts/:id')

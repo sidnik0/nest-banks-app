@@ -15,11 +15,10 @@ export class AccountController extends BaseController {
   @Post()
   @ApiOperation({ summary: 'Create account', description: 'Create account' })
   @ApiBody({ type: CreateAccountDto })
-  async create(@Body() createAccountDto: CreateAccountDto, @Res() res: Response): Promise<void> {
+  async create(@Body() createAccountDto: CreateAccountDto, @Res({ passthrough: true }) res: Response): Promise<void> {
     const account = await this.executeCommand({ name: CommandName.ACCOUNT_CREATE, params: createAccountDto });
 
     res.set('Location', account.id);
-    res.end();
   }
 
   @Get(':id')

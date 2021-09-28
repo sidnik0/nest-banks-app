@@ -15,11 +15,10 @@ export class BankController extends BaseController {
   @Post()
   @ApiOperation({ summary: 'Create bank', description: 'Create bank' })
   @ApiBody({ type: CreateBankDto })
-  async create(@Body() createBankDto: CreateBankDto, @Res() res: Response): Promise<void> {
+  async create(@Body() createBankDto: CreateBankDto, @Res({ passthrough: true }) res: Response): Promise<void> {
     const bank = await this.executeCommand({ name: CommandName.BANK_CREATE, params: createBankDto });
 
     res.set('Location', bank.id);
-    res.end();
   }
 
   @Get(':id/users')
