@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNumber, IsOptional, IsString, Min } from 'class-validator';
 
 export class CreateBankDto {
   @ApiProperty({
@@ -20,21 +20,27 @@ export class CreateBankDto {
   @IsNumber()
   readonly commissionForIndividual: number;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Rate RUB-USD',
   })
+  @IsOptional()
   @IsNumber()
+  @Min(0.01)
   readonly rubUsd?: number;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Rate RUB-EUR',
   })
+  @IsOptional()
   @IsNumber()
+  @Min(0.01)
   readonly rubEur?: number;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Rate USD-EUR',
   })
+  @IsOptional()
   @IsNumber()
+  @Min(0.01)
   readonly usdEur?: number;
 }

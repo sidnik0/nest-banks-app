@@ -1,5 +1,5 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsNumber, IsOptional, Min } from 'class-validator';
 
 export class UpdateRateDto {
   @ApiPropertyOptional({
@@ -7,6 +7,7 @@ export class UpdateRateDto {
   })
   @IsOptional()
   @IsNumber()
+  @Min(0.01)
   readonly rubUsd?: number;
 
   @ApiPropertyOptional({
@@ -14,6 +15,7 @@ export class UpdateRateDto {
   })
   @IsOptional()
   @IsNumber()
+  @Min(0.01)
   readonly rubEur?: number;
 
   @ApiPropertyOptional({
@@ -21,5 +23,6 @@ export class UpdateRateDto {
   })
   @IsOptional()
   @IsNumber()
+  @Min(0.01)
   readonly usdEur?: number;
 }

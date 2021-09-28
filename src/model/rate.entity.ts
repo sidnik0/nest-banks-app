@@ -7,7 +7,7 @@ import { RateModel } from './interface/rate.model';
 export class RateEntity extends BaseEntity implements RateModel {
   @Column({
     type: 'float',
-    default: 0,
+    default: 1,
     nullable: false,
     scale: 2,
   })
@@ -15,7 +15,7 @@ export class RateEntity extends BaseEntity implements RateModel {
 
   @Column({
     type: 'float',
-    default: 0,
+    default: 1,
     nullable: false,
     scale: 2,
   })
@@ -23,7 +23,7 @@ export class RateEntity extends BaseEntity implements RateModel {
 
   @Column({
     type: 'float',
-    default: 0,
+    default: 1,
     nullable: false,
     scale: 2,
   })
