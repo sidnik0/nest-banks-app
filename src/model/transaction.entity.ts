@@ -21,10 +21,16 @@ export class TransactionEntity extends BaseEntity implements TransactionModel {
   })
   createAt: Date;
 
-  @ManyToOne(() => AccountEntity, { nullable: false })
+  @Column({
+    type: 'uuid',
+    nullable: false,
+  })
   fromAccountId: string;
 
-  @ManyToOne(() => AccountEntity, { nullable: false })
+  @Column({
+    type: 'uuid',
+    nullable: false,
+  })
   toAccountId: string;
 
   @ManyToOne(() => AccountEntity, { nullable: false })
