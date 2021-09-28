@@ -23,19 +23,19 @@ export class TransactionEntity extends BaseEntity implements TransactionModel {
 
   @Column({
     type: 'uuid',
-    nullable: false,
+    nullable: true,
   })
   fromAccountId: string;
 
   @Column({
     type: 'uuid',
-    nullable: false,
+    nullable: true,
   })
   toAccountId: string;
 
-  @ManyToOne(() => AccountEntity, { nullable: false })
+  @ManyToOne(() => AccountEntity, { nullable: true, orphanedRowAction: 'nullify', onDelete: 'SET NULL' })
   fromAccount: AccountEntity;
 
-  @ManyToOne(() => AccountEntity, { nullable: false })
+  @ManyToOne(() => AccountEntity, { nullable: true, orphanedRowAction: 'nullify', onDelete: 'SET NULL' })
   toAccount: AccountEntity;
 }

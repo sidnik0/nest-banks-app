@@ -5,9 +5,8 @@ import { IAccountRepository } from '../repository/interface/account.repository';
 import { IUserRepository } from '../repository/interface/user.repository';
 import { IBankRepository } from '../repository/interface/bank.repository';
 import { AccountModel } from '../model/interface/account.model';
-import { CreateAccountDto } from '../api/rest/rest-dto/create-account.dto';
-import { UpdateAccountDto } from '../api/rest/rest-dto/update-account.dto';
 import { AccountCreatorException } from '../common/exception/account-creator.exception';
+import { OperationType } from '../types/operation.type';
 
 @Injectable()
 export class AccountService extends BaseService<AccountModel> implements IAccountService {
@@ -19,7 +18,7 @@ export class AccountService extends BaseService<AccountModel> implements IAccoun
     super(repository);
   }
 
-  async create(model: CreateAccountDto): Promise<AccountModel> {
+  async create(model: AccountModel): Promise<AccountModel> {
     const userPromise = this.userRepository.get(model.userId);
     const bankPromise = this.bankRepository.get(model.bankId);
 
@@ -34,18 +33,16 @@ export class AccountService extends BaseService<AccountModel> implements IAccoun
     return await this.repository.create({ ...data, user, bank } as AccountModel);
   }
 
-  async update(): Promise<never> {
+  update(): never {
     throw Error('Prohibited operation');
   }
 
-  async updateBalance(id: string, updateAccountDto: UpdateAccountDto): Promise<AccountModel> {
+  async updateBalance(id: string, updateModel: { amount: number; operation: OperationType }): Promise<AccountModel> {
     const data = await this.repository.get(id);
 
     data.balance =
-      Math.floor(
-        (data.balance +
-          (updateAccountDto.operation === 'replenishment' ? updateAccountDto.amount : -updateAccountDto.amount)) *
-          100,
+      Math.round(
+        (data.balance + (updateModel.operation === 'replenishment' ? updateModel.amount : -updateModel.amount)) * 100,
       ) / 100;
 
     return await this.repository.update(data);

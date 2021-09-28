@@ -8,7 +8,6 @@ import { IUserRepository } from '../repository/interface/user.repository';
 import { IRateRepository } from '../repository/interface/rate.repository';
 import { TransactionModel } from '../model/interface/transaction.model';
 import { AccountModel } from '../model/interface/account.model';
-import { CreateTransactionDto } from '../api/rest/rest-dto/create-transaction.dto';
 import { FaceType } from '../types/face.type';
 import { TransactionBalanceException } from '../common/exception/transaction-balance.exception';
 
@@ -24,7 +23,15 @@ export class TransactionService extends BaseService<TransactionModel> implements
     super(repository);
   }
 
-  async createTransaction({ fromAccountId, toAccountId, amount }: CreateTransactionDto): Promise<TransactionModel> {
+  async createTransaction({
+    fromAccountId,
+    toAccountId,
+    amount,
+  }: Omit<TransactionModel, 'createAt'>): Promise<TransactionModel> {
+    if (fromAccountId === toAccountId) {
+      throw Error(`Transaction prohibited. From account = ${fromAccountId}, to account = ${toAccountId}`);
+    }
+
     const fromAccountPromise = this.accountRepository.get(fromAccountId);
     const toAccountPromise = this.accountRepository.get(toAccountId);
 
@@ -35,8 +42,8 @@ export class TransactionService extends BaseService<TransactionModel> implements
 
     const [commission, rate] = await Promise.all([commissionPromise, ratePromise]);
 
-    const fromAmount = Math.floor(amount * commission * 100) / 100;
-    const toAmount = Math.floor(amount * rate * 100) / 100;
+    const fromAmount = Math.round(amount * commission * 100) / 100;
+    const toAmount = Math.round(amount * rate * 100) / 100;
 
     TransactionService.checkBalance(fromAccount, fromAmount);
 
@@ -63,15 +70,15 @@ export class TransactionService extends BaseService<TransactionModel> implements
     });
   }
 
-  async create(): Promise<never> {
+  create(): never {
     throw Error('Prohibited operation');
   }
 
-  async update(): Promise<never> {
+  update(): never {
     throw Error('Prohibited operation');
   }
 
-  async delete(): Promise<never> {
+  delete(): never {
     throw Error('Prohibited operation');
   }
 
@@ -95,7 +102,7 @@ export class TransactionService extends BaseService<TransactionModel> implements
   }
 
   private static getRecalculatedBalance(a: number, b: number): number {
-    return Math.floor((a + b) * 100) / 100;
+    return Math.round((a + b) * 100) / 100;
   }
 
   private async getCurrenCommission(from: AccountModel, to: AccountModel): Promise<number> {
@@ -121,10 +128,10 @@ export class TransactionService extends BaseService<TransactionModel> implements
     const rate = await this.rateRepository.getByBank(from.bankId);
 
     const currentRate =
-      rate[`${from.currency.toLocaleLowerCase()}${to.currency[0] + to.currency.slice(1).toLowerCase}`];
+      rate[`${from.currency.toLocaleLowerCase()}${to.currency[0] + to.currency.slice(1).toLowerCase()}`];
 
-    return currentRate
+    return typeof currentRate === 'number'
       ? Math.floor((1 / currentRate) * 100) / 100
-      : rate[`${to.currency.toLocaleLowerCase()}${from.currency[0] + from.currency.slice(1).toLowerCase}`];
+      : rate[`${to.currency.toLocaleLowerCase()}${from.currency[0] + from.currency.slice(1).toLowerCase()}`];
   }
 }

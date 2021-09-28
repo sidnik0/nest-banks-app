@@ -1,9 +1,13 @@
-import { Repository } from 'typeorm';
+import { Inject } from '@nestjs/common';
+import { Connection, Repository } from 'typeorm';
 import { IBaseRepository } from './interface/base.repository';
 import { BaseEntity } from '../model/base.entity';
 import { NotFountException } from '../common/exception/not-fount.exception';
 
 export abstract class DbBaseRepository<T extends BaseEntity> implements IBaseRepository<T> {
+  @Inject()
+  private readonly connection: Connection;
+
   protected constructor(protected readonly repository: Repository<T>) {}
 
   abstract getLoggingModelId(model: T | string): string;

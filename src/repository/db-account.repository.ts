@@ -29,6 +29,10 @@ export class DbAccountRepository extends DbBaseRepository<AccountEntity> impleme
     return await super.create(model);
   }
 
+  async update(model: AccountEntity): Promise<AccountEntity> {
+    return await super.update(model);
+  }
+
   getAllByUser(id: string): Promise<AccountEntity[]> {
     return this.repository.find({ userId: id });
   }
