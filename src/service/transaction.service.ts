@@ -23,6 +23,18 @@ export class TransactionService extends BaseService<TransactionModel> implements
     super(repository);
   }
 
+  create(): never {
+    throw Error('Prohibited operation');
+  }
+
+  update(): never {
+    throw Error('Prohibited operation');
+  }
+
+  delete(): never {
+    throw Error('Prohibited operation');
+  }
+
   async createTransaction({
     fromAccountId,
     toAccountId,
@@ -68,18 +80,6 @@ export class TransactionService extends BaseService<TransactionModel> implements
       fromAccount,
       toAccount,
     });
-  }
-
-  create(): never {
-    throw Error('Prohibited operation');
-  }
-
-  update(): never {
-    throw Error('Prohibited operation');
-  }
-
-  delete(): never {
-    throw Error('Prohibited operation');
   }
 
   async getAllByAccount(id: string, period?: { from?: Date; to?: Date }): Promise<TransactionModel[]> {
