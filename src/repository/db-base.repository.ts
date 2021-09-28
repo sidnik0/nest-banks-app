@@ -31,6 +31,8 @@ export abstract class DbBaseRepository<T extends BaseEntity> implements IBaseRep
   }
 
   async delete(id: string): Promise<boolean> {
-    return await this.repository.delete(id).then((data) => !!data.affected);
+    return await this.repository
+      .delete(id)
+      .then((data) => (typeof data.affected === 'number' ? !!data.affected : !!data.raw));
   }
 }
