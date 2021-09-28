@@ -8,17 +8,17 @@ export class CreateBankDto {
   @IsString()
   readonly name: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Commission for entity',
   })
   @IsNumber()
-  readonly commissionForEntity: number;
+  readonly commissionForEntity?: number;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     description: 'Commission for individual',
   })
   @IsNumber()
-  readonly commissionForIndividual: number;
+  readonly commissionForIndividual?: number;
 
   @ApiPropertyOptional({
     description: 'Rate RUB-USD',

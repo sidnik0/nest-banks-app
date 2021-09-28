@@ -30,7 +30,11 @@ export class BankService extends BaseService<BankModel> implements IBankService 
       throw new ExistsException(`Bank with name ${name} exists`);
     }
 
-    const bank = await this.repository.create({ name, commissionForEntity, commissionForIndividual });
+    const bank = await this.repository.create({
+      name,
+      commissionForEntity: commissionForEntity || 0,
+      commissionForIndividual: commissionForIndividual || 0,
+    });
 
     await this.rateRepository.create({
       bankId: bank.id,

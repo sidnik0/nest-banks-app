@@ -24,8 +24,8 @@ export class BankCreateCommand extends BaseCommand {
 
     Options:
       name=<name>                       Bank name
-      commissionForEntity=<comEnt>      Entity commission
-      commissionForIndividual=<comInd>  Individuals commission
+      commissionForEntity=[comEnt]      Entity commission
+      commissionForIndividual=[comInd]  Individuals commission
       rubUsd=[rubUsd]                   Rate RUB_USD
       rubEur=[rubEur]                   Rate RUB_EUR
       usdEur=[usdEur]                   Rate USD_EUR
@@ -42,11 +42,11 @@ export class BankCreateCommand extends BaseCommand {
       },
       commissionForEntity: {
         type: 'number',
-        required: true,
+        required: false,
       },
       commissionForIndividual: {
         type: 'number',
-        required: true,
+        required: false,
       },
       rubUsd: {
         type: 'number',
