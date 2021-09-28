@@ -30,7 +30,7 @@ export class FsRateRepository extends FsBaseRepository<RateModel> implements IRa
     return await super.create(model);
   }
 
-  async get(): Promise<never> {
+  get(): never {
     throw Error('Prohibited operation');
   }
 

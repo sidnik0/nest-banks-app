@@ -29,7 +29,7 @@ export class DbRateRepository extends DbBaseRepository<RateEntity> implements IR
     return await super.create(model);
   }
 
-  async get(): Promise<never> {
+  get(): never {
     throw Error('Prohibited operation');
   }
 
