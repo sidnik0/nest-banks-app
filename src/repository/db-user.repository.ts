@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { DbBaseRepository } from './db-base.repository';
 import { IUserRepository } from './interface/user.repository';
 import { UserEntity } from '../model/user.entity';
+import { FaceType } from '../types/face.type';
 
 @Injectable()
 export class DbUserRepository extends DbBaseRepository<UserEntity> implements IUserRepository {
@@ -22,9 +23,9 @@ export class DbUserRepository extends DbBaseRepository<UserEntity> implements IU
     return model.id ? `id=${model.id}` : `name=${model.name}`;
   }
 
-  async checkName(name: string): Promise<boolean> {
-    const user = await this.repository.find({ where: { name } });
+  async checkEntityUserName(name: string): Promise<boolean> {
+    const user = await this.repository.findOne({ where: { name, face: FaceType.ENTITY } });
 
-    return !!user.length;
+    return !!user;
   }
 }

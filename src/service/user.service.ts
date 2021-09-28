@@ -21,9 +21,9 @@ export class UserService extends BaseService<UserModel> implements IUserService 
 
   async create(model: UserModel): Promise<UserModel> {
     if (model.face === FaceType.ENTITY) {
-      const checkBank = await this.repository.checkName(model.name);
+      const userName = await this.repository.checkEntityUserName(model.name);
 
-      if (checkBank) {
+      if (userName) {
         throw new ExistsException(`Entity(user) with name ${model.name} exists`);
       }
     }
