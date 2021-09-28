@@ -6,7 +6,7 @@ import { NotFountException } from '../common/exception/not-fount.exception';
 
 export abstract class DbBaseRepository<T extends BaseEntity> implements IBaseRepository<T> {
   @Inject()
-  private readonly connection: Connection;
+  protected readonly connection: Connection;
 
   protected constructor(protected readonly repository: Repository<T>) {}
 

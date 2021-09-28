@@ -30,18 +30,34 @@ export class DbAccountRepository extends DbBaseRepository<AccountEntity> impleme
   }
 
   async update(model: AccountEntity): Promise<AccountEntity> {
-    return await super.update(model);
+    const queryRunner = this.connection.createQueryRunner();
+
+    await queryRunner.connect();
+
+    await queryRunner.startTransaction();
+
+    try {
+      await queryRunner.manager.save(model);
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
+
+    return await this.repository.findOne(model);
   }
 
-  getAllByUser(id: string): Promise<AccountEntity[]> {
-    return this.repository.find({ userId: id });
+  async getAllByUser(id: string): Promise<AccountEntity[]> {
+    return await this.repository.find({ userId: id });
   }
 
-  getAllByBank(id: string): Promise<AccountEntity[]> {
-    return this.repository.find({ bankId: id });
+  async getAllByBank(id: string): Promise<AccountEntity[]> {
+    return await this.repository.find({ bankId: id });
   }
 
-  getAllByUserAndBank(userId: string, bankId: string): Promise<AccountEntity[]> {
-    return this.repository.find({ userId, bankId });
+  async getAllByUserAndBank(userId: string, bankId: string): Promise<AccountEntity[]> {
+    return await this.repository.find({ userId, bankId });
   }
 }
