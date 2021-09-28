@@ -35,7 +35,7 @@ export class RateEntity extends BaseEntity implements RateModel {
   })
   bankId: string;
 
-  @OneToOne(() => BankEntity, { nullable: false })
+  @OneToOne(() => BankEntity, { nullable: false, onDelete: 'CASCADE' })
   @JoinColumn()
   bank: BankEntity;
 }

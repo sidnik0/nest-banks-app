@@ -35,9 +35,9 @@ export class AccountEntity extends BaseEntity implements AccountModel {
   })
   bankId: string;
 
-  @ManyToOne(() => UserEntity, { nullable: false })
+  @ManyToOne(() => UserEntity, { nullable: false, onDelete: 'CASCADE' })
   user: UserEntity;
 
-  @ManyToOne(() => BankEntity, { nullable: false })
+  @ManyToOne(() => BankEntity, { nullable: false, onDelete: 'CASCADE' })
   bank: BankEntity;
 }
