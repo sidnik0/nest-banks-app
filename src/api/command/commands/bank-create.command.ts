@@ -26,8 +26,8 @@ export class BankCreateCommand extends BaseCommand {
       name=<name>                       Bank name
       commissionForEntity=[comEnt]      Entity commission
       commissionForIndividual=[comInd]  Individuals commission
-      rubUsd=[rubUsd]                   Rate RUB_USD
-      rubEur=[rubEur]                   Rate RUB_EUR
+      bynUsd=[bynUsd]                   Rate BYN_USD
+      bynEur=[bynEur]                   Rate BYN_EUR
       usdEur=[usdEur]                   Rate USD_EUR
       
       help                              Display help for command
@@ -48,11 +48,11 @@ export class BankCreateCommand extends BaseCommand {
         type: 'number',
         required: false,
       },
-      rubUsd: {
+      bynUsd: {
         type: 'number',
         required: false,
       },
-      rubEur: {
+      bynEur: {
         type: 'number',
         required: false,
       },

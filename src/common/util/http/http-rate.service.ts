@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 
 interface RateType {
-  rubUsd: number;
-  rubEur: number;
+  bynUsd: number;
+  bynEur: number;
   usdEur: number;
 }
 
@@ -18,11 +18,11 @@ export class HttpRateService {
 
     const { USD_in, EUR_in, USD_EUR_in } = allRates.data[0];
 
-    const rubUsd = HttpRateService.getScaleRate(USD_in);
-    const rubEur = HttpRateService.getScaleRate(EUR_in);
+    const bynUsd = HttpRateService.getScaleRate(USD_in);
+    const bynEur = HttpRateService.getScaleRate(EUR_in);
     const usdEur = HttpRateService.getScaleRate(USD_EUR_in);
 
-    return { rubUsd, rubEur, usdEur };
+    return { bynUsd, bynEur, usdEur };
   }
 
   private static getScaleRate(rate: string): number {

@@ -24,7 +24,7 @@ export class BankService extends BaseService<BankModel> implements IBankService 
   }
 
   async create(model: BankModel & RateModel): Promise<BankModel> {
-    const { name, commissionForEntity, commissionForIndividual, rubEur, rubUsd, usdEur } = model;
+    const { name, commissionForEntity, commissionForIndividual, bynEur, bynUsd, usdEur } = model;
 
     const checkBank = await this.repository.checkName(name);
 
@@ -44,8 +44,8 @@ export class BankService extends BaseService<BankModel> implements IBankService 
 
     await this.rateRepository.create({
       bankId: bank.id,
-      rubEur: rubEur || rates.rubEur,
-      rubUsd: rubUsd || rates.rubUsd,
+      bynEur: bynEur || rates.bynEur,
+      bynUsd: bynUsd || rates.bynUsd,
       usdEur: usdEur || rates.usdEur,
       bank,
     });

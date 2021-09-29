@@ -68,7 +68,7 @@ export class PropertyParser {
   }
 
   private static parseCurrencyType(value: any): { value?: CurrencyType; error?: string } {
-    if (value !== CurrencyType.RUB && value !== CurrencyType.USD && value !== CurrencyType.EUR) {
+    if (value !== CurrencyType.BYN && value !== CurrencyType.USD && value !== CurrencyType.EUR) {
       return { error: 'Currency Type parser error' };
     }
 

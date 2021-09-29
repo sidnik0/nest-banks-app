@@ -7,10 +7,10 @@ export class RateModel extends BaseModel {
   bankId: string;
 
   @ApiProperty()
-  rubUsd: number;
+  bynUsd: number;
 
   @ApiProperty()
-  rubEur: number;
+  bynEur: number;
 
   @ApiProperty()
   usdEur: number;
