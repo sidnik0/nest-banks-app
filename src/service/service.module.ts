@@ -10,9 +10,10 @@ import { BankService } from './bank.service';
 import { RateService } from './rate.service';
 import { TransactionService } from './transaction.service';
 import { UserService } from './user.service';
+import { UtilHttpModule } from '../common/util/http/util-http.module';
 
 @Module({
-  imports: [RepositoryModule.forRoot()],
+  imports: [RepositoryModule.forRoot(), UtilHttpModule],
   providers: [
     {
       provide: IAccountService,

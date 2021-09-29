@@ -9,6 +9,7 @@ import { BankModel } from '../model/interface/bank.model';
 import { UserModel } from '../model/interface/user.model';
 import { RateModel } from '../model/interface/rate.model';
 import { ExistsException } from '../common/exception/exists.exception';
+import { HttpRateService } from '../common/util/http/http-rate.service';
 
 @Injectable()
 export class BankService extends BaseService<BankModel> implements IBankService {
@@ -17,6 +18,7 @@ export class BankService extends BaseService<BankModel> implements IBankService 
     private readonly accountRepository: IAccountRepository,
     private readonly userRepository: IUserRepository,
     private readonly rateRepository: IRateRepository,
+    private readonly httpRateService: HttpRateService,
   ) {
     super(repository);
   }
@@ -30,17 +32,21 @@ export class BankService extends BaseService<BankModel> implements IBankService 
       throw new ExistsException(`Bank with name ${name} exists`);
     }
 
-    const bank = await this.repository.create({
+    const bankPromise = this.repository.create({
       name,
       commissionForEntity: commissionForEntity || 0,
       commissionForIndividual: commissionForIndividual || 0,
     });
 
+    const ratesPromise = this.httpRateService.getRates();
+
+    const [bank, rates] = await Promise.all([bankPromise, ratesPromise]);
+
     await this.rateRepository.create({
       bankId: bank.id,
-      rubEur: rubEur || 1,
-      rubUsd: rubUsd || 1,
-      usdEur: usdEur || 1,
+      rubEur: rubEur || rates.rubEur,
+      rubUsd: rubUsd || rates.rubUsd,
+      usdEur: usdEur || rates.usdEur,
       bank,
     });
 
