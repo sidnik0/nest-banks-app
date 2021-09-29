@@ -24,8 +24,8 @@ export class FsUserRepository extends FsBaseRepository<UserModel> implements IUs
     return model.id ? `id=${model.id}` : `name=${model.name}`;
   }
 
-  async checkEntityUserName(name: string): Promise<boolean> {
-    let user = null;
+  async findEntityUserByName(name: string): Promise<UserModel | undefined> {
+    let user: UserModel;
 
     for (const userId of Object.keys(this.data)) {
       if (this.data[userId].name === name && this.data[userId].face === FaceType.ENTITY) {
@@ -35,6 +35,6 @@ export class FsUserRepository extends FsBaseRepository<UserModel> implements IUs
       }
     }
 
-    return !!user;
+    return user;
   }
 }

@@ -39,6 +39,7 @@ export class HelpCommand extends BaseCommand {
     transaction-get-all [options]               Get all transactions
     transaction-get-all-by-account [options]    Get all account transactions
     
+    user-create-with-account [options]          Create user with account
     user-create [options]                       Create user
     user-get [options]                          Get user by id
     user-get-all [options]                      Get all users

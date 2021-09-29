@@ -30,6 +30,8 @@ export class DbAccountRepository extends DbBaseRepository<AccountEntity> impleme
   }
 
   async update(model: AccountEntity): Promise<AccountEntity> {
+    const data = Object.assign(new AccountEntity(), model);
+
     const queryRunner = this.connection.createQueryRunner();
 
     await queryRunner.connect();
@@ -37,7 +39,7 @@ export class DbAccountRepository extends DbBaseRepository<AccountEntity> impleme
     await queryRunner.startTransaction();
 
     try {
-      await queryRunner.manager.save(model);
+      await queryRunner.manager.save(data);
 
       await queryRunner.commitTransaction();
     } catch (err) {

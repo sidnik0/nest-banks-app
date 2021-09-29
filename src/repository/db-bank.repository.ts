@@ -22,9 +22,7 @@ export class DbBankRepository extends DbBaseRepository<BankEntity> implements IB
     return model.id ? `id=${model.id}` : `name=${model.name}`;
   }
 
-  async checkName(name: string): Promise<boolean> {
-    const bank = await this.repository.find({ where: { name } });
-
-    return !!bank.length;
+  async findBankByName(name: string): Promise<BankEntity | undefined> {
+    return await this.repository.findOne({ where: { name } });
   }
 }

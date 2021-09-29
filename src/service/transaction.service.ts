@@ -131,7 +131,7 @@ export class TransactionService extends BaseService<TransactionModel> implements
       rate[`${from.currency.toLocaleLowerCase()}${to.currency[0] + to.currency.slice(1).toLowerCase()}`];
 
     return typeof currentRate === 'number'
-      ? Math.floor((1 / currentRate) * 100) / 100
+      ? Math.floor((1 / currentRate) * 10000) / 10000
       : rate[`${to.currency.toLocaleLowerCase()}${from.currency[0] + from.currency.slice(1).toLowerCase()}`];
   }
 }

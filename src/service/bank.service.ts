@@ -26,9 +26,9 @@ export class BankService extends BaseService<BankModel> implements IBankService 
   async create(model: BankModel & RateModel): Promise<BankModel> {
     const { name, commissionForEntity, commissionForIndividual, bynEur, bynUsd, usdEur } = model;
 
-    const checkBank = await this.repository.checkName(name);
+    const existingBank = await this.repository.findBankByName(name);
 
-    if (checkBank) {
+    if (!!existingBank) {
       throw new ExistsException(`Bank with name ${name} exists`);
     }
 

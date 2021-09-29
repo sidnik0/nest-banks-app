@@ -23,6 +23,7 @@ import { TransactionGetCommand } from './transaction-get.command';
 import { TransactionGetAllCommand } from './transaction-get-all.command';
 import { TransactionGetAllByAccountCommand } from './transaction-get-all-by-account.command';
 
+import { UserCreateWithAccountCommand } from './user-create-with-account.command';
 import { UserCreateCommand } from './user-create.command';
 import { UserGetCommand } from './user-get.command';
 import { UserGetAllCommand } from './user-get-all.command';
@@ -55,6 +56,7 @@ export const commands = [
   TransactionGetCommand,
   TransactionGetAllCommand,
   TransactionGetAllByAccountCommand,
+  UserCreateWithAccountCommand,
   UserCreateCommand,
   UserGetCommand,
   UserGetAllCommand,

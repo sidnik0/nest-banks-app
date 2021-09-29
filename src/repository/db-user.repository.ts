@@ -23,9 +23,7 @@ export class DbUserRepository extends DbBaseRepository<UserEntity> implements IU
     return model.id ? `id=${model.id}` : `name=${model.name}`;
   }
 
-  async checkEntityUserName(name: string): Promise<boolean> {
-    const user = await this.repository.findOne({ where: { name, face: FaceType.ENTITY } });
-
-    return !!user;
+  async findEntityUserByName(name: string): Promise<UserEntity | undefined> {
+    return await this.repository.findOne({ where: { name, face: FaceType.ENTITY } });
   }
 }

@@ -20,6 +20,7 @@ export enum CommandName {
   TRANSACTION_GET = 'transaction-get',
   TRANSACTION_GET_ALL = 'transaction-get-all',
   TRANSACTION_GET_ALL_BY_ACCOUNT = 'transaction-get-all-by-account',
+  USER_CREATE_WITH_ACCOUNT = 'user-create-with-account',
   USER_CREATE = 'user-create',
   USER_GET = 'user-get',
   USER_GET_ALL = 'user-get-all',

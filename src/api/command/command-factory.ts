@@ -8,6 +8,7 @@ import { CommandName } from '../../types/command-name.type';
 import { AccountCreateCommand } from './commands/account-create.command';
 import { BankCreateCommand } from './commands/bank-create.command';
 import { TransactionCreateCommand } from './commands/transaction-create.command';
+import { UserCreateWithAccountCommand } from './commands/user-create-with-account.command';
 import { UserCreateCommand } from './commands/user-create.command';
 import { AccountDeleteCommand } from './commands/account-delete.command';
 import { BankDeleteCommand } from './commands/bank-delete.command';
@@ -57,6 +58,7 @@ export class CommandFactory {
       [CommandName.ACCOUNT_CREATE, AccountCreateCommand],
       [CommandName.BANK_CREATE, BankCreateCommand],
       [CommandName.TRANSACTION_CREATE, TransactionCreateCommand],
+      [CommandName.USER_CREATE_WITH_ACCOUNT, UserCreateWithAccountCommand],
       [CommandName.USER_CREATE, UserCreateCommand],
       [CommandName.ACCOUNT_DELETE, AccountDeleteCommand],
       [CommandName.BANK_DELETE, BankDeleteCommand],

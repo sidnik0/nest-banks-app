@@ -6,6 +6,7 @@ import { UserModel } from '../../model/interface/user.model';
 import { BankModel } from '../../model/interface/bank.model';
 import { CommandName } from '../../types/command-name.type';
 import { CreateUserDto } from './rest-dto/create-user.dto';
+import { CreateUserWithAccountDto } from './rest-dto/create-user-with-account.dto';
 import { UpdateUserDto } from './rest-dto/update-user.dto';
 import { IdDto } from './rest-dto/id.dto';
 
@@ -19,6 +20,21 @@ export class UserController extends BaseController {
     const user = await this.executeCommand({ name: CommandName.USER_CREATE, params: createUserDto });
 
     res.set('Location', user.id);
+  }
+
+  @Post('with-account')
+  @ApiOperation({ summary: 'Create user with account', description: 'Create user with account' })
+  @ApiBody({ type: CreateUserWithAccountDto })
+  async createWithAccount(
+    @Body() createUserWithAccountDto: CreateUserWithAccountDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<void> {
+    const { user, bank, account } = await this.executeCommand({
+      name: CommandName.USER_CREATE_WITH_ACCOUNT,
+      params: createUserWithAccountDto,
+    });
+
+    res.set('Location', `user: ${user.id}, bank: ${bank.id}, account: ${account.id}`);
   }
 
   @Get(':id/banks')
