@@ -11,13 +11,17 @@ export class CreateBankDto {
   @ApiPropertyOptional({
     description: 'Commission for entity',
   })
+  @IsOptional()
   @IsNumber()
+  @Min(0)
   readonly commissionForEntity?: number;
 
   @ApiPropertyOptional({
     description: 'Commission for individual',
   })
+  @IsOptional()
   @IsNumber()
+  @Min(0)
   readonly commissionForIndividual?: number;
 
   @ApiPropertyOptional({
