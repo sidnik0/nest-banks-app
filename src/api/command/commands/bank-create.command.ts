@@ -5,7 +5,7 @@ import { BankModel } from '../../../model/interface/bank.model';
 import { ParamsDefinition } from '../values-object/params-definition';
 import { TypedCommandDescriptor } from '../values-object/typed-command-descriptor';
 import { CommandResult } from '../values-object/command-result';
-import { RateModel } from 'src/model/interface/rate.model';
+import { RateModel } from '../../../model/interface/rate.model';
 
 @Injectable()
 export class BankCreateCommand extends BaseCommand {
