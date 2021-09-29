@@ -25,7 +25,7 @@ export class AccountCreateCommand extends BaseCommand {
       userId=<userId>                   User id
       bankId=<bankId>                   Bank id
       balance=[balance]                 Starting balance
-      currency=<currency>               Currency ("RUB" || "USD" || "EUR")
+      currency=<currency>               Currency ("BYN" || "USD" || "EUR")
       
       help                              Display help for command
     `;
